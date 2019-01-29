@@ -20,6 +20,7 @@ use Yii;
  *
  * @property AccountType $accountType
  * @property AuthAssignment $authAssignment
+ * @property Siswa $siswa
  */
 class User extends \yii\db\ActiveRecord
 {
@@ -72,5 +73,12 @@ class User extends \yii\db\ActiveRecord
      */
     public function getAuthAssignment(){
         return $this->hasOne(AuthAssignment::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * Get Siswa
+     */
+    public function getSiswa(){
+        return $this->hasOne(Siswa::className(), ['user_id' => 'id']);
     }
 }

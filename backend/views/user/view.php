@@ -51,4 +51,6 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
+    <?= Html::a('Data Diri', ['siswa/view', 'id' => $model->siswa->nisn], ['class' => 'btn btn-primary']); ?>
+
 </div>

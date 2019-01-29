@@ -33,7 +33,7 @@
                                 ['label' => 'Jenis Akun', 'icon' => 'drivers-license-o', 'url' => ['auth-item/index']],
                             ]
                         ],
-                        ['label' => 'Data Siswa', 'icon' => 'user', 'url' => ['#']],
+                        ['label' => 'Data Siswa', 'icon' => 'user', 'url' => ['siswa/index']],
                     ];
                 }else{
                     $menuItems = [
