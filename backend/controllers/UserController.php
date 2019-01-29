@@ -7,6 +7,7 @@ use app\models\AuthAssignment;
 use app\models\AuthItem;
 use app\models\ChangePassword;
 use app\models\ResetPassword;
+use app\models\Siswa;
 use Yii;
 use app\models\User;
 use app\models\search\UserSearch;
@@ -110,6 +111,16 @@ class UserController extends Controller
                 $auth_assignment->item_name = $model->role;
                 $auth_assignment->user_id = $user->id;
                 $auth_assignment->save();
+
+                // Pengecekan akun ke tabel lain, apakah siswa, guru, pegawai, dll
+                if($user->role == 'siswa'){
+                    $siswa = new Siswa;
+                    $siswa->nisn = $user->username;
+                    $siswa->user_id = $user->id;
+                    $siswa->save();
+
+                    return $this->actionView($user->id);
+                }
 
                 $role = AuthItem::find()->all();
                 $model = new SignupForm();
@@ -220,7 +231,7 @@ class UserController extends Controller
             $user->save();
 
             Yii::$app->session->setFlash('success', 'Password berhasil diganti');
-            return $this->actionShow($user->id);
+            return $this->actionView($user->id);
         }
 
         return $this->render('ganti_password', [
@@ -267,20 +278,6 @@ class UserController extends Controller
             ]);
         }else{
             return $this->redirect(['error/forbidden-error']);
-        }
-    }
-
-    /**
-     * Melihat data diri user
-     */
-    public function actionShow($id)
-    {
-        if(Yii::$app->user->can('admin')) {
-            return $this->render('view', [
-                'model' => $model,
-            ]);
-        }else{
-            $this->redirect(['error/forbidden-error']);
         }
     }
 

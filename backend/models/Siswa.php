@@ -41,7 +41,7 @@ class Siswa extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nisn', 'nama', 'kelahiran', 'jenis_kelamin', 'agama', 'status_dalam_keluarga', 'anak_ke', 'sekolah_asal', 'nama_ayah', 'nama_ibu', 'alamat_orang_tua', 'nomor_telepon_orang_tua', 'pekerjaan_ayah', 'pekerjaan_ibu', 'user_id'], 'required'],
+            [['nisn', 'user_id'], 'required'],
             [['anak_ke', 'nomor_telepon_orang_tua', 'user_id'], 'integer'],
             [['alamat_orang_tua'], 'string'],
             [['nisn', 'kelahiran', 'jenis_kelamin', 'agama', 'status_dalam_keluarga', 'pekerjaan_ayah', 'pekerjaan_ibu'], 'string', 'max' => 255],

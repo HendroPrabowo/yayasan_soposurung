@@ -51,6 +51,10 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
-    <?= Html::a('Data Diri', ['siswa/view', 'id' => $model->siswa->nisn], ['class' => 'btn btn-primary']); ?>
+    <?php
+        if($model->role == 'siswa'){
+            echo Html::a('Data Diri Siswa', ['siswa/view', 'id' => $model->username], ['class' => 'btn btn-primary']);
+        }
+    ?>
 
 </div>

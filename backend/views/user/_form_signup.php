@@ -31,7 +31,7 @@ $all_role = \yii\helpers\ArrayHelper::map($role, 'name', 'name');
                 <?= $form->field($model, 'role')->dropDownList($all_role, ['prompt' => 'Pilih satu']) ?>
 
                 <div class="form-group">
-                    <?= Html::submitButton('Signup', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
+                    <?= Html::submitButton('Tambah Akun', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
                 </div>
 
             <?php ActiveForm::end(); ?>
