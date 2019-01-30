@@ -15,4 +15,14 @@ class ErrorController extends Controller{
             'message' => 'Akun anda dilarang untuk memasuki fungsi ini',
         ]);
     }
+
+    /**
+     * Under Construction
+     */
+    public function actionUnderConstruction(){
+        return $this->render('error_under_construction', [
+            'name' => 'Under Construction',
+            'message' => 'Fungsi ini sedang dikembangkan',
+        ]);
+    }
 }

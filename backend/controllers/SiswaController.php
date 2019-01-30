@@ -2,6 +2,8 @@
 
 namespace backend\controllers;
 
+use phpDocumentor\Reflection\Types\Integer;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Yii;
 use app\models\Siswa;
 use app\models\search\SiswaSearch;
@@ -9,6 +11,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\web\UploadedFile;
+use app\models\User;
 
 /**
  * SiswaController implements the CRUD actions for Siswa model.
@@ -51,13 +55,18 @@ class SiswaController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new SiswaSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        if(Yii::$app->user->can('admin')) {
+            $searchModel = new SiswaSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
+
     }
 
     /**
@@ -68,9 +77,14 @@ class SiswaController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        if(Yii::$app->user->can('admin')) {
+            return $this->render('view', [
+                'model' => $this->findModel($id),
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
+
     }
 
     /**
@@ -80,15 +94,20 @@ class SiswaController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Siswa();
+        if(Yii::$app->user->can('admin')) {
+            $model = new Siswa();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->nisn]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->nisn]);
+            }
+
+            return $this->render('create', [
+                'model' => $model,
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
         }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
     }
 
     /**
@@ -100,15 +119,20 @@ class SiswaController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        if(Yii::$app->user->can('admin')) {
+            $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->nisn]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->nisn]);
+            }
+
+            return $this->render('update', [
+                'model' => $model,
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
         }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
     }
 
     /**
@@ -120,9 +144,14 @@ class SiswaController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if(Yii::$app->user->can('admin')) {
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['index']);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
+
     }
 
     /**
@@ -139,5 +168,94 @@ class SiswaController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    /**
+     * Import data siswa dari excel
+     */
+    public function actionImportExcel(){
+        if(Yii::$app->user->can('admin')) {
+            $model = new Siswa();
+            if(Yii::$app->request->post()){
+                $model->excel = UploadedFile::getInstance($model, 'excel');
+                $path = 'uploads/excel';
+                $filePath = $path . rand(1, 100) . '-' . str_replace('', '-', $model->excel->name);
+                $model->excel->saveAs($filePath);
+
+                // Membaca file
+                $spreadsheet = IOFactory::load($filePath);
+                $sheetdata = $spreadsheet->getActiveSheet()->toArray();
+
+                // Buat user siswa
+                $i = 0;
+                $user_array = array();
+                $siswa_array = array();
+                set_time_limit(3600);
+                foreach ($sheetdata as $value){
+                    if($i > 1){
+                        // Pembuatan akun baru
+                        if(User::findOne(['username' => $value[3]]) == null){
+                            $user_common = new \common\models\User();
+                            $user_common->setPassword($value[3]);
+                            $user_common->generateAuthKey();
+
+                            $user = new User;
+                            $user->username = $value[3];
+                            $user->auth_key = $user_common->auth_key;
+                            $user->password_hash = $user_common->password_hash;
+                            $user->role = 'siswa';
+                            $user->status = 10;
+                            $user->save();
+                        }
+
+                        // Ambil data user
+                        $user = User::findOne(['username' => $value[3]]);
+                        $siswa = Siswa::findOne(['nisn' => $user->username]);
+
+                        /**
+                         * Simpan data ke array siswa jika data belum ada
+                         * Untuk dimasukkan ke tabel siswa
+                         */
+                        if($siswa == null){
+                            $siswa_array[] = [
+                                'nisn' => $value[3],
+                                'nama' => $value[2],
+                                'kelahiran' => $value[4],
+                                'jenis_kelamin' => $value[5],
+                                'agama' => $value[6],
+                                'status_dalam_keluarga' => $value[7],
+                                'anak_ke' => $value[8],
+                                'sekolah_asal' => $value[9],
+                                'nama_ayah' => $value[10],
+                                'nama_ibu' => $value[11],
+                                'alamat_orang_tua' => $value[12],
+                                'nomor_telepon_orang_tua' => $value[13],
+                                'pekerjaan_ayah' => $value[14],
+                                'pekerjaan_ibu' => $value[15],
+                                'user_id' => $user->id,
+                            ];
+                        }
+                    }
+                    $i++;
+                }
+
+                // Insert ke tabel siswa
+                if($siswa_array != null){
+                    $tableName ='siswa';
+                    $columnNameArray = ['nisn', 'nama', 'kelahiran', 'jenis_kelamin', 'agama', 'status_dalam_keluarga', 'anak_ke', 'sekolah_asal', 'nama_ayah', 'nama_ibu', 'alamat_orang_tua', 'nomor_telepon_orang_tua', 'pekerjaan_ayah', 'pekerjaan_ibu', 'user_id'];
+                    Yii::$app->db->createCommand()->batchInsert($tableName, $columnNameArray, $siswa_array)->execute();
+                }
+
+                Yii::$app->session->setFlash('success', 'Import data excel berhasil');
+                return $this->actionIndex();
+            }
+
+            return $this->render('_form_import_excel', [
+                'model' => $model,
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
+
     }
 }
