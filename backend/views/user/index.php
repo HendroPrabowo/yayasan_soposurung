@@ -27,16 +27,43 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'username',
             'role',
+//            'is_active',
+            [
+                'attribute' => 'is_active',
+                'label' => 'Status Akun',
+                'encodeLabel' => false,
+                'headerOptions' => ['style'=>'text-align:center'],
+                'value' => function(\yii\base\Model $model){
+                    if($model->is_active == 1){
+                        return 'Aktif';
+                    }else{
+                        return 'Tidak Aktif';
+                    }
+                },
+                'contentOptions' => function ($model, $key, $index, $column) {
+                    if($model->is_active == 1){
+                        return ['class' => 'label label-success center-block'];
+                    }else{
+                        return ['class' => 'label label-danger center-block'];
+                    }
+                },
+            ],
 
             ['class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {update} {status}',
                 'buttons'=>[
                     'view'=>function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-zoom-in"></span> Detail', ['user/view', 'id' => $model->id]);
                     },
-                    'update'=>function ($url, $model) {
-//                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', ['user/update', 'id' => $model->id]);
+                    'status'=>function ($url, $model) {
+                        if($model->is_active == 0){
+                            return Html::a('<span class="glyphicon glyphicon-ok-sign" style="color:green;"></span> Aktifkan', ['user/aktifkan-akun', 'id' => $model->id]);
+                        }else{
+                            return Html::a('<span class="glyphicon glyphicon-remove-sign" style="color: red"></span> Non-Aktifkan', ['user/nonaktifkan-akun', 'id' => $model->id]);
+                        }
                     },
-                ],],
+                ],
+            ],
         ],
     ]); ?>
 </div>

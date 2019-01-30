@@ -321,4 +321,37 @@ class UserController extends Controller
             return $this->redirect(['error/forbidden-error']);
         }
     }
+
+    /**
+     * Mengaktifkan akun
+     */
+    public function actionAktifkanAkun($id){
+        if(Yii::$app->user->can('admin')) {
+            $user = $this->findModel($id);
+            $user->is_active = 1;
+            $user->save();
+
+            Yii::$app->session->addFlash('success', 'Akun Aktif');
+            return $this->actionView($id);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
+    }
+
+    /**
+     * Menonaktifkan akun
+     */
+    public function actionNonaktifkanAkun($id){
+        if(Yii::$app->user->can('admin')) {
+            $user = $this->findModel($id);
+            $user->is_active = 0;
+            $user->save();
+
+            Yii::$app->session->addFlash('error', 'Akun Tidak Aktif');
+            return $this->actionView($id);
+
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
+    }
 }

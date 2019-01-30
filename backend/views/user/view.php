@@ -14,6 +14,24 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h3><?= Html::encode('Detail : '.$this->title) ?></h3>
 
+    <?php
+        if($model->is_active == 1){
+            echo '<div class="info-box">
+                    <span class="info-box-icon bg-green"><i class="glyphicon glyphicon-ok-sign"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-number" style="margin-top: 29px">Akun Aktif</span>
+                    </div>
+                </div>';
+        }else{
+            echo '<div class="info-box">
+                    <span class="info-box-icon bg-red"><i class="glyphicon glyphicon-remove-sign"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-number" style="margin-top: 29px">Akun Tidak Aktif</span>
+                    </div>
+                </div>';
+        }
+    ?>
+
     <p>
         <?php
             if(Yii::$app->user->can('admin')){
@@ -28,8 +46,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             'method' => 'post',
                         ],
                     ]);
+                echo '&nbsp';
             }else{
                 echo Html::a('Ganti Password', ['ganti-password', 'id' => $model->id], ['class' => 'btn btn-warning']);
+                echo '&nbsp';
+            }
+
+            if($model->is_active == 0){
+                echo Html::a('Aktifkan Akun', ['user/aktifkan-akun', 'id' => $model->id], ['class' => 'btn btn-success']);
+            }else{
+                echo Html::a('Non-Aktifkan Akun', ['user/nonaktifkan-akun', 'id' => $model->id], ['class' => 'btn btn-danger']);
             }
         ?>
 
