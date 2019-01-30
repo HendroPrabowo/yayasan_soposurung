@@ -15,6 +15,7 @@ use Yii;
  * @property string $email
  * @property string $role
  * @property int $status
+ * @property int $is_active
  * @property int $created_at
  * @property int $updated_at
  *
@@ -39,7 +40,7 @@ class User extends \yii\db\ActiveRecord
     {
         return [
             [['username', 'auth_key'], 'required'],
-            [['status', 'created_at', 'updated_at'], 'integer'],
+            [['status', 'created_at', 'updated_at', 'is_active'], 'integer'],
             [['username', 'password_hash', 'password_reset_token'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
             ['role', 'string'],

@@ -99,7 +99,23 @@ class SiswaController extends Controller
         if(Yii::$app->user->can('admin')) {
             $model = new Siswa();
 
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if ($model->load(Yii::$app->request->post())) {
+                // Create Akun untuk Siswa
+                $user_common = new \common\models\User();
+                $user_common->setPassword($model->nisn);
+                $user_common->generateAuthKey();
+
+                $user = new User();
+                $user->username = $model->nisn;
+                $user->role = 'siswa';
+                $user->password_hash = $user_common->password_hash;
+                $user->auth_key = $user_common->auth_key;
+                $user->save();
+
+                $model->user_id = $user->id;
+                $model->save();
+
+                Yii::$app->session->addFlash('success', 'Akun berhasil '.$user->username.' dibuat');
                 return $this->redirect(['view', 'id' => $model->nisn]);
             }
 

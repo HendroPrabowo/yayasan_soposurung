@@ -1,6 +1,7 @@
 <?php
 namespace backend\controllers;
 
+use app\models\User;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -75,7 +76,23 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
+
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+
+            if(Yii::$app->user->can('admin')){
+                return $this->goBack();
+            }else{
+                // Cek apakah akun masih aktif
+                $user = User::findOne(['username' => $model->username]);
+                if($user->is_active == 0){
+                    Yii::$app->user->logout();
+                    return $this->render('login', [
+                        'model' => $model,
+                        'status' => false,
+                    ]);
+                }
+            }
+
             return $this->goBack();
         } else {
             $model->password = '';

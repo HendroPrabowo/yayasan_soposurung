@@ -21,6 +21,18 @@ $fieldOptions2 = [
 
 <div class="login-box">
     <!-- /.login-logo -->
+
+    <?php
+        if(isset($status)){
+            if($status == 0){
+                echo '<div class="alert-error alert fade in">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></button>
+                    <i class="icon fa fa-warning"></i>Akun Sudah Tidak Aktif. Silahkan Menghubungi Admin
+                </div>';
+            }
+        }
+    ?>
+
     <div class="login-box-body">
         <div class="login-logo">
             <a href="#"><b>Yayasan Soposurung</b></a>

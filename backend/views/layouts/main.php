@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use nirvana\showloading\ShowLoadingAsset;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -23,6 +24,7 @@ if (Yii::$app->controller->action->id === 'login') {
     }
 
     dmstr\web\AdminLteAsset::register($this);
+    ShowLoadingAsset::register($this);
 
     $directoryAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/dist');
     ?>
@@ -38,7 +40,7 @@ if (Yii::$app->controller->action->id === 'login') {
     </head>
     <div class="col-md-1"></div>
     <div class="col-md-10">
-        <body class="hold-transition skin-blue sidebar-mini" class="<?= \dmstr\helpers\AdminLteHelper::skinClass() ?>">
+        <body class="hold-transition skin-green sidebar-mini" class="<?= \dmstr\helpers\AdminLteHelper::skinClass() ?>">
         <?php $this->beginBody() ?>
         <div class="wrapper">
 
