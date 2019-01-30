@@ -2,6 +2,8 @@
 
 namespace backend\controllers;
 
+use app\models\AuthAssignment;
+use backend\models\Excel;
 use phpDocumentor\Reflection\Types\Integer;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Yii;
@@ -175,7 +177,7 @@ class SiswaController extends Controller
      */
     public function actionImportExcel(){
         if(Yii::$app->user->can('admin')) {
-            $model = new Siswa();
+            $model = new Excel();
             if(Yii::$app->request->post()){
                 $model->excel = UploadedFile::getInstance($model, 'excel');
                 $path = 'uploads/excel';
@@ -188,7 +190,6 @@ class SiswaController extends Controller
 
                 // Buat user siswa
                 $i = 0;
-                $user_array = array();
                 $siswa_array = array();
                 set_time_limit(3600);
                 foreach ($sheetdata as $value){
@@ -199,41 +200,40 @@ class SiswaController extends Controller
                             $user_common->setPassword($value[3]);
                             $user_common->generateAuthKey();
 
-                            $user = new User;
-                            $user->username = $value[3];
-                            $user->auth_key = $user_common->auth_key;
-                            $user->password_hash = $user_common->password_hash;
-                            $user->role = 'siswa';
-                            $user->status = 10;
-                            $user->save();
-                        }
+                            if($value[3] != null){
+                                $user = new User;
+                                $user->username = $value[3];
+                                $user->auth_key = $user_common->auth_key;
+                                $user->password_hash = $user_common->password_hash;
+                                $user->role = 'siswa';
+                                $user->status = 10;
+                                $user->save();
 
-                        // Ambil data user
-                        $user = User::findOne(['username' => $value[3]]);
-                        $siswa = Siswa::findOne(['nisn' => $user->username]);
+                                // Pembuatan validasi siswa
+                                $authAssignment = new AuthAssignment;
+                                $authAssignment->item_name = 'siswa';
+                                $authAssignment->user_id = $user->id;
+                                $authAssignment->save();
 
-                        /**
-                         * Simpan data ke array siswa jika data belum ada
-                         * Untuk dimasukkan ke tabel siswa
-                         */
-                        if($siswa == null){
-                            $siswa_array[] = [
-                                'nisn' => $value[3],
-                                'nama' => $value[2],
-                                'kelahiran' => $value[4],
-                                'jenis_kelamin' => $value[5],
-                                'agama' => $value[6],
-                                'status_dalam_keluarga' => $value[7],
-                                'anak_ke' => $value[8],
-                                'sekolah_asal' => $value[9],
-                                'nama_ayah' => $value[10],
-                                'nama_ibu' => $value[11],
-                                'alamat_orang_tua' => $value[12],
-                                'nomor_telepon_orang_tua' => $value[13],
-                                'pekerjaan_ayah' => $value[14],
-                                'pekerjaan_ibu' => $value[15],
-                                'user_id' => $user->id,
-                            ];
+                                // Array siswa
+                                $siswa_array[] = [
+                                    'nisn' => $value[3],
+                                    'nama' => $value[2],
+                                    'kelahiran' => $value[4],
+                                    'jenis_kelamin' => $value[5],
+                                    'agama' => $value[6],
+                                    'status_dalam_keluarga' => $value[7],
+                                    'anak_ke' => $value[8],
+                                    'sekolah_asal' => $value[9],
+                                    'nama_ayah' => $value[10],
+                                    'nama_ibu' => $value[11],
+                                    'alamat_orang_tua' => $value[12],
+                                    'nomor_telepon_orang_tua' => $value[13],
+                                    'pekerjaan_ayah' => $value[14],
+                                    'pekerjaan_ibu' => $value[15],
+                                    'user_id' => $user->id,
+                                ];
+                            }
                         }
                     }
                     $i++;

@@ -285,13 +285,27 @@ class UserController extends Controller
      * Update data user
      */
     public function actionUpdate($id){
-        $model = $this->findModel($id);
-        $role = AuthItem::find()->all();
+        if(Yii::$app->user->can('admin')) {
+            $model = $this->findModel($id);
 
-        return $this->render('_form_update', [
-            'model' => $model,
-            'role' => $role,
-        ]);
+            if(Yii::$app->request->post()){
+                $posted = Yii::$app->request->post('User');
+                $model->username = $posted['username'];
+                $model->role = $posted['role'];
+                $model->authAssignment->item_name = $posted['role'];
+                $model->save();
+
+                return $this->actionView($model->id);
+            }
+
+            $role = AuthItem::find()->all();
+            return $this->render('_form_update', [
+                'model' => $model,
+                'role' => $role,
+            ]);
+        }else {
+            return $this->redirect(['error/forbidden-error']);
+        }
     }
 
     /**

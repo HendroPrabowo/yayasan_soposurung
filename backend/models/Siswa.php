@@ -27,7 +27,6 @@ use Yii;
  */
 class Siswa extends \yii\db\ActiveRecord
 {
-    public $excel;
     /**
      * {@inheritdoc}
      */
@@ -50,7 +49,6 @@ class Siswa extends \yii\db\ActiveRecord
             [['sekolah_asal'], 'string', 'max' => 300],
             [['nisn'], 'unique'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
-            [['excel'], 'file', 'skipOnEmpty' => false, 'extensions' => 'xls, xlsx'],
         ];
     }
 
@@ -75,7 +73,6 @@ class Siswa extends \yii\db\ActiveRecord
             'pekerjaan_ayah' => 'Pekerjaan Ayah',
             'pekerjaan_ibu' => 'Pekerjaan Ibu',
             'user_id' => 'User ID',
-            'excel' => 'Import Excel',
         ];
     }
 
