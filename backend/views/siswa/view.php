@@ -44,6 +44,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'pekerjaan_ayah',
             'pekerjaan_ibu',
 //            'user_id'
+//            'kelas_id'
+            [
+                'attribute' => 'Kelas',
+                'value' => function(\yii\base\Model $model){
+                    return $model->kelas->kelas;
+                }
+            ],
         ],
     ]) ?>
 

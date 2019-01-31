@@ -35,7 +35,8 @@ $fieldOptions2 = [
 
     <div class="login-box-body">
         <div class="login-logo">
-            <a href="#"><b>Yayasan Soposurung</b></a>
+            <img src="/yayasan_soposurung/backend/web/uploads/logo/yayasan_soposurung_logo.png" class="center" style="height: 100px; width: 100px">
+            <p class="text-center" style="color: black; font-size: 20px">Yayasan Soposurung</p>
         </div>
         <hr>
        <!-- <p class="login-box-msg">Sign in to start your session</p> -->

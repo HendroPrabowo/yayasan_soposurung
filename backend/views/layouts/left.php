@@ -34,6 +34,8 @@
                             ]
                         ],
                         ['label' => 'Data Siswa', 'icon' => 'user', 'url' => ['siswa/index']],
+                        ['label' => 'Semua Kelas', 'icon' => 'users', 'url' => ['kelas-r/index']],
+                        ['label' => 'Semua Mata Pelajaran', 'icon' => 'book', 'url' => ['mata-pelajaran-r/index']],
                     ];
                 }else{
                     $menuItems = [

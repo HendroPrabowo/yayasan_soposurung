@@ -28,6 +28,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'nisn',
             'nama',
+//            'kelas_id',
+            [
+                'attribute' => 'Kelas',
+                'value' => 'kelas.kelas',
+            ],
 //            'kelahiran',
 //            'jenis_kelamin',
 //            'agama',

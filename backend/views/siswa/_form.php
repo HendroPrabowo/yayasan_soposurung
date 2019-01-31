@@ -6,6 +6,9 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model app\models\Siswa */
 /* @var $form yii\widgets\ActiveForm */
+
+$kelas_all = \yii\helpers\ArrayHelper::map($kelas, 'id', 'kelas');
+
 ?>
 
 <div class="siswa-form">
@@ -39,9 +42,9 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'pekerjaan_ayah')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'pekerjaan_ibu')->textInput(['maxlength' => true]) ?>
-<!--
-    <?= $form->field($model, 'user_id')->textInput() ?>
--->
+
+    <?= $form->field($model, 'kelas_id')->dropDownList($kelas_all, ['prompt' => 'Pilih Satu']) ?>
+
     <div class="form-group">
         <?= Html::submitButton('Simpan', ['class' => 'btn btn-success']) ?>
     </div>

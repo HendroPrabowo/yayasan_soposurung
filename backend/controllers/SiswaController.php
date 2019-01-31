@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use app\models\AuthAssignment;
+use app\models\KelasR;
 use backend\models\Excel;
 use phpDocumentor\Reflection\Types\Integer;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -119,8 +120,11 @@ class SiswaController extends Controller
                 return $this->redirect(['view', 'id' => $model->nisn]);
             }
 
+            $kelas = KelasR::find()->all();
+
             return $this->render('create', [
                 'model' => $model,
+                'kelas' => $kelas,
             ]);
         }else{
             return $this->redirect(['error/forbidden-error']);
@@ -144,8 +148,10 @@ class SiswaController extends Controller
                 return $this->redirect(['view', 'id' => $model->nisn]);
             }
 
+            $kelas = KelasR::find()->all();
             return $this->render('update', [
                 'model' => $model,
+                'kelas' => $kelas,
             ]);
         }else{
             return $this->redirect(['error/forbidden-error']);
