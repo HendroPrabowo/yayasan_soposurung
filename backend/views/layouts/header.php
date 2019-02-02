@@ -10,7 +10,7 @@ $user = \app\models\User::findOne(Yii::$app->user->id);
 
 <header class="main-header">
 
-    <?= Html::a('<span class="logo-mini">APP</span><span class="logo-lg">Yayasan Soposurung</span>', Yii::$app->homeUrl, ['class' => 'logo']) ?>
+    <?= Html::a('<span class="logo-mini"><b>Y</b>SP</span><span class="logo-lg">Yayasan Soposurung</span>', Yii::$app->homeUrl, ['class' => 'logo']) ?>
 
     <nav class="navbar navbar-static-top" role="navigation">
 

@@ -3,14 +3,14 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\KelasR */
+/* @var $model app\models\TahunAjaranSemester */
 
-$this->title = 'Update Kelas: ' . $model->kelas;
-$this->params['breadcrumbs'][] = ['label' => 'Kelas', 'url' => ['index']];
+$this->title = 'Edit Tahun Ajaran: ' . $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Tahun Ajaran', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'Edit';
 ?>
-<div class="kelas-r-update">
+<div class="tahun-ajaran-semester-update">
 
     <h3><?= Html::encode($this->title) ?></h3>
 

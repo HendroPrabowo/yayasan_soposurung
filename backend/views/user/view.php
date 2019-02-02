@@ -52,10 +52,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 echo '&nbsp';
             }
 
-            if($model->is_active == 0){
-                echo Html::a('Aktifkan Akun', ['user/aktifkan-akun', 'id' => $model->id], ['class' => 'btn btn-success']);
-            }else{
-                echo Html::a('Non-Aktifkan Akun', ['user/nonaktifkan-akun', 'id' => $model->id], ['class' => 'btn btn-danger']);
+            if(Yii::$app->user->can('admin')){
+                if($model->is_active == 0){
+                    echo Html::a('Aktifkan Akun', ['user/aktifkan-akun', 'id' => $model->id], ['class' => 'btn btn-success']);
+                }else{
+                    echo Html::a('Non-Aktifkan Akun', ['user/nonaktifkan-akun', 'id' => $model->id], ['class' => 'btn btn-danger']);
+                }
             }
         ?>
 
@@ -78,8 +80,14 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
     <?php
-        if($model->role == 'siswa'){
-            echo Html::a('Data Diri Siswa', ['siswa/view', 'id' => $model->username], ['class' => 'btn btn-primary']);
+        if(Yii::$app->user->can('admin')){
+            if($model->role == 'siswa'){
+                echo Html::a('Data Diri Siswa', ['siswa/view', 'id' => $model->username], ['class' => 'btn btn-primary']);
+            }
+        }elseif (Yii::$app->user->can('siswa')){
+            if($model->role == 'siswa'){
+                echo Html::a('Data Diri Siswa', ['siswa/view-by-siswa'], ['class' => 'btn btn-primary']);
+            }
         }
     ?>
 

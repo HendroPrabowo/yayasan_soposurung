@@ -31,7 +31,12 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'kelas_id',
             [
                 'attribute' => 'Kelas',
-                'value' => 'kelas.kelas',
+                'value' => function(\yii\base\Model $model){
+                    if($model->kelas_id == null)
+                        return '-';
+                    else
+                        return $model->kelas->kelas;
+                }
             ],
 //            'kelahiran',
 //            'jenis_kelamin',

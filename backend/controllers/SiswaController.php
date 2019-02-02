@@ -116,7 +116,7 @@ class SiswaController extends Controller
                 $model->user_id = $user->id;
                 $model->save();
 
-                Yii::$app->session->addFlash('success', 'Akun berhasil '.$user->username.' dibuat');
+                Yii::$app->session->addFlash('success', 'Akun '.$user->username.' berhasil dibuat');
                 return $this->redirect(['view', 'id' => $model->nisn]);
             }
 
@@ -187,7 +187,7 @@ class SiswaController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Siswa::findOne($id)) !== null) {
+        if (($model = Siswa::findOne($id)) != null) {
             return $model;
         }
 
@@ -278,6 +278,20 @@ class SiswaController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
+    }
 
+    /*
+     * Fungsi untuk melihat data diri siswa
+     */
+    public function actionViewBySiswa(){
+        if(Yii::$app->user->can('siswa')) {
+            $user = User::findOne(Yii::$app->user->id);
+
+            return $this->render('view_by_siswa', [
+                'model' => $this->findModel(['nisn' => $user->username]),
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
     }
 }

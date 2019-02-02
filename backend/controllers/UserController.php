@@ -38,7 +38,7 @@ class UserController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'create', 'view', 'sign-up', 'ganti-password', 'reset-password', 'update'],
+                'only' => ['index', 'create', 'view', 'sign-up', 'ganti-password', 'reset-password', 'update', 'show'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -46,7 +46,7 @@ class UserController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'signup', 'ganti-password', 'reset-password', 'create', 'update'],
+                        'actions' => ['index', 'view', 'signup', 'ganti-password', 'reset-password', 'create', 'update', 'show'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -231,7 +231,12 @@ class UserController extends Controller
             $user->save();
 
             Yii::$app->session->setFlash('success', 'Password berhasil diganti');
-            return $this->actionView($user->id);
+            if(Yii::$app->user->can('admin')){
+                return $this->actionView($user->id);
+            }elseif (Yii::$app->user->can('siswa')){
+                return $this->actionShow();
+            }
+
         }
 
         return $this->render('ganti_password', [
@@ -352,6 +357,19 @@ class UserController extends Controller
 
         }else{
             return $this->redirect(['error/forbidden-error']);
+        }
+    }
+
+    /**
+     * Menampilkan data diri untuk siswa
+     */
+    public function actionShow(){
+        if(Yii::$app->user->can('siswa')) {
+            return $this->render('view', [
+                'model' => $this->findModel(Yii::$app->user->id),
+            ]);
+        }else{
+            $this->redirect(['error/forbidden-error']);
         }
     }
 }

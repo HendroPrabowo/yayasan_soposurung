@@ -4,19 +4,19 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\search\MataPelajaranRSearch */
+/* @var $searchModel app\models\search\GuruSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Mata Pelajaran';
+$this->title = 'Semua Guru';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="mata-pelajaran-r-index">
+<div class="guru-index">
 
     <h3><?= Html::encode($this->title) ?></h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Tambah Mata Pelajaran', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Tambah Guru', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -26,7 +26,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
 //            'id',
-            'pelajaran',
+            'no_induk_guru',
+            'username',
+            'nama',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

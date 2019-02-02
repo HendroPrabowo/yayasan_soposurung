@@ -5,18 +5,6 @@
 
     <section class="sidebar">
 
-        <!-- search form -->
-<!--        <form action="#" method="get" class="sidebar-form">-->
-<!--            <div class="input-group">-->
-<!--                <input type="text" name="q" class="form-control" placeholder="Search..."/>-->
-<!--              <span class="input-group-btn">-->
-<!--                <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i>-->
-<!--                </button>-->
-<!--              </span>-->
-<!--            </div>-->
-<!--        </form>-->
-        <!-- /.search form -->
-
         <?php
             $menuItems = [];
             if(Yii::$app->user->isGuest == false){
@@ -36,13 +24,15 @@
                         ['label' => 'Data Siswa', 'icon' => 'user', 'url' => ['siswa/index']],
                         ['label' => 'Semua Kelas', 'icon' => 'users', 'url' => ['kelas-r/index']],
                         ['label' => 'Semua Mata Pelajaran', 'icon' => 'book', 'url' => ['mata-pelajaran-r/index']],
+                        ['label' => 'Semua Guru', 'icon' => 'users', 'url' => ['guru/index']],
+                        ['label' => 'Tahun Ajaran', 'icon' => 'users', 'url' => ['tahun-ajaran-semester/index']],
                     ];
-                }else{
+                }elseif ($user->role == 'siswa'){
                     $menuItems = [
-                        ['label' => 'User', 'icon' => 'user', 'url' => ['user/show', 'id' => $user->id]],
+                        ['label' => 'Akun', 'icon' => 'user', 'url' => ['user/show']],
+                        ['label' => 'Data Diri', 'icon' => 'user', 'url' => ['siswa/view-by-siswa']],
                     ];
                 }
-
             }
         ?>
 
