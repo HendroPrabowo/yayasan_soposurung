@@ -19,17 +19,17 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= Tabs::widget([
         'items' => [
             [
-                'label' => 'Tahun Ajaran',
-                'content' => $this->render('_tahun_ajaran_semester', [
-                    'searchModel' => $searchModel,
-                    'dataProvider' => $dataProvider,
+                'label' => 'Tahun Ajaran Aktif',
+                'content' => $this->render('_tahun_ajaran_semester_aktif', [
+                    'tahun_ajaran_aktif' => $tahun_ajaran_aktif,
                 ]),
                 'active' => true
             ],
             [
-                'label' => 'Tahun Ajaran Aktif',
-                'content' => $this->render('_tahun_ajaran_semester_aktif', [
-                    'tahun_ajaran_aktif' => $tahun_ajaran_aktif,
+                'label' => 'Tahun Ajaran',
+                'content' => $this->render('_tahun_ajaran_semester', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
                 ]),
             ],
         ],

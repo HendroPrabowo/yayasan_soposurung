@@ -3,6 +3,8 @@
 namespace backend\controllers;
 
 use app\models\KelasR;
+use app\models\Siswa;
+use app\models\SiswaAssign;
 use app\models\TahunAjaranKelas;
 use Yii;
 use app\models\TahunAjaranSemester;
@@ -31,7 +33,7 @@ class TahunAjaranSemesterController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'set-active', 'assign-kelas', 'ubah-assign-kelas'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'set-active', 'assign-kelas', 'ubah-assign-kelas', 'assign-siswa-ke-kelas'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -39,7 +41,7 @@ class TahunAjaranSemesterController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'set-active', 'assign-kelas', 'ubah-assign-kelas'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'set-active', 'assign-kelas', 'ubah-assign-kelas', 'assign-siswa-ke-kelas'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -212,13 +214,16 @@ class TahunAjaranSemesterController extends Controller
 
             if(Yii::$app->request->post()){
                 if($model->load(Yii::$app->request->post())){
-                    foreach ($model->kelas_id as $value){
-                        $kelas_id = (int)$value;
-                        if(($kelas = TahunAjaranKelas::findOne(['kelas_id' => $kelas_id])) == null){
-                            $tahun_ajaran_kelas = new TahunAjaranKelas;
-                            $tahun_ajaran_kelas->tahun_ajaran_semester_id = $id;
-                            $tahun_ajaran_kelas->kelas_id = $kelas_id;
-                            $tahun_ajaran_kelas->save();
+                    $tahun_ajaran = TahunAjaranSemester::find()->where(['tahun_ajaran' => $tahun_ajaran_aktif->tahun_ajaran])->all();
+                    foreach ($tahun_ajaran as $value_tahun_ajaran){
+                        foreach ($model->kelas_id as $value_kelas){
+                            $kelas_id = (int)$value_kelas;
+                            if(($kelas = TahunAjaranKelas::findOne(['kelas_id' => $kelas_id, 'tahun_ajaran_semester_id' => $value_tahun_ajaran->id])) == null){
+                                $tahun_ajaran_kelas = new TahunAjaranKelas;
+                                $tahun_ajaran_kelas->tahun_ajaran_semester_id = $value_tahun_ajaran->id;
+                                $tahun_ajaran_kelas->kelas_id = $kelas_id;
+                                $tahun_ajaran_kelas->save();
+                            }
                         }
                     }
                 }
@@ -236,6 +241,9 @@ class TahunAjaranSemesterController extends Controller
         }
     }
 
+    /*
+     * Mengubah kelas yang telah di assign ke tahun ajaran tertentu
+    */
     public function actionUbahAssignKelas($id){
         if(Yii::$app->user->can('admin')) {
             $model = new TahunAjaranKelas;
@@ -243,25 +251,28 @@ class TahunAjaranSemesterController extends Controller
 
             if(Yii::$app->request->post()){
                 if($model->load(Yii::$app->request->post())){
-                    // Hapus kelas lama yang ingin dihapus
-                    // Kelas yang telah di assign ke semester
-                    $kelas_all = TahunAjaranKelas::findAll(['tahun_ajaran_semester_id' => $id]);
-                    foreach ($kelas_all as $value){
-                        // $value->kelas_id adalah variable kelas yang telah di assign ke semester
-                        if(!in_array($value->kelas_id, $model->kelas_id)){
-                            $kelas_hapus = TahunAjaranKelas::find()->where(['tahun_ajaran_semester_id' => $id, 'kelas_id' => $value->kelas_id])->one();
-                            $kelas_hapus->delete();
+                    // Cari model untuk semester ganjil dan genapnya
+                    $tahun_ajaran = TahunAjaranSemester::find()->where(['tahun_ajaran' => $tahun_ajaran_aktif->tahun_ajaran])->all();
+                    foreach($tahun_ajaran as $value_tahun_ajaran){
+                        // Hapus kelas lama yang ingin dihapus
+                        // Kelas yang telah di assign ke semester
+                        $kelas_all = TahunAjaranKelas::findAll(['tahun_ajaran_semester_id' => $value_tahun_ajaran->id]);
+                        foreach ($kelas_all as $value){
+                            if(!in_array($value->kelas_id, $model->kelas_id)){
+                                $kelas_hapus = TahunAjaranKelas::findOne(['kelas_id' => $value->kelas_id, 'tahun_ajaran_semester_id' => $value_tahun_ajaran->id]);
+                                $kelas_hapus->delete();
+                            }
                         }
-                    }
 
-                    // Insert kelas baru yang ditambahkan
-                    foreach ($model->kelas_id as $value){
-                        $kelas_id = (int)$value;
-                        if(($kelas = TahunAjaranKelas::findOne(['kelas_id' => $kelas_id])) == null){
-                            $tahun_ajaran_kelas = new TahunAjaranKelas;
-                            $tahun_ajaran_kelas->tahun_ajaran_semester_id = $id;
-                            $tahun_ajaran_kelas->kelas_id = $kelas_id;
-                            $tahun_ajaran_kelas->save();
+                        // Insert kelas baru yang ditambahkan
+                        foreach ($model->kelas_id as $value){
+                            $kelas_id = (int)$value;
+                            if(($kelas = TahunAjaranKelas::findOne(['kelas_id' => $kelas_id, 'tahun_ajaran_semester_id' => $value_tahun_ajaran->id])) == null){
+                                $tahun_ajaran_kelas = new TahunAjaranKelas;
+                                $tahun_ajaran_kelas->tahun_ajaran_semester_id = $value_tahun_ajaran->id;
+                                $tahun_ajaran_kelas->kelas_id = $kelas_id;
+                                $tahun_ajaran_kelas->save();
+                            }
                         }
                     }
                 }
@@ -272,6 +283,27 @@ class TahunAjaranSemesterController extends Controller
                     'kelas' => $kelas,
                     'model' => $model,
                     'tahun_ajaran_aktif' => $tahun_ajaran_aktif,
+                ]);
+            }
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
+    }
+
+    /*
+     * Mengassign siswa ke kelas tertentu
+     */
+    public function actionAssignSiswaKeKelas(){
+        if(Yii::$app->user->can('admin')) {
+            if(Yii::$app->request->post()){
+                $input = Yii::$app->request->post('SiswaAssign');
+                var_dump($input);
+                die();
+            }else{
+                $semua_siswa = Siswa::findAll(['kelas_id' => null]);
+                return $this->render('_form_assign_siswa_ke_kelas', [
+                    'semua_siswa' => $semua_siswa,
+                    'model' => new SiswaAssign(),
                 ]);
             }
         }else{

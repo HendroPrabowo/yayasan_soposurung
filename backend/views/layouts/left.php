@@ -25,7 +25,15 @@
                         ['label' => 'Semua Kelas', 'icon' => 'users', 'url' => ['kelas-r/index']],
                         ['label' => 'Semua Mata Pelajaran', 'icon' => 'book', 'url' => ['mata-pelajaran-r/index']],
                         ['label' => 'Semua Guru', 'icon' => 'users', 'url' => ['guru/index']],
-                        ['label' => 'Tahun Ajaran', 'icon' => 'users', 'url' => ['tahun-ajaran-semester/index']],
+                        [
+                            'label' => 'Tahun Ajaran',
+                            'icon' => 'users',
+                            'url' => '#',
+                            'items' => [
+                                ['label' => 'Tahun Ajaran', 'icon' => 'users', 'url' => ['tahun-ajaran-semester/index']],
+                                ['label' => 'Guru Aktif', 'icon' => 'users', 'url' => ['guru-tahun-ajaran/index']],
+                            ]
+                        ],
                     ];
                 }elseif ($user->role == 'siswa'){
                     $menuItems = [
