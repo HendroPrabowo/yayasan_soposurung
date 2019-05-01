@@ -2,20 +2,20 @@
 
 namespace backend\controllers;
 
+use app\models\AturanAsrama;
+use app\models\Siswa;
 use Yii;
-use app\models\Guru;
-use app\models\search\GuruSearch;
+use app\models\Kedisiplinan;
+use app\models\search\KedisiplinanSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use app\models\User;
-use yii\widgets\ActiveForm;
 
 /**
- * GuruController implements the CRUD actions for Guru model.
+ * KedisiplinanController implements the CRUD actions for Kedisiplinan model.
  */
-class GuruController extends Controller
+class KedisiplinanController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -23,12 +23,6 @@ class GuruController extends Controller
     public function behaviors()
     {
         return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
             'access' => [
                 'class' => AccessControl::className(),
                 'only' => ['index', 'view', 'create', 'update', 'delete'],
@@ -44,17 +38,23 @@ class GuruController extends Controller
                     ],
                 ],
             ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
         ];
     }
 
     /**
-     * Lists all Guru models.
+     * Lists all Kedisiplinan models.
      * @return mixed
      */
     public function actionIndex()
     {
         if(Yii::$app->user->can('admin')) {
-            $searchModel = new GuruSearch();
+            $searchModel = new KedisiplinanSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
             return $this->render('index', [
@@ -64,10 +64,11 @@ class GuruController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
+
     }
 
     /**
-     * Displays a single Guru model.
+     * Displays a single Kedisiplinan model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -81,41 +82,27 @@ class GuruController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
+
     }
 
     /**
-     * Creates a new Guru model.
+     * Creates a new Kedisiplinan model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
         if(Yii::$app->user->can('admin')) {
-            $model = new Guru();
-
-            if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-                Yii::$app->response->format = 'json';
-                return ActiveForm::validate($model);
-            }
+            $model = new Kedisiplinan();
 
             if ($model->load(Yii::$app->request->post())) {
-                // Create akun untuk guru
-                $user_common = new \common\models\User();
-                $user_common->setPassword($model->username);
-                $user_common->generateAuthKey();
+                if($model->tambah_ke_point == 1){
+                    $siswa = Siswa::findOne($model->siswa_id);
+                    $siswa->kredit_point += $model->aturanAsrama->point;
+                    $siswa->save();
+                }
 
-                $user = new User();
-                $user->username = $model->username;
-                $user->role = 'guru';
-                $user->password_hash = $user_common->password_hash;
-                $user->auth_key = $user_common->auth_key;
-                $user->is_active = 0;
-                $user->save();
-
-                $model->user_id = $user->id;
                 $model->save();
-
-                Yii::$app->session->addFlash('success', 'Akun '.$user->username.' berhasil dibuat');
                 return $this->redirect(['view', 'id' => $model->id]);
             }
 
@@ -125,10 +112,11 @@ class GuruController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
+
     }
 
     /**
-     * Updates an existing Guru model.
+     * Updates an existing Kedisiplinan model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -139,7 +127,28 @@ class GuruController extends Controller
         if(Yii::$app->user->can('admin')) {
             $model = $this->findModel($id);
 
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if ($model->load(Yii::$app->request->post())) {
+                $siswa = Siswa::findOne($model->siswa_id);
+                $aturan_asrama_lama = AturanAsrama::findOne($model->getOldAttribute('aturan_asrama_id'));
+
+                if($model->tambah_ke_point == 0){
+                    if($model->getOldAttribute('tambah_ke_point') == 1){
+                        $siswa->kredit_point -=  $aturan_asrama_lama->point;
+                        $siswa->save();
+                    }
+                }
+                elseif ($model->tambah_ke_point == 1){
+                    if($model->getOldAttribute('tambah_ke_point') == 1){
+                        $siswa->kredit_point -=  $aturan_asrama_lama->point;
+                        $siswa->kredit_point += $model->aturanAsrama->point;
+                        $siswa->save();
+                    }else if($model->getOldAttribute('tambah_ke_point') == 0){
+                        $siswa->kredit_point += $model->aturanAsrama->point;
+                        $siswa->save();
+                    }
+                }
+
+                $model->save();
                 return $this->redirect(['view', 'id' => $model->id]);
             }
 
@@ -149,10 +158,11 @@ class GuruController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
+
     }
 
     /**
-     * Deletes an existing Guru model.
+     * Deletes an existing Kedisiplinan model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -167,18 +177,19 @@ class GuruController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
+
     }
 
     /**
-     * Finds the Guru model based on its primary key value.
+     * Finds the Kedisiplinan model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Guru the loaded model
+     * @return Kedisiplinan the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Guru::findOne($id)) !== null) {
+        if (($model = Kedisiplinan::findOne($id)) !== null) {
             return $model;
         }
 

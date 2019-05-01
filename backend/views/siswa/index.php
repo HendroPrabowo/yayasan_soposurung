@@ -51,6 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'pekerjaan_ayah',
             //'pekerjaan_ibu',
             //'user_id',
+            'kredit_point',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

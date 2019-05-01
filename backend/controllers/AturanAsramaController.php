@@ -2,20 +2,21 @@
 
 namespace backend\controllers;
 
+use backend\models\Excel;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use yii\web\UploadedFile;
 use Yii;
-use app\models\Guru;
-use app\models\search\GuruSearch;
+use app\models\AturanAsrama;
+use app\models\search\AturanAsramaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use app\models\User;
-use yii\widgets\ActiveForm;
 
 /**
- * GuruController implements the CRUD actions for Guru model.
+ * AturanAsramaController implements the CRUD actions for AturanAsrama model.
  */
-class GuruController extends Controller
+class AturanAsramaController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -23,12 +24,6 @@ class GuruController extends Controller
     public function behaviors()
     {
         return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
             'access' => [
                 'class' => AccessControl::className(),
                 'only' => ['index', 'view', 'create', 'update', 'delete'],
@@ -44,17 +39,23 @@ class GuruController extends Controller
                     ],
                 ],
             ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
         ];
     }
 
     /**
-     * Lists all Guru models.
+     * Lists all AturanAsrama models.
      * @return mixed
      */
     public function actionIndex()
     {
         if(Yii::$app->user->can('admin')) {
-            $searchModel = new GuruSearch();
+            $searchModel = new AturanAsramaSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
             return $this->render('index', [
@@ -64,10 +65,11 @@ class GuruController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
+
     }
 
     /**
-     * Displays a single Guru model.
+     * Displays a single AturanAsrama model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -81,54 +83,33 @@ class GuruController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
+
     }
 
     /**
-     * Creates a new Guru model.
+     * Creates a new AturanAsrama model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
         if(Yii::$app->user->can('admin')) {
-            $model = new Guru();
+            $model = new AturanAsrama();
 
-            if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-                Yii::$app->response->format = 'json';
-                return ActiveForm::validate($model);
-            }
-
-            if ($model->load(Yii::$app->request->post())) {
-                // Create akun untuk guru
-                $user_common = new \common\models\User();
-                $user_common->setPassword($model->username);
-                $user_common->generateAuthKey();
-
-                $user = new User();
-                $user->username = $model->username;
-                $user->role = 'guru';
-                $user->password_hash = $user_common->password_hash;
-                $user->auth_key = $user_common->auth_key;
-                $user->is_active = 0;
-                $user->save();
-
-                $model->user_id = $user->id;
-                $model->save();
-
-                Yii::$app->session->addFlash('success', 'Akun '.$user->username.' berhasil dibuat');
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
 
             return $this->render('create', [
                 'model' => $model,
             ]);
-        }else{
+        }else {
             return $this->redirect(['error/forbidden-error']);
         }
     }
 
     /**
-     * Updates an existing Guru model.
+     * Updates an existing AturanAsrama model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -146,13 +127,13 @@ class GuruController extends Controller
             return $this->render('update', [
                 'model' => $model,
             ]);
-        }else{
+        }else {
             return $this->redirect(['error/forbidden-error']);
         }
     }
 
     /**
-     * Deletes an existing Guru model.
+     * Deletes an existing AturanAsrama model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -170,18 +151,83 @@ class GuruController extends Controller
     }
 
     /**
-     * Finds the Guru model based on its primary key value.
+     * Finds the AturanAsrama model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Guru the loaded model
+     * @return AturanAsrama the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Guru::findOne($id)) !== null) {
+        if (($model = AturanAsrama::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionImportExcel()
+    {
+        if(Yii::$app->user->can('admin')) {
+            $model = new Excel();
+
+            if(Yii::$app->request->post()){
+                $model->excel = UploadedFile::getInstance($model, 'excel');
+                $path = 'uploads/excel';
+                $filePath = $path . rand(1, 100) . '-' . str_replace('', '-', $model->excel->name);
+                $model->excel->saveAs($filePath);
+
+                // membaca file
+                $spreadsheet = IOFactory::load($filePath);
+                $sheetdata = $spreadsheet->getActiveSheet()->toArray();
+
+                $i = 0;
+                $peraturan_array = array();
+                set_time_limit(3600);
+                foreach ($sheetdata as $value) {
+                    if($i > 0){
+                        $aturan = AturanAsrama::find()->where(['jenis_pelanggaran' => $value[1]])->one();
+                        // kalo peraturannya belum ada maka dibuat baru
+                        if($aturan == null){
+                            $peraturan_array[] = [
+                                'jenis_pelanggaran' => $value[1],
+                                'point' => $value[2]
+                            ];
+                        }// kalo udah ada update yang lama
+                        else{
+                            $aturan->jenis_pelanggaran = $value[1];
+                            $aturan->point = $value[2];
+                            $aturan->save();
+                        }
+                    }
+                    $i++;
+                }
+
+                if($peraturan_array != null){
+                    $tableName = 'aturan_asrama';
+                    $columnNameArray = ['jenis_pelanggaran', 'point'];
+                    Yii::$app->db->createCommand()->batchInsert($tableName, $columnNameArray, $peraturan_array)->execute();
+                }
+
+                Yii::$app->session->setFlash('success', 'Import data excel berhasil');
+                return $this->actionIndex();
+            }
+
+            return $this->render('_form_import_excel', [
+                'model' => $model
+            ]);
+
+            return $this->redirect(['index']);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
+    }
+
+    public function actionDownloadExcel(){
+        $excel = Yii::$app->basePath.'/web/template/AturanAsrama.xlsx';
+
+        if (file_exists($excel)) {
+            return Yii::$app->response->sendFile($excel);
+        }
     }
 }

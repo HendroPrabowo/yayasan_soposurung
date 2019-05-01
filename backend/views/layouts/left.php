@@ -34,6 +34,9 @@
                                 ['label' => 'Guru Aktif', 'icon' => 'users', 'url' => ['guru-tahun-ajaran/index']],
                             ]
                         ],
+                        ['label' => 'Aturan Asrama', 'icon' => 'fa fa-book', 'url' => ['aturan-asrama/index']],
+                        ['label' => 'Kesehatan', 'icon' => 'glyphicon glyphicon-plus', 'url' => ['kesehatan/index']],
+                        ['label' => 'Kedisiplinan', 'icon' => 'user', 'url' => ['kedisiplinan/index']],
                     ];
                 }elseif ($user->role == 'siswa'){
                     $menuItems = [

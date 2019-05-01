@@ -2,20 +2,19 @@
 
 namespace backend\controllers;
 
+use app\models\User;
 use Yii;
-use app\models\Guru;
-use app\models\search\GuruSearch;
+use app\models\Kesehatan;
+use app\models\search\KesehatanSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use app\models\User;
-use yii\widgets\ActiveForm;
 
 /**
- * GuruController implements the CRUD actions for Guru model.
+ * KesehatanController implements the CRUD actions for Kesehatan model.
  */
-class GuruController extends Controller
+class KesehatanController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -23,12 +22,6 @@ class GuruController extends Controller
     public function behaviors()
     {
         return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
             'access' => [
                 'class' => AccessControl::className(),
                 'only' => ['index', 'view', 'create', 'update', 'delete'],
@@ -44,17 +37,23 @@ class GuruController extends Controller
                     ],
                 ],
             ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
         ];
     }
 
     /**
-     * Lists all Guru models.
+     * Lists all Kesehatan models.
      * @return mixed
      */
     public function actionIndex()
     {
         if(Yii::$app->user->can('admin')) {
-            $searchModel = new GuruSearch();
+            $searchModel = new KesehatanSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
             return $this->render('index', [
@@ -64,10 +63,11 @@ class GuruController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
+
     }
 
     /**
-     * Displays a single Guru model.
+     * Displays a single Kesehatan model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -81,41 +81,26 @@ class GuruController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
+
     }
 
     /**
-     * Creates a new Guru model.
+     * Creates a new Kesehatan model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
         if(Yii::$app->user->can('admin')) {
-            $model = new Guru();
-
-            if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-                Yii::$app->response->format = 'json';
-                return ActiveForm::validate($model);
-            }
+            $model = new Kesehatan();
 
             if ($model->load(Yii::$app->request->post())) {
-                // Create akun untuk guru
-                $user_common = new \common\models\User();
-                $user_common->setPassword($model->username);
-                $user_common->generateAuthKey();
-
-                $user = new User();
-                $user->username = $model->username;
-                $user->role = 'guru';
-                $user->password_hash = $user_common->password_hash;
-                $user->auth_key = $user_common->auth_key;
-                $user->is_active = 0;
-                $user->save();
-
-                $model->user_id = $user->id;
+                $user = User::findOne(Yii::$app->user->getId());
+                if($user->role == 'admin'){
+                    $model->created_by = 'admin';
+                }
                 $model->save();
 
-                Yii::$app->session->addFlash('success', 'Akun '.$user->username.' berhasil dibuat');
                 return $this->redirect(['view', 'id' => $model->id]);
             }
 
@@ -125,10 +110,11 @@ class GuruController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
+
     }
 
     /**
-     * Updates an existing Guru model.
+     * Updates an existing Kesehatan model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -140,6 +126,7 @@ class GuruController extends Controller
             $model = $this->findModel($id);
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
                 return $this->redirect(['view', 'id' => $model->id]);
             }
 
@@ -149,10 +136,11 @@ class GuruController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
+
     }
 
     /**
-     * Deletes an existing Guru model.
+     * Deletes an existing Kesehatan model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -167,18 +155,19 @@ class GuruController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
+
     }
 
     /**
-     * Finds the Guru model based on its primary key value.
+     * Finds the Kesehatan model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Guru the loaded model
+     * @return Kesehatan the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Guru::findOne($id)) !== null) {
+        if (($model = Kesehatan::findOne($id)) !== null) {
             return $model;
         }
 

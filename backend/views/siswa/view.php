@@ -54,6 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return $model->kelas->kelas;
                 }
             ],
+            'kredit_point',
         ],
     ]) ?>
 

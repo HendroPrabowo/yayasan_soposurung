@@ -92,7 +92,6 @@ class SiteController extends Controller
                     ]);
                 }
             }
-
             return $this->goBack();
         } else {
             $model->password = '';
