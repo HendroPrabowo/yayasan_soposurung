@@ -56,8 +56,14 @@ class GuruTahunAjaranController extends Controller
         if(Yii::$app->user->can('admin')) {
             // Ambil tahun ajaran yang aktif
             $tahun_ajaran_aktif = TahunAjaranSemester::find()->where(['is_active' => 1])->one();
-            // Ambil semua guru yang aktif di tahun ajaran aktif tersebut
-            $guru_tahun_ajaran = GuruTahunAjaran::find()->where(['tahun_ajaran_semester_id' => $tahun_ajaran_aktif->id])->all();
+
+            // Jika belum ada tahun ajaran yang aktif
+            if($tahun_ajaran_aktif == null){
+                $guru_tahun_ajaran = null;
+            }else{
+                // Ambil semua guru yang aktif di tahun ajaran aktif tersebut
+                $guru_tahun_ajaran = GuruTahunAjaran::find()->where(['tahun_ajaran_semester_id' => $tahun_ajaran_aktif->id])->all();
+            }
 
             return $this->render('index', [
                 'tahun_ajaran_aktif' => $tahun_ajaran_aktif,

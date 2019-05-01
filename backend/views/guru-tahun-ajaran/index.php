@@ -8,10 +8,17 @@ $this->title = 'Guru Aktif';
 ?>
 <div class="guru-tahun-ajaran-index">
 
-    <h3><?= $this->title ?> pada Tahun Ajaran <b><?= $tahun_ajaran_aktif->tahun_ajaran ?></b> Semester <b><?= $tahun_ajaran_aktif->semester ?></b></h3>
-
     <?php
-    if(sizeof($guru_tahun_ajaran ) == 0){
+    if($tahun_ajaran_aktif == null){
+        echo '<h3>Belum ada tahun ajaran yang aktif</h3>';
+    }else{
+        echo '<h3><?= $this->title ?> pada Tahun Ajaran <b><?= $tahun_ajaran_aktif->tahun_ajaran ?></b> Semester <b><?= $tahun_ajaran_aktif->semester ?></b></h3>';
+    }
+    ?>
+    <?php
+    if($guru_tahun_ajaran == null){
+        echo '<h4>Silahkan tambah tahun ajaran baru terlebih dahulu</h4>';
+    }else if(sizeof($guru_tahun_ajaran ) == 0){
         echo '<h4>Belum ada guru di assign ke semester ini</h4>';
         echo '<a href="'.Url::to("tambah-guru").'" class="btn btn-success">Tambah Guru</a>';
     }else{
