@@ -3,19 +3,26 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
+use yii\helpers\ArrayHelper;
+use kartik\select2\Select2;
 
-/* @var $this yii\web\View */
-/* @var $model app\models\Kesehatan */
-/* @var $form yii\widgets\ActiveForm */
+$item_siswa = ArrayHelper::map($siswa, 'nisn', 'KeteranganSiswa');
 ?>
 
 <div class="kesehatan-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'siswa_id')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'siswa_id')->widget(Select2::classname(), [
+        'data' => $item_siswa,
+        'language' => 'en',
+        'options' => ['placeholder' => 'Pilih Siswa ...'],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]) ?>
 
-    <?= $form->field($model, 'kesehatan')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'kesehatan')->textarea(['rows' => 4]) ?>
 
     <?= $form->field($model, 'semester')->textInput([
             'type' => 'number'

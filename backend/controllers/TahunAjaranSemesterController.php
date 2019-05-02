@@ -213,6 +213,22 @@ class TahunAjaranSemesterController extends Controller
             $tahun_ajaran_aktif = TahunAjaranSemester::findOne($id);
 
             if(Yii::$app->request->post()){
+                $request = Yii::$app->request->post();
+                $i=0;
+                $kelas_dipilih = array();
+                foreach ($request as $value){
+                    if($i > 0){
+                        $kelas_dipilih[] = $value;
+                    }
+                    $i++;
+                }
+
+                foreach ($kelas_dipilih as $value){
+                    echo $value.'<br>';
+                }
+
+                die();
+
                 if($model->load(Yii::$app->request->post())){
                     $tahun_ajaran = TahunAjaranSemester::find()->where(['tahun_ajaran' => $tahun_ajaran_aktif->tahun_ajaran])->all();
                     foreach ($tahun_ajaran as $value_tahun_ajaran){

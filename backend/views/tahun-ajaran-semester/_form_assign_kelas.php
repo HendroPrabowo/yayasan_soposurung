@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\TahunAjaranSemester */
@@ -29,5 +30,25 @@ $kelas_all = \yii\helpers\ArrayHelper::map($kelas, 'id', 'kelas');
     </div>
 
     <?php ActiveForm::end() ?>
+
+    <hr>
+    <p>Form Baru</p>
+
+    <?= Html::beginForm(Url::to('assign-kelas?id='.$tahun_ajaran_aktif->id), 'post') ?>
+
+    <div class="form-group">
+        <label>Pilih Kelas</label>
+        <?php
+        foreach ($kelas as $value){
+            echo "<br>".Html::input('checkbox', 'kelas'.$value->id, $value->id)." ".$value->kelas;
+        }
+        ?>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Simpan</button>
+        </div>
+
+    </div>
+
+    <?= Html::endForm() ?>
 
 </div>

@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
+use kartik\select2\Select2;
 
 $array = [
     ['name' => 'Ya', 'value' => 1],
@@ -10,6 +11,11 @@ $array = [
 ];
 
 $item = ArrayHelper::map($array, 'value', 'name');
+$item_siswa = ArrayHelper::map($siswa, 'nisn', 'KeteranganSiswa');
+$item_aturan_asrama = ArrayHelper::map($aturan_asrama, 'id', 'jenis_pelanggaran');
+
+//var_dump($item);
+//die();
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Kedisiplinan */
@@ -20,9 +26,23 @@ $item = ArrayHelper::map($array, 'value', 'name');
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'siswa_id')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'siswa_id')->widget(Select2::classname(), [
+        'data' => $item_siswa,
+        'language' => 'en',
+        'options' => ['placeholder' => 'Pilih Siswa ...'],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]) ?>
 
-    <?= $form->field($model, 'aturan_asrama_id')->textInput() ?>
+    <?= $form->field($model, 'aturan_asrama_id')->widget(Select2::classname(), [
+        'data' => $item_aturan_asrama,
+        'language' => 'en',
+        'options' => ['placeholder' => 'Pilih Aturan yang Dilanggar ...'],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]) ?>
 
     <?= $form->field($model, 'keterangan')->textarea(['rows' => 6]) ?>
 

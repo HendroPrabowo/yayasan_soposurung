@@ -10,6 +10,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use app\models\Siswa;
 
 /**
  * KesehatanController implements the CRUD actions for Kesehatan model.
@@ -104,8 +105,10 @@ class KesehatanController extends Controller
                 return $this->redirect(['view', 'id' => $model->id]);
             }
 
+            $siswa = Siswa::find()->all();
             return $this->render('create', [
                 'model' => $model,
+                'siswa' => $siswa,
             ]);
         }else{
             return $this->redirect(['error/forbidden-error']);
@@ -130,8 +133,10 @@ class KesehatanController extends Controller
                 return $this->redirect(['view', 'id' => $model->id]);
             }
 
+            $siswa = Siswa::find()->all();
             return $this->render('update', [
                 'model' => $model,
+                'siswa' => $siswa
             ]);
         }else{
             return $this->redirect(['error/forbidden-error']);

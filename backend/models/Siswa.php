@@ -95,4 +95,8 @@ class Siswa extends \yii\db\ActiveRecord
     public function getKelas(){
         return $this->hasOne(KelasR::className(), ['id' => 'kelas_id']);
     }
+
+    public function getKeteranganSiswa(){
+        return $this->nama." ".$this->nisn;
+    }
 }

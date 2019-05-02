@@ -106,8 +106,12 @@ class KedisiplinanController extends Controller
                 return $this->redirect(['view', 'id' => $model->id]);
             }
 
+            $aturan_asrama = AturanAsrama::find()->all();
+            $siswa = Siswa::find()->all();
             return $this->render('create', [
                 'model' => $model,
+                'siswa' => $siswa,
+                'aturan_asrama' => $aturan_asrama
             ]);
         }else{
             return $this->redirect(['error/forbidden-error']);
@@ -152,8 +156,12 @@ class KedisiplinanController extends Controller
                 return $this->redirect(['view', 'id' => $model->id]);
             }
 
+            $aturan_asrama = AturanAsrama::find()->all();
+            $siswa = Siswa::find()->all();
             return $this->render('update', [
                 'model' => $model,
+                'siswa' => $siswa,
+                'aturan_asrama' => $aturan_asrama,
             ]);
         }else{
             return $this->redirect(['error/forbidden-error']);
