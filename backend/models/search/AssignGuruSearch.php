@@ -1,15 +1,15 @@
 <?php
 
-namespace backend\models\search;
+namespace app\models\search;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\GuruTahunAjaran;
+use app\models\AssignGuru;
 
 /**
- * GuruTahunAjaranSearch represents the model behind the search form of `app\models\GuruTahunAjaran`.
+ * AssignGuruSearch represents the model behind the search form of `app\models\AssignGuru`.
  */
-class GuruTahunAjaranSearch extends GuruTahunAjaran
+class AssignGuruSearch extends AssignGuru
 {
     /**
      * {@inheritdoc}
@@ -17,7 +17,7 @@ class GuruTahunAjaranSearch extends GuruTahunAjaran
     public function rules()
     {
         return [
-            [['id', 'guru_id', 'tahun_ajaran_semester_id'], 'integer'],
+            [['id', 'kelas_mata_pelajaran_id', 'guru_id'], 'integer'],
         ];
     }
 
@@ -39,7 +39,7 @@ class GuruTahunAjaranSearch extends GuruTahunAjaran
      */
     public function search($params)
     {
-        $query = GuruTahunAjaran::find();
+        $query = AssignGuru::find();
 
         // add conditions that should always apply here
 
@@ -58,8 +58,8 @@ class GuruTahunAjaranSearch extends GuruTahunAjaran
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'kelas_mata_pelajaran_id' => $this->kelas_mata_pelajaran_id,
             'guru_id' => $this->guru_id,
-            'tahun_ajaran_semester_id' => $this->tahun_ajaran_semester_id,
         ]);
 
         return $dataProvider;

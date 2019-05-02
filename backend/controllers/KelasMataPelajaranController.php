@@ -156,12 +156,4 @@ class KelasMataPelajaranController extends Controller
         }
     }
 
-    public function actionAssignGuru(){
-        if(Yii::$app->user->can('admin')) {
-            var_dump('Assign Guru');
-            die();
-        }else{
-            return $this->redirect(['error/forbidden-error']);
-        }
-    }
 }

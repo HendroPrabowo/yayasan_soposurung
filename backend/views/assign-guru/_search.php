@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\search\GuruTahunAjaranSearch */
+/* @var $model app\models\search\AssignGuruSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="guru-tahun-ajaran-search">
+<div class="assign-guru-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
@@ -17,9 +17,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'guru_id') ?>
+    <?= $form->field($model, 'kelas_mata_pelajaran_id') ?>
 
-    <?= $form->field($model, 'tahun_ajaran_semester_id') ?>
+    <?= $form->field($model, 'guru_id') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

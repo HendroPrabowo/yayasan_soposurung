@@ -31,7 +31,7 @@
                             'url' => '#',
                             'items' => [
                                 ['label' => 'Tahun Ajaran', 'icon' => 'users', 'url' => ['tahun-ajaran-semester/index']],
-                                ['label' => 'Guru Aktif', 'icon' => 'users', 'url' => ['guru-tahun-ajaran/index']],
+                                ['label' => 'List Assign Guru', 'icon' => 'users', 'url' => ['assign-guru/index']],
                             ]
                         ],
                         ['label' => 'Aturan Asrama', 'icon' => 'fa fa-book', 'url' => ['aturan-asrama/index']],
