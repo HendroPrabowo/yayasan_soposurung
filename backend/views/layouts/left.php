@@ -37,6 +37,7 @@
                         ['label' => 'Aturan Asrama', 'icon' => 'fa fa-book', 'url' => ['aturan-asrama/index']],
                         ['label' => 'Kesehatan', 'icon' => 'glyphicon glyphicon-plus', 'url' => ['kesehatan/index']],
                         ['label' => 'Kedisiplinan', 'icon' => 'user', 'url' => ['kedisiplinan/index']],
+                        ['label' => 'Log Keluar Masuk Barang', 'icon' => 'book', 'url' => ['keluar-masuk-barang/index']],
                     ];
                 }elseif ($user->role == 'siswa'){
                     $menuItems = [
