@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use app\models\Guru;
 use app\models\KelasMataPelajaran;
+use app\models\TahunAjaranSemester;
 use Yii;
 use app\models\AssignGuru;
 use app\models\search\AssignGuruSearch;
@@ -31,7 +32,7 @@ class AssignGuruController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'assign-guru'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'assign-guru', 'index_guru'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -39,7 +40,7 @@ class AssignGuruController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'assign-guru'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'assign-guru', 'index_guru'],
                         'roles' => ['@'],
                     ],
                 ],

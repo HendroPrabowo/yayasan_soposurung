@@ -14,6 +14,7 @@ use Yii;
  * @property int $user_id
  *
  * @property User $user
+ * @property AssignGuru[] $assignGurus
  */
 class Guru extends \yii\db\ActiveRecord
 {
@@ -68,5 +69,12 @@ class Guru extends \yii\db\ActiveRecord
      */
     public function getUser(){
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    /*
+     * Get assign gurus
+     */
+    public function getAssignGurus(){
+        return $this->hasMany(AssignGuru::className(), ['guru_id' => 'id']);
     }
 }
