@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use app\models\MataPelajaranR;
 use app\models\TahunAjaranKelas;
+use app\models\TahunAjaranSemester;
 use Yii;
 use app\models\KelasMataPelajaran;
 use app\models\search\KelasMataPelajaranSearch;
@@ -12,6 +13,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\data\ActiveDataProvider;
 
 /**
  * KelasMataPelajaranController implements the CRUD actions for KelasMataPelajaran model.
@@ -32,7 +34,7 @@ class KelasMataPelajaranController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['view-mata-pelajaran', 'tambah-mata-pelajaran', 'tambah-mata-pelajaran-post'],
+                'only' => ['view-mata-pelajaran', 'tambah-mata-pelajaran', 'tambah-mata-pelajaran-post', 'assign-guru'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -40,7 +42,7 @@ class KelasMataPelajaranController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['view-mata-pelajaran', 'tambah-mata-pelajaran', 'tambah-mata-pelajaran-post'],
+                        'actions' => ['view-mata-pelajaran', 'tambah-mata-pelajaran', 'tambah-mata-pelajaran-post', 'assign-guru'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -64,8 +66,16 @@ class KelasMataPelajaranController extends Controller
         if(Yii::$app->user->can('admin')) {
             $tahun_ajaran_kelas = TahunAjaranKelas::findOne($id);
 
+            $dataProvider = new ActiveDataProvider([
+                'query' => KelasMataPelajaran::find()->where(['tahun_ajaran_kelas_id' => $id])->orderBy('id ASC'),
+                'pagination' => [
+                    'pageSize' => 5,
+                ],
+            ]);
+
             return $this->render("index_mata_pelajaran", [
-                "tahun_ajaran_kelas" => $tahun_ajaran_kelas
+                'tahun_ajaran_kelas' => $tahun_ajaran_kelas,
+                'listDataProvider' => $dataProvider
             ]);
         }else{
             return $this->redirect(['error/forbidden-error']);
@@ -97,32 +107,59 @@ class KelasMataPelajaranController extends Controller
     public function actionTambahMataPelajaranPost(){
         if(Yii::$app->user->can('admin')) {
             $request = Yii::$app->request->post();
+            $pelajaran_yang_dipilih = array();
 
-            $tahun_ajaran_kelas = TahunAjaranKelas::findOne($request['id_tahun_ajaran_kelas']);
+            // Ambil id yang dipilih dari request
+            $i = 0;
+            foreach ($request as $value){
+                if($i > 2){
+                    $pelajaran_yang_dipilih[] = $value;
+                }
+                $i++;
+            }
 
-            $mata_pelajaran_all = MataPelajaranR::find()->all();
-            $mata_pelajaran = [];
+            // Ambil kedua tahun ajaran dan semester berbeda
+            $tahun_ajaran_aktif = TahunAjaranSemester::findOne($request['semester']);
+            $tahun_ajaran = TahunAjaranSemester::find()->where(['tahun_ajaran' => $tahun_ajaran_aktif->tahun_ajaran])->all();
 
-            foreach ($mata_pelajaran_all as $item) {
-                try{
-                    $value = $request['pelajaran'.$item->id];
-                    $mata_pelajaran[] = $item->id;
-                }catch (\ErrorException $e){
-                    continue;
+            // Ambil kedua kelas di tahun ajaran yang sama di semester berbeda
+            $tahun_ajaran_kelas = array();
+            foreach ($tahun_ajaran as $value_tahun_ajaran){
+                $tahun_ajaran_kelas[] = TahunAjaranKelas::find()->where([
+                    'tahun_ajaran_semester_id' => $value_tahun_ajaran->id,
+                    'kelas_id' => $request['kelas'],
+                ])->one();
+            }
+
+            // Masukkan ke database
+            foreach ($tahun_ajaran_kelas as $value_tahun_ajaran_kelas){
+                foreach ($pelajaran_yang_dipilih as $value_pelajaran_yang_dipilih){
+                    $check_duplikat = KelasMataPelajaran::find()->where(['tahun_ajaran_kelas_id' => $value_tahun_ajaran_kelas->id, 'mata_pelajaran_id' => $value_pelajaran_yang_dipilih])->one();
+
+                    if($check_duplikat == null){
+                        $kelas_mata_pelajaran = new KelasMataPelajaran();
+                        $kelas_mata_pelajaran->tahun_ajaran_kelas_id = $value_tahun_ajaran_kelas->id;
+                        $kelas_mata_pelajaran->mata_pelajaran_id = $value_pelajaran_yang_dipilih;
+                        $kelas_mata_pelajaran->save();
+                    }
                 }
             }
 
-            foreach ($mata_pelajaran as $value){
-                $check_duplikat = KelasMataPelajaran::find()->where(['tahun_ajaran_kelas_id' => $tahun_ajaran_kelas->id, 'mata_pelajaran_id' => $value])->one();
+            $tahun_ajaran_kelas_aktif = TahunAjaranKelas::find()->where([
+                'tahun_ajaran_semester_id' => $tahun_ajaran_aktif->id,
+                'kelas_id' => $request['kelas']
+            ])->one();
 
-                if($check_duplikat == null){
-                    $kelas_mata_pelajaran = new KelasMataPelajaran();
-                    $kelas_mata_pelajaran->tahun_ajaran_kelas_id = $tahun_ajaran_kelas->id;
-                    $kelas_mata_pelajaran->mata_pelajaran_id = $value;
-                    $kelas_mata_pelajaran->save();
-                }
-            }
-            return $this->actionViewMataPelajaran($tahun_ajaran_kelas->id);
+            return $this->actionViewMataPelajaran($tahun_ajaran_kelas_aktif->id);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
+    }
+
+    public function actionAssignGuru(){
+        if(Yii::$app->user->can('admin')) {
+            var_dump('Assign Guru');
+            die();
         }else{
             return $this->redirect(['error/forbidden-error']);
         }

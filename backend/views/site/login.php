@@ -27,7 +27,7 @@ $fieldOptions2 = [
             if($status == 0){
                 echo '<div class="alert-error alert fade in">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></button>
-                    <i class="icon fa fa-warning"></i>Akun Sudah Tidak Aktif. Silahkan Menghubungi Admin
+                    <i class="icon fa fa-warning"></i>Akun Anda Tidak Aktif. Silahkan Menghubungi Admin
                 </div>';
             }
         }

@@ -223,26 +223,39 @@ class TahunAjaranSemesterController extends Controller
                     $i++;
                 }
 
-                foreach ($kelas_dipilih as $value){
-                    echo $value.'<br>';
-                }
-
-                die();
-
-                if($model->load(Yii::$app->request->post())){
-                    $tahun_ajaran = TahunAjaranSemester::find()->where(['tahun_ajaran' => $tahun_ajaran_aktif->tahun_ajaran])->all();
-                    foreach ($tahun_ajaran as $value_tahun_ajaran){
-                        foreach ($model->kelas_id as $value_kelas){
-                            $kelas_id = (int)$value_kelas;
-                            if(($kelas = TahunAjaranKelas::findOne(['kelas_id' => $kelas_id, 'tahun_ajaran_semester_id' => $value_tahun_ajaran->id])) == null){
-                                $tahun_ajaran_kelas = new TahunAjaranKelas;
-                                $tahun_ajaran_kelas->tahun_ajaran_semester_id = $value_tahun_ajaran->id;
-                                $tahun_ajaran_kelas->kelas_id = $kelas_id;
-                                $tahun_ajaran_kelas->save();
-                            }
+                $tahun_ajaran = TahunAjaranSemester::find()->where(['tahun_ajaran' => $tahun_ajaran_aktif->tahun_ajaran])->all();
+                foreach ($tahun_ajaran as $value_tahun_ajaran){
+                    foreach ($kelas_dipilih as $value_kelas){
+                        if(($kelas = TahunAjaranKelas::findOne(['kelas_id' => $value_kelas, 'tahun_ajaran_semester_id' => $value_tahun_ajaran->id])) == null){
+                            $tahun_ajaran_kelas = new TahunAjaranKelas;
+                            $tahun_ajaran_kelas->tahun_ajaran_semester_id = $value_tahun_ajaran->id;
+                            $tahun_ajaran_kelas->kelas_id = $value_kelas;
+                            $tahun_ajaran_kelas->save();
                         }
                     }
                 }
+
+//                Menampilkan kelas yang dipilih
+//                foreach ($kelas_dipilih as $value){
+//                    echo $value.'<br>';
+//                }
+
+//                if($model->load(Yii::$app->request->post())){
+//                    $tahun_ajaran = TahunAjaranSemester::find()->where(['tahun_ajaran' => $tahun_ajaran_aktif->tahun_ajaran])->all();
+//                    foreach ($tahun_ajaran as $value_tahun_ajaran){
+//                        foreach ($model->kelas_id as $value_kelas){
+//                            $kelas_id = (int)$value_kelas;
+//                            if(($kelas = TahunAjaranKelas::findOne(['kelas_id' => $kelas_id, 'tahun_ajaran_semester_id' => $value_tahun_ajaran->id])) == null){
+//                                $tahun_ajaran_kelas = new TahunAjaranKelas;
+//                                $tahun_ajaran_kelas->tahun_ajaran_semester_id = $value_tahun_ajaran->id;
+//                                $tahun_ajaran_kelas->kelas_id = $kelas_id;
+//                                $tahun_ajaran_kelas->save();
+//                            }
+//                        }
+//                    }
+//                }
+
+//                die();
                 return $this->actionIndex();
             }else{
                 $kelas = KelasR::find()->all();
