@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use app\models\Angkatan;
 use app\models\AuthAssignment;
 use app\models\KelasR;
 use backend\models\Excel;
@@ -121,10 +122,11 @@ class SiswaController extends Controller
             }
 
             $kelas = KelasR::find()->all();
-
+            $angkatan = Angkatan::find()->all();
             return $this->render('create', [
                 'model' => $model,
                 'kelas' => $kelas,
+                'angkatan' => $angkatan,
             ]);
         }else{
             return $this->redirect(['error/forbidden-error']);
@@ -149,9 +151,11 @@ class SiswaController extends Controller
             }
 
             $kelas = KelasR::find()->all();
+            $angkatan = Angkatan::find()->all();
             return $this->render('update', [
                 'model' => $model,
                 'kelas' => $kelas,
+                'angkatan' => $angkatan,
             ]);
         }else{
             return $this->redirect(['error/forbidden-error']);

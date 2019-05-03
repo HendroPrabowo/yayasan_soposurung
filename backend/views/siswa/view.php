@@ -43,6 +43,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'nomor_telepon_orang_tua',
             'pekerjaan_ayah',
             'pekerjaan_ibu',
+//            'angkatan_id',
+            [
+                'attribute' => 'Angkatan',
+                'value' => function(yii\base\Model $model){
+                    if($model->angkatan_id != null){
+                        return $model->angkatan->angkatan;
+                    }
+                }
+            ],
 //            'user_id'
 //            'kelas_id'
             [

@@ -69,7 +69,7 @@ class KelasMataPelajaranController extends Controller
             $dataProvider = new ActiveDataProvider([
                 'query' => KelasMataPelajaran::find()->where(['tahun_ajaran_kelas_id' => $id])->orderBy('id ASC'),
                 'pagination' => [
-                    'pageSize' => 5,
+                    'pageSize' => 10,
                 ],
             ]);
 

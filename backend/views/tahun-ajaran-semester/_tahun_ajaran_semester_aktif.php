@@ -24,8 +24,6 @@ elseif($tahun_ajaran_aktif->tahunAjaranKelas == null){
     }
     echo '<br>';
     echo Html::a('Ubah Kelas', ['ubah-assign-kelas', 'id' => $tahun_ajaran_aktif->id], ['class' => 'btn btn-danger']);
-    echo '&nbsp';
-    echo Html::a('Assign Siswa Ke Kelas', ['assign-siswa-ke-kelas'], ['class' => 'btn btn-primary']);
 }
 
 ?>

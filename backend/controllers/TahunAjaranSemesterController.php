@@ -33,7 +33,7 @@ class TahunAjaranSemesterController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'set-active', 'assign-kelas', 'ubah-assign-kelas', 'assign-siswa-ke-kelas'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'set-active', 'assign-kelas', 'ubah-assign-kelas'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -41,7 +41,7 @@ class TahunAjaranSemesterController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'set-active', 'assign-kelas', 'ubah-assign-kelas', 'assign-siswa-ke-kelas'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'set-active', 'assign-kelas', 'ubah-assign-kelas'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -235,27 +235,6 @@ class TahunAjaranSemesterController extends Controller
                     }
                 }
 
-//                Menampilkan kelas yang dipilih
-//                foreach ($kelas_dipilih as $value){
-//                    echo $value.'<br>';
-//                }
-
-//                if($model->load(Yii::$app->request->post())){
-//                    $tahun_ajaran = TahunAjaranSemester::find()->where(['tahun_ajaran' => $tahun_ajaran_aktif->tahun_ajaran])->all();
-//                    foreach ($tahun_ajaran as $value_tahun_ajaran){
-//                        foreach ($model->kelas_id as $value_kelas){
-//                            $kelas_id = (int)$value_kelas;
-//                            if(($kelas = TahunAjaranKelas::findOne(['kelas_id' => $kelas_id, 'tahun_ajaran_semester_id' => $value_tahun_ajaran->id])) == null){
-//                                $tahun_ajaran_kelas = new TahunAjaranKelas;
-//                                $tahun_ajaran_kelas->tahun_ajaran_semester_id = $value_tahun_ajaran->id;
-//                                $tahun_ajaran_kelas->kelas_id = $kelas_id;
-//                                $tahun_ajaran_kelas->save();
-//                            }
-//                        }
-//                    }
-//                }
-
-//                die();
                 return $this->actionIndex();
             }else{
                 $kelas = KelasR::find()->all();
@@ -312,27 +291,6 @@ class TahunAjaranSemesterController extends Controller
                     'kelas' => $kelas,
                     'model' => $model,
                     'tahun_ajaran_aktif' => $tahun_ajaran_aktif,
-                ]);
-            }
-        }else{
-            return $this->redirect(['error/forbidden-error']);
-        }
-    }
-
-    /*
-     * Mengassign siswa ke kelas tertentu
-     */
-    public function actionAssignSiswaKeKelas(){
-        if(Yii::$app->user->can('admin')) {
-            if(Yii::$app->request->post()){
-                $input = Yii::$app->request->post('SiswaAssign');
-                var_dump($input);
-                die();
-            }else{
-                $semua_siswa = Siswa::findAll(['kelas_id' => null]);
-                return $this->render('_form_assign_siswa_ke_kelas', [
-                    'semua_siswa' => $semua_siswa,
-                    'model' => new SiswaAssign(),
                 ]);
             }
         }else{

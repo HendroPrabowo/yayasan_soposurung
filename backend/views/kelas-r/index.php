@@ -20,6 +20,12 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
     <?= GridView::widget([
+        'options' => [
+            'style' => [
+                'width' => '500px',
+                'margin-left' => '10px'
+            ]
+        ],
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -28,7 +34,11 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'id',
             'kelas',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'header' => 'Actions',
+                'headerOptions' => ['style' => 'color:black'],
+            ],
         ],
     ]); ?>
 </div>

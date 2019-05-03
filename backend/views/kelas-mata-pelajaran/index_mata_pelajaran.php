@@ -14,12 +14,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h3>Mata Pelajaran pada Kelas <strong><?= $tahun_ajaran_kelas->kelas->kelas ?></strong> Semester <strong><?= $tahun_ajaran_kelas->tahunAjaranSemester->semester ?></strong></h3>
 
-    <div class="col-md-10">
+
         <?= Html::a('Tambah Pelajaran', ['kelas-mata-pelajaran/tambah-mata-pelajaran', 'id' => $tahun_ajaran_kelas->id], ['class' => 'btn btn-primary']); ?>
         <br>
         <br>
         <?=
             GridView::widget([
+                'options' => [
+                    'style' => [
+                        'width' => '700px',
+                    ]
+                ],
                 'dataProvider' => $listDataProvider,
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
@@ -50,5 +55,4 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]
             ]);
         ?>
-    </div>
 </div>

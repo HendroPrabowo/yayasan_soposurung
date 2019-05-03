@@ -43,8 +43,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'Semester',
                 'value' => 'kelasMataPelajaran.tahunAjaranKelas.tahunAjaranSemester.semester'
             ],
-
-            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 </div>

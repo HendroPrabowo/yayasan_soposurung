@@ -2,12 +2,14 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Siswa */
 /* @var $form yii\widgets\ActiveForm */
 
-$kelas_all = \yii\helpers\ArrayHelper::map($kelas, 'id', 'kelas');
+$kelas_all = ArrayHelper::map($kelas, 'id', 'kelas');
+$angkatan_all = ArrayHelper::map($angkatan, 'id', 'angkatan');
 
 ?>
 
@@ -44,6 +46,8 @@ $kelas_all = \yii\helpers\ArrayHelper::map($kelas, 'id', 'kelas');
     <?= $form->field($model, 'pekerjaan_ibu')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'kelas_id')->dropDownList($kelas_all, ['prompt' => 'Pilih Satu']) ?>
+
+    <?= $form->field($model, 'angkatan_id')->dropDownList($angkatan_all, ['prompt' => 'Pilih Satu']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Simpan', ['class' => 'btn btn-success']) ?>

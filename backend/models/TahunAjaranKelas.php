@@ -73,4 +73,12 @@ class TahunAjaranKelas extends \yii\db\ActiveRecord
     {
         return $this->hasOne(TahunAjaranSemester::className(), ['id' => 'tahun_ajaran_semester_id']);
     }
+
+    /*
+     * Hitung jumlah siswa
+     */
+    public function getJumlahSiswa(){
+        $kelas_siswa = KelasSiswa::find()->where(['thn_ajaran_kelas_id' => $this->id])->all();
+        return sizeof($kelas_siswa);
+    }
 }

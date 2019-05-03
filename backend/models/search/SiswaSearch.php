@@ -18,7 +18,7 @@ class SiswaSearch extends Siswa
     {
         return [
             [['nisn', 'nama', 'kelahiran', 'jenis_kelamin', 'agama', 'status_dalam_keluarga', 'sekolah_asal', 'nama_ayah', 'nama_ibu', 'alamat_orang_tua', 'pekerjaan_ayah', 'pekerjaan_ibu'], 'safe'],
-            [['anak_ke', 'nomor_telepon_orang_tua', 'user_id', 'kredit_point'], 'integer'],
+            [['anak_ke', 'nomor_telepon_orang_tua', 'user_id', 'kredit_point', 'angkatan_id'], 'integer'],
         ];
     }
 
@@ -62,6 +62,7 @@ class SiswaSearch extends Siswa
             'nomor_telepon_orang_tua' => $this->nomor_telepon_orang_tua,
             'user_id' => $this->user_id,
             'kredit_point' => $this->kredit_point,
+            'angkatan_id' => $this->angkatan_id,
         ]);
 
         $query->andFilterWhere(['like', 'nisn', $this->nisn])

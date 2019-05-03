@@ -22,21 +22,22 @@
                             ]
                         ],
                         ['label' => 'Data Siswa', 'icon' => 'user', 'url' => ['siswa/index']],
-                        ['label' => 'Semua Kelas', 'icon' => 'users', 'url' => ['kelas-r/index']],
+                        ['label' => 'Semua Kelas', 'icon' => 'cog', 'url' => ['kelas-r/index']],
                         ['label' => 'Semua Mata Pelajaran', 'icon' => 'book', 'url' => ['mata-pelajaran-r/index']],
                         ['label' => 'Semua Guru', 'icon' => 'users', 'url' => ['guru/index']],
                         [
                             'label' => 'Tahun Ajaran',
-                            'icon' => 'users',
+                            'icon' => 'list-alt',
                             'url' => '#',
                             'items' => [
-                                ['label' => 'Tahun Ajaran', 'icon' => 'users', 'url' => ['tahun-ajaran-semester/index']],
+                                ['label' => 'Tahun Ajaran', 'icon' => 'laptop', 'url' => ['tahun-ajaran-semester/index']],
                                 ['label' => 'List Assign Guru', 'icon' => 'users', 'url' => ['assign-guru/index']],
+                                ['label' => 'Assign Siswa', 'icon' => 'send', 'url' => ['kelas-siswa/index']],
                             ]
                         ],
-                        ['label' => 'Aturan Asrama', 'icon' => 'fa fa-book', 'url' => ['aturan-asrama/index']],
-                        ['label' => 'Kesehatan', 'icon' => 'glyphicon glyphicon-plus', 'url' => ['kesehatan/index']],
-                        ['label' => 'Kedisiplinan', 'icon' => 'user', 'url' => ['kedisiplinan/index']],
+                        ['label' => 'Aturan Asrama', 'icon' => 'tags', 'url' => ['aturan-asrama/index']],
+                        ['label' => 'Kesehatan', 'icon' => 'heart', 'url' => ['kesehatan/index']],
+                        ['label' => 'Kedisiplinan', 'icon' => 'warning', 'url' => ['kedisiplinan/index']],
                         ['label' => 'Log Keluar Masuk Barang', 'icon' => 'book', 'url' => ['keluar-masuk-barang/index']],
                     ];
                 }elseif ($user->role == 'siswa'){
