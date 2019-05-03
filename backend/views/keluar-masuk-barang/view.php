@@ -37,7 +37,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => ['date', 'php:d-M-Y']
             ],
             'vendor',
-            'created_by',
+            'jumlah',
+//            'created_by',
+            [
+                    'attribute' => 'Created By',
+                'value' => $model->createdBy->username
+            ],
             'keterangan:ntext',
         ],
     ]) ?>

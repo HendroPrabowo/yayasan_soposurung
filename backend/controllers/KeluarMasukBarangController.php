@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use app\models\User;
 use Yii;
 use app\models\KeluarMasukBarang;
 use app\models\search\KeluarMasukBarangSearch;
@@ -93,7 +94,11 @@ class KeluarMasukBarangController extends Controller
         if(Yii::$app->user->can('admin')) {
             $model = new KeluarMasukBarang();
 
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if ($model->load(Yii::$app->request->post())) {
+                $user = User::findOne(Yii::$app->user->id);
+                $model->created_by = $user->id;
+                $model->save();
+
                 return $this->redirect(['view', 'id' => $model->id]);
             }
 
@@ -118,7 +123,11 @@ class KeluarMasukBarangController extends Controller
         if(Yii::$app->user->can('admin')) {
             $model = $this->findModel($id);
 
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if ($model->load(Yii::$app->request->post())) {
+                $user = User::findOne(Yii::$app->user->id);
+                $model->created_by = $user->id;
+                $model->save();
+
                 return $this->redirect(['view', 'id' => $model->id]);
             }
 

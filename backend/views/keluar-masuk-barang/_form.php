@@ -17,7 +17,12 @@ use kartik\date\DatePicker;
 
     <?= $form->field($model, 'vendor')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'keterangan')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'jumlah')->textInput([
+            'type' => 'number',
+            'value' => 1
+    ]) ?>
+
+    <?= $form->field($model, 'keterangan')->textarea(['rows' => 4]) ?>
 
     <?= $form->field($model, 'tanggal')->widget(DatePicker::classname(), [
         'options' => ['placeholder' => 'Masukkan Tanggal ....'],
@@ -27,8 +32,6 @@ use kartik\date\DatePicker;
             'format' => 'yyyy/mm/dd'
         ]
     ]); ?>
-
-    <?= $form->field($model, 'created_by')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

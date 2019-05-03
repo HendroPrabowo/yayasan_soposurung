@@ -29,6 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'nama_barang',
 //            'tanggal',
             'vendor',
+            'jumlah',
             'created_by',
             [
                 'attribute' => 'tanggal',

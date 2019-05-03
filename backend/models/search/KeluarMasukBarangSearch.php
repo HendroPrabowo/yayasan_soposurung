@@ -17,7 +17,7 @@ class KeluarMasukBarangSearch extends KeluarMasukBarang
     public function rules()
     {
         return [
-            [['id', 'created_by'], 'integer'],
+            [['id', 'created_by', 'jumlah'], 'integer'],
             [['nama_barang', 'tanggal', 'vendor', 'keterangan'], 'safe'],
         ];
     }
@@ -61,6 +61,7 @@ class KeluarMasukBarangSearch extends KeluarMasukBarang
             'id' => $this->id,
             'tanggal' => $this->tanggal,
             'created_by' => $this->created_by,
+            'jumlah' => $this->jumlah,
         ]);
 
         $query->andFilterWhere(['like', 'nama_barang', $this->nama_barang])

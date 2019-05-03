@@ -11,6 +11,7 @@ use Yii;
  * @property string $nama_barang
  * @property string $tanggal
  * @property string $vendor
+ * @property int $jumlah
  * @property int $created_by
  * @property string $keterangan
  *
@@ -32,9 +33,10 @@ class KeluarMasukBarang extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nama_barang', 'tanggal', 'vendor', 'created_by', 'keterangan'], 'required'],
+            [['nama_barang', 'tanggal', 'vendor', 'keterangan'], 'required'],
             [['tanggal'], 'safe'],
             [['created_by'], 'integer'],
+            [['jumlah'], 'integer'],
             [['keterangan'], 'string'],
             [['nama_barang'], 'string', 'max' => 500],
             [['vendor'], 'string', 'max' => 255],
@@ -52,6 +54,7 @@ class KeluarMasukBarang extends \yii\db\ActiveRecord
             'nama_barang' => 'Nama Barang',
             'tanggal' => 'Tanggal',
             'vendor' => 'Vendor',
+            'jumlah' => 'Jumlah',
             'created_by' => 'Created By',
             'keterangan' => 'Keterangan',
         ];
