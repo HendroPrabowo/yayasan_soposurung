@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{assign} {view}',
                 'buttons'=>[
                     'assign'=>function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-upload"></span> Assign Siswa', ['kelas-siswa/assign-siswa', 'id' => $model->id]);
+                        return Html::a('<span class="glyphicon glyphicon-asterisk"></span> Assign Siswa', ['kelas-siswa/assign-siswa', 'id' => $model->id]);
                     },
                     'view'=>function ($url, $model) {
                         return Html::a('&nbsp;&nbsp;<span class="glyphicon glyphicon-user"></span> View Siswa', ['kelas-siswa/view-siswa', 'id' => $model->id]);

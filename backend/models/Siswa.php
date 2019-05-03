@@ -27,6 +27,7 @@ use Yii;
  * @property int $kredit_point
  *
  * @property User $user
+ * @property Kedisiplinan $kedisiplinan
  * @property Angkatan $angkatan
  * @property KelasR $kelas
  */
@@ -104,6 +105,13 @@ class Siswa extends \yii\db\ActiveRecord
      */
     public function getAngkatan(){
         return $this->hasOne(Angkatan::className(), ['id' => 'angkatan_id']);
+    }
+
+    /*
+     * Mengambil kedisiplinan
+     */
+    public function getKedisiplinan(){
+        return $this->hasMany(Kedisiplinan::className(), ['siswa_id' => 'nisn']);
     }
 
     public function getKeteranganSiswa(){

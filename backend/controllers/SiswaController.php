@@ -4,9 +4,9 @@ namespace backend\controllers;
 
 use app\models\Angkatan;
 use app\models\AuthAssignment;
+use app\models\Kedisiplinan;
 use app\models\KelasR;
 use backend\models\Excel;
-use phpDocumentor\Reflection\Types\Integer;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Yii;
 use app\models\Siswa;
@@ -17,6 +17,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\UploadedFile;
 use app\models\User;
+use yii\data\ActiveDataProvider;
 
 /**
  * SiswaController implements the CRUD actions for Siswa model.
@@ -37,7 +38,7 @@ class SiswaController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'import-excel', 'view-by-siswa'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -45,7 +46,7 @@ class SiswaController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete',  'import-excel', 'view-by-siswa'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -82,8 +83,18 @@ class SiswaController extends Controller
     public function actionView($id)
     {
         if(Yii::$app->user->can('admin')) {
+            $model = Siswa::findOne($id);
+
+            $dataProvider = new ActiveDataProvider([
+                'query' => Kedisiplinan::find()->where(['siswa_id' => $model->nisn])->orderBy('id ASC'),
+                'pagination' => [
+                    'pageSize' => 10,
+                ],
+            ]);
+
             return $this->render('view', [
-                'model' => $this->findModel($id),
+                'model' => $model,
+                'dataProvider' => $dataProvider,
             ]);
         }else{
             return $this->redirect(['error/forbidden-error']);
@@ -257,6 +268,7 @@ class SiswaController extends Controller
                                     'nomor_telepon_orang_tua' => $value[13],
                                     'pekerjaan_ayah' => $value[14],
                                     'pekerjaan_ibu' => $value[15],
+                                    'angkatan_id' => $value[16],
                                     'user_id' => $user->id,
                                 ];
                             }
@@ -268,7 +280,7 @@ class SiswaController extends Controller
                 // Insert ke tabel siswa
                 if($siswa_array != null){
                     $tableName ='siswa';
-                    $columnNameArray = ['nisn', 'nama', 'kelahiran', 'jenis_kelamin', 'agama', 'status_dalam_keluarga', 'anak_ke', 'sekolah_asal', 'nama_ayah', 'nama_ibu', 'alamat_orang_tua', 'nomor_telepon_orang_tua', 'pekerjaan_ayah', 'pekerjaan_ibu', 'user_id'];
+                    $columnNameArray = ['nisn', 'nama', 'kelahiran', 'jenis_kelamin', 'agama', 'status_dalam_keluarga', 'anak_ke', 'sekolah_asal', 'nama_ayah', 'nama_ibu', 'alamat_orang_tua', 'nomor_telepon_orang_tua', 'pekerjaan_ayah', 'pekerjaan_ibu', 'angkatan_id', 'user_id'];
                     Yii::$app->db->createCommand()->batchInsert($tableName, $columnNameArray, $siswa_array)->execute();
                 }
 

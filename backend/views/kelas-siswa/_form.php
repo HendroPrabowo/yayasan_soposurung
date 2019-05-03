@@ -14,7 +14,7 @@ $angkatan_all = ArrayHelper::map($angkatan, 'id', 'angkatan');
 
 <div class="kelas-siswa-form">
 
-    <div class="form-group col-md-3">
+    <div class="form-group">
         <label>Angkatan</label>
         <?= Select2::widget([
             'name' => 'angkatan',

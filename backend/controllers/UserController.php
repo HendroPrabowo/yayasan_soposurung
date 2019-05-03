@@ -38,7 +38,7 @@ class UserController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'create', 'view', 'sign-up', 'ganti-password', 'reset-password', 'update', 'show'],
+                'only' => ['index', 'create', 'view', 'sign-up', 'ganti-password', 'reset-password', 'update', 'show', 'aktifkan-akun', 'nonaktifkan-akun'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -46,7 +46,7 @@ class UserController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'signup', 'ganti-password', 'reset-password', 'create', 'update', 'show'],
+                        'actions' => ['index', 'view', 'signup', 'ganti-password', 'reset-password', 'create', 'update', 'show', 'aktifkan-akun', 'nonaktifkan-akun'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -371,5 +371,29 @@ class UserController extends Controller
         }else{
             $this->redirect(['error/forbidden-error']);
         }
+    }
+
+    public function actionCreateDefaultAdmin(){
+
+        $cek_duplikat = User::find()->where(['username' => 'default-admin'])->one();
+        if($cek_duplikat == null){
+            $user_common = new \common\models\User();
+            $user_common->setPassword("admin");
+            $user_common->generateAuthKey();
+
+            $user = new User();
+            $user->username = "default-admin";
+            $user->role = "admin";
+            $user->password_hash = $user_common->password_hash;
+            $user->auth_key = $user_common->auth_key;
+            $user->save();
+
+            $auth_assignment = new AuthAssignment();
+            $auth_assignment->item_name = "admin";
+            $auth_assignment->user_id = $user->id;
+            $auth_assignment->save();
+        }
+
+        die();
     }
 }
