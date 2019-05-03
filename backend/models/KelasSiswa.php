@@ -11,7 +11,7 @@ use Yii;
  * @property string $nisn
  * @property int $thn_ajaran_kelas_id
  *
- * @property Siswa $nisn0
+ * @property Siswa $siswa
  * @property TahunAjaranKelas $thnAjaranKelas
  */
 class KelasSiswa extends \yii\db\ActiveRecord
@@ -53,7 +53,7 @@ class KelasSiswa extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getNisn0()
+    public function getSiswa()
     {
         return $this->hasOne(Siswa::className(), ['nisn' => 'nisn']);
     }

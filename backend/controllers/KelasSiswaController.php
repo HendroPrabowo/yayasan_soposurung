@@ -27,7 +27,7 @@ class KelasSiswaController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'assign-siswa', 'get-siswa'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'assign-siswa', 'get-siswa', 'view-siswa'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -35,7 +35,7 @@ class KelasSiswaController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'assign-siswa', 'get-siswa'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'assign-siswa', 'get-siswa', 'view-siswa'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -174,37 +174,42 @@ class KelasSiswaController extends Controller
      * Fungsi untuk mengassign siswa ke kelas
      */
     public function actionAssignSiswa($id){
-        $model = new KelasSiswa();
-        $tahun_ajaran_kelas = TahunAjaranKelas::findOne($id);
+        if(Yii::$app->user->can('admin')) {
+            $model = new KelasSiswa();
+            $tahun_ajaran_kelas = TahunAjaranKelas::findOne($id);
 
-        if(Yii::$app->request->post()){
-            $request = Yii::$app->request->post();
+            if(Yii::$app->request->post()){
+                $request = Yii::$app->request->post();
 
-            $i=0;
-            foreach ($request as $value){
-                if($i !=  0){
-                    $siswa = KelasSiswa::find()->where(['nisn' => $value, 'thn_ajaran_kelas_id' => $id])->one();
-                    if($siswa == null){
-                        $siswa_baru = new KelasSiswa();
-                        $siswa_baru->nisn = $value;
-                        $siswa_baru->thn_ajaran_kelas_id = $id;
-                        $siswa_baru->save();
+                $i=0;
+                foreach ($request as $value){
+                    if($i !=  0){
+                        $siswa = KelasSiswa::find()->where(['nisn' => $value, 'thn_ajaran_kelas_id' => $id])->one();
+                        if($siswa == null){
+                            $siswa_baru = new KelasSiswa();
+                            $siswa_baru->nisn = $value;
+                            $siswa_baru->thn_ajaran_kelas_id = $id;
+                            $siswa_baru->save();
+                        }
                     }
+                    $i++;
                 }
-                $i++;
+
+                return $this->redirect(['kelas-siswa/index']);
             }
 
-            return $this->redirect(['kelas-siswa/index']);
+            $siswa = Siswa::find()->all();
+            $angkatan = Angkatan::find()->all();
+            return  $this->render('create', [
+                'siswa' => $siswa,
+                'tahun_ajaran_kelas' => $tahun_ajaran_kelas,
+                'model' => $model,
+                'angkatan' => $angkatan,
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
         }
 
-        $siswa = Siswa::find()->all();
-        $angkatan = Angkatan::find()->all();
-        return  $this->render('create', [
-            'siswa' => $siswa,
-            'tahun_ajaran_kelas' => $tahun_ajaran_kelas,
-            'model' => $model,
-            'angkatan' => $angkatan,
-        ]);
     }
 
     // Ambil siswa dengan jquery
@@ -216,5 +221,27 @@ class KelasSiswaController extends Controller
         return [
             'siswa' => $siswa,
         ];
+    }
+
+    public function actionViewSiswa($id){
+        if(Yii::$app->user->can('admin')) {
+            $tahun_ajaran_kelas = TahunAjaranKelas::findOne($id);
+            $kelas_siswa = KelasSiswa::find()->where(['thn_ajaran_kelas_id' => $tahun_ajaran_kelas->id])->all();
+
+            $dataProvider = new ActiveDataProvider([
+                'query' => KelasSiswa::find()->where(['thn_ajaran_kelas_id' => $tahun_ajaran_kelas->id])->orderBy('nisn ASC'),
+                'pagination' => [
+                    'pageSize' => 10,
+                ],
+            ]);
+
+            return $this->render('view-siswa', [
+                'tahun_ajaran_kelas' => $tahun_ajaran_kelas,
+                'dataProvider' => $dataProvider
+            ]);
+
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
     }
 }
