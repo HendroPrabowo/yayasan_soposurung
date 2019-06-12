@@ -4,12 +4,12 @@ namespace app\models\search;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Kesehatan;
+use app\models\LogMasukBarang;
 
 /**
- * KesehatanSearch represents the model behind the search form of `app\models\Kesehatan`.
+ * LogMasukBarangSearch represents the model behind the search form of `app\models\LogMasukBarang`.
  */
-class KesehatanSearch extends Kesehatan
+class LogMasukBarangSearch extends LogMasukBarang
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class KesehatanSearch extends Kesehatan
     public function rules()
     {
         return [
-            [['id', 'semester'], 'integer'],
-            [['siswa_id', 'keterangan', 'penyakit', 'tanggal', 'created_by'], 'safe'],
+            [['id', 'created_by'], 'integer'],
+            [['nama_barang', 'tanggal', 'vendor', 'jumlah', 'keterangan'], 'safe'],
         ];
     }
 
@@ -40,7 +40,7 @@ class KesehatanSearch extends Kesehatan
      */
     public function search($params)
     {
-        $query = Kesehatan::find();
+        $query = LogMasukBarang::find();
 
         // add conditions that should always apply here
 
@@ -59,15 +59,14 @@ class KesehatanSearch extends Kesehatan
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'semester' => $this->semester,
             'tanggal' => $this->tanggal,
-            'created_by' => $this->created_by
+            'created_by' => $this->created_by,
         ]);
 
-        $query->andFilterWhere(['like', 'siswa_id', $this->siswa_id])
-            ->andFilterWhere(['like', 'penyakit', $this->penyakit])
-            ->andFilterWhere(['like', 'keterangan', $this->keterangan])
-            ->andFilterWhere(['like', 'created_by', $this->created_by]);
+        $query->andFilterWhere(['like', 'nama_barang', $this->nama_barang])
+            ->andFilterWhere(['like', 'vendor', $this->vendor])
+            ->andFilterWhere(['like', 'jumlah', $this->jumlah])
+            ->andFilterWhere(['like', 'keterangan', $this->keterangan]);
 
         return $dataProvider;
     }

@@ -9,7 +9,8 @@ use Yii;
  *
  * @property int $id
  * @property string $siswa_id
- * @property string $kesehatan
+ * @property string $penyakit
+ * @property string $keterangan
  * @property int $semester
  * @property string $tanggal
  * @property string $created_by
@@ -32,12 +33,13 @@ class Kesehatan extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['siswa_id', 'kesehatan', 'semester', 'tanggal'], 'required'],
+            [['siswa_id', 'penyakit', 'semester', 'tanggal', 'keterangan'], 'required'],
             [['semester'], 'integer', 'max' => '8', 'min' => '1'],
             [['tanggal'], 'safe'],
+            [['penyakit'], 'string'],
+            [['keterangan'], 'string'],
             [['siswa_id'], 'string', 'max' => 255],
             [['created_by'], 'string', 'max' => 255],
-            [['kesehatan'], 'string', 'max' => 500],
             [['siswa_id'], 'exist', 'skipOnError' => true, 'targetClass' => Siswa::className(), 'targetAttribute' => ['siswa_id' => 'nisn']],
         ];
     }
@@ -50,10 +52,11 @@ class Kesehatan extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'siswa_id' => 'Siswa ID',
-            'kesehatan' => 'Kesehatan',
             'semester' => 'Semester',
             'tanggal' => 'Tanggal',
-            'created_by' => 'Created By'
+            'created_by' => 'Created By',
+            'penyakit' => 'Penyakit',
+            'keterangan' => 'Keterangan dan Tindakan yang Dilakukan',
         ];
     }
 

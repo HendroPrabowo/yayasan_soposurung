@@ -2,19 +2,18 @@
 
 namespace backend\controllers;
 
-use app\models\User;
 use Yii;
-use app\models\KeluarMasukBarang;
-use app\models\search\KeluarMasukBarangSearch;
+use app\models\SiswaNilai;
+use app\models\search\SiswaNilaiSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
 /**
- * KeluarMasukBarangController implements the CRUD actions for KeluarMasukBarang model.
+ * SiswaNilaiController implements the CRUD actions for SiswaNilai model.
  */
-class KeluarMasukBarangController extends Controller
+class SiswaNilaiController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -47,13 +46,13 @@ class KeluarMasukBarangController extends Controller
     }
 
     /**
-     * Lists all KeluarMasukBarang models.
+     * Lists all SiswaNilai models.
      * @return mixed
      */
     public function actionIndex()
     {
         if(Yii::$app->user->can('admin')) {
-            $searchModel = new KeluarMasukBarangSearch();
+            $searchModel = new SiswaNilaiSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
             return $this->render('index', [
@@ -67,7 +66,7 @@ class KeluarMasukBarangController extends Controller
     }
 
     /**
-     * Displays a single KeluarMasukBarang model.
+     * Displays a single SiswaNilai model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -85,20 +84,16 @@ class KeluarMasukBarangController extends Controller
     }
 
     /**
-     * Creates a new KeluarMasukBarang model.
+     * Creates a new SiswaNilai model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
         if(Yii::$app->user->can('admin')) {
-            $model = new KeluarMasukBarang();
+            $model = new SiswaNilai();
 
-            if ($model->load(Yii::$app->request->post())) {
-                $user = User::findOne(Yii::$app->user->id);
-                $model->created_by = $user->id;
-                $model->save();
-
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
 
@@ -112,7 +107,7 @@ class KeluarMasukBarangController extends Controller
     }
 
     /**
-     * Updates an existing KeluarMasukBarang model.
+     * Updates an existing SiswaNilai model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -123,11 +118,7 @@ class KeluarMasukBarangController extends Controller
         if(Yii::$app->user->can('admin')) {
             $model = $this->findModel($id);
 
-            if ($model->load(Yii::$app->request->post())) {
-                $user = User::findOne(Yii::$app->user->id);
-                $model->created_by = $user->id;
-                $model->save();
-
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
 
@@ -141,7 +132,7 @@ class KeluarMasukBarangController extends Controller
     }
 
     /**
-     * Deletes an existing KeluarMasukBarang model.
+     * Deletes an existing SiswaNilai model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -160,15 +151,15 @@ class KeluarMasukBarangController extends Controller
     }
 
     /**
-     * Finds the KeluarMasukBarang model based on its primary key value.
+     * Finds the SiswaNilai model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return KeluarMasukBarang the loaded model
+     * @return SiswaNilai the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = KeluarMasukBarang::findOne($id)) !== null) {
+        if (($model = SiswaNilai::findOne($id)) !== null) {
             return $model;
         }
 

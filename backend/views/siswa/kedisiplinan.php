@@ -21,7 +21,13 @@ use yii\grid\GridView;
         ],
         [
             'attribute' => 'Kredit Point',
-            'value' => 'aturanAsrama.point'
+            'value' => function(\yii\base\Model $model){
+                if($model->tambah_ke_point == 1){
+                    return $model->aturanAsrama->point;
+                }else{
+                    return 0;
+                }
+            }
         ],
 //            'aturan_asrama_id',
         'keterangan:ntext',

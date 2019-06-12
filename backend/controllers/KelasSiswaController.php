@@ -3,7 +3,9 @@
 namespace backend\controllers;
 
 use app\models\Angkatan;
+use app\models\KelasMataPelajaran;
 use app\models\Siswa;
+use app\models\SiswaNilai;
 use app\models\TahunAjaranKelas;
 use app\models\TahunAjaranSemester;
 use Yii;
@@ -59,15 +61,26 @@ class KelasSiswaController extends Controller
             $searchModel = new KelasSiswaSearch();
 //            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $tahun_ajaran_semester_aktif = TahunAjaranSemester::find()->where(['is_active' => 1])->one();
-            $dataProvider = new ActiveDataProvider([
-                'query' => TahunAjaranKelas::find()->where(['tahun_ajaran_semester_id' => $tahun_ajaran_semester_aktif->id])->orderBy('id ASC'),
-            ]);
 
-            return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-                'tahun_ajaran_semester_aktif' => $tahun_ajaran_semester_aktif,
-            ]);
+            if($tahun_ajaran_semester_aktif == null){
+                $dataProvider = null;
+                return $this->render('index', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+                    'tahun_ajaran_semester_aktif' => $tahun_ajaran_semester_aktif,
+                ]);
+            }
+            else{
+                $dataProvider = new ActiveDataProvider([
+                    'query' => TahunAjaranKelas::find()->where(['tahun_ajaran_semester_id' => $tahun_ajaran_semester_aktif->id])->orderBy('id ASC'),
+                ]);
+
+                return $this->render('index', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+                    'tahun_ajaran_semester_aktif' => $tahun_ajaran_semester_aktif,
+                ]);
+            }
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
@@ -184,18 +197,30 @@ class KelasSiswaController extends Controller
                 $i=0;
                 foreach ($request as $value){
                     if($i !=  0){
+                        // Cari siswa yang di assign di kelas tersebut
                         $siswa = KelasSiswa::find()->where(['nisn' => $value, 'thn_ajaran_kelas_id' => $id])->one();
+                        $kelas_mata_pelajaran = KelasMataPelajaran::find()->where(['tahun_ajaran_kelas_id' => $id])->all();
                         if($siswa == null){
-                            $siswa_baru = new KelasSiswa();
-                            $siswa_baru->nisn = $value;
-                            $siswa_baru->thn_ajaran_kelas_id = $id;
-                            $siswa_baru->save();
+                            $kelas_siswa = new KelasSiswa();
+                            $kelas_siswa->nisn = $value;
+                            $kelas_siswa->thn_ajaran_kelas_id = $id;
+                            $kelas_siswa->save();
+
+                            foreach ($kelas_mata_pelajaran as $value){
+                                $check_duplikat = SiswaNilai::find()->where(['kelas_siswa_id' => $kelas_siswa, 'kelas_mata_pelajaran_id' => $value->id])->one();
+                                if($check_duplikat == null){
+                                    $siswa_nilai = new SiswaNilai();
+                                    $siswa_nilai->kelas_mata_pelajaran_id = $value->id;
+                                    $siswa_nilai->kelas_siswa_id = $kelas_siswa->id;
+                                    $siswa_nilai->save();
+                                }
+                            }
                         }
                     }
                     $i++;
                 }
 
-                return $this->redirect(['kelas-siswa/index']);
+                return $this->redirect(['kelas-siswa/view-siswa?id='.$id]);
             }
 
             $siswa = Siswa::find()->all();

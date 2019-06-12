@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\KeluarMasukBarang */
+/* @var $model app\models\LogKeluarBarang */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -17,10 +17,7 @@ use kartik\date\DatePicker;
 
     <?= $form->field($model, 'vendor')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'jumlah')->textInput([
-            'type' => 'number',
-            'value' => 1
-    ]) ?>
+    <?= $form->field($model, 'jumlah')->textInput(['type' => 'number']) ?>
 
     <?= $form->field($model, 'keterangan')->textarea(['rows' => 4]) ?>
 

@@ -53,6 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{view} {update} {status}',
                 'buttons'=>[
                     'view'=>function ($url, $model) {
+        Html::a('', '', '');
                         return Html::a('<span class="glyphicon glyphicon-zoom-in"></span> Detail', ['user/view', 'id' => $model->id]);
                     },
                     'status'=>function ($url, $model) {

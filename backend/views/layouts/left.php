@@ -33,12 +33,22 @@
                                 ['label' => 'Tahun Ajaran', 'icon' => 'laptop', 'url' => ['tahun-ajaran-semester/index']],
                                 ['label' => 'List Assign Guru', 'icon' => 'users', 'url' => ['assign-guru/index']],
                                 ['label' => 'Assign Siswa', 'icon' => 'send', 'url' => ['kelas-siswa/index']],
+                                ['label' => 'Nilai Siswa', 'icon' => 'check', 'url' => ['siswa-nilai/index']],
                             ]
                         ],
                         ['label' => 'Aturan Asrama', 'icon' => 'tags', 'url' => ['aturan-asrama/index']],
                         ['label' => 'Kesehatan', 'icon' => 'heart', 'url' => ['kesehatan/index']],
                         ['label' => 'Kedisiplinan', 'icon' => 'warning', 'url' => ['kedisiplinan/index']],
-                        ['label' => 'Log Keluar Masuk Barang', 'icon' => 'book', 'url' => ['keluar-masuk-barang/index']],
+
+                        [
+                            'label' => 'Security',
+                            'icon' => 'book',
+                            'url' => '#',
+                            'items' => [
+                                ['label' => 'Barang Masuk', 'icon' => 'book', 'url' => ['log-masuk-barang/index']],
+                                ['label' => 'Barang Keluar', 'icon' => 'book', 'url' => ['log-keluar-barang/index']],
+                            ]
+                        ],
                     ];
                 }elseif ($user->role == 'siswa'){
                     $menuItems = [

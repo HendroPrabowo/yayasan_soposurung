@@ -22,7 +22,9 @@ $item_siswa = ArrayHelper::map($siswa, 'nisn', 'KeteranganSiswa');
         ],
     ]) ?>
 
-    <?= $form->field($model, 'kesehatan')->textarea(['rows' => 4]) ?>
+    <?= $form->field($model, 'penyakit')->textInput() ?>
+
+    <?= $form->field($model, 'keterangan')->textarea(['rows' => 4]) ?>
 
     <?= $form->field($model, 'semester')->textInput([
             'type' => 'number'

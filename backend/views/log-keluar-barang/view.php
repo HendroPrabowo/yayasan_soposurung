@@ -4,14 +4,14 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Kesehatan */
+/* @var $model app\models\LogKeluarBarang */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Kesehatan', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Log Barang Keluar', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="kesehatan-view">
+<div class="keluar-masuk-barang-view">
 
     <h3><?= Html::encode($this->title) ?></h3>
 
@@ -30,20 +30,20 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
 //            'id',
-//            'siswa_id',
-            [
-                    'attribute' => 'siswa',
-                'value' => $model->siswa->nama,
-            ],
-            'penyakit',
-            'keterangan',
-            'semester',
+            'nama_barang',
 //            'tanggal',
-            'created_by',
             [
                 'attribute' => 'tanggal',
                 'format' => ['date', 'php:d-M-Y']
             ],
+            'vendor',
+            'jumlah',
+//            'created_by',
+            [
+                'attribute' => 'Created By',
+                'value' => $model->createdBy->username
+            ],
+            'keterangan:ntext',
         ],
     ]) ?>
 

@@ -3,10 +3,10 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\KeluarMasukBarang */
+/* @var $model app\models\LogKeluarBarang */
 
-$this->title = 'Update Log Keluar Masuk Barang: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Log Keluar Masuk Barang', 'url' => ['index']];
+$this->title = 'Update Log Barang Keluar: ' . $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Barang Keluar', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>

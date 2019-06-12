@@ -4,12 +4,12 @@ namespace app\models\search;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\KeluarMasukBarang;
+use app\models\SiswaNilai;
 
 /**
- * KeluarMasukBarangSearch represents the model behind the search form of `app\models\KeluarMasukBarang`.
+ * SiswaNilaiSearch represents the model behind the search form of `app\models\SiswaNilai`.
  */
-class KeluarMasukBarangSearch extends KeluarMasukBarang
+class SiswaNilaiSearch extends SiswaNilai
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,7 @@ class KeluarMasukBarangSearch extends KeluarMasukBarang
     public function rules()
     {
         return [
-            [['id', 'created_by', 'jumlah'], 'integer'],
-            [['nama_barang', 'tanggal', 'vendor', 'keterangan'], 'safe'],
+            [['id', 'kelas_siswa_id', 'kelas_mata_pelajaran_id'], 'integer'],
         ];
     }
 
@@ -40,7 +39,7 @@ class KeluarMasukBarangSearch extends KeluarMasukBarang
      */
     public function search($params)
     {
-        $query = KeluarMasukBarang::find();
+        $query = SiswaNilai::find();
 
         // add conditions that should always apply here
 
@@ -59,14 +58,9 @@ class KeluarMasukBarangSearch extends KeluarMasukBarang
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'tanggal' => $this->tanggal,
-            'created_by' => $this->created_by,
-            'jumlah' => $this->jumlah,
+            'kelas_siswa_id' => $this->kelas_siswa_id,
+            'kelas_mata_pelajaran_id' => $this->kelas_mata_pelajaran_id,
         ]);
-
-        $query->andFilterWhere(['like', 'nama_barang', $this->nama_barang])
-            ->andFilterWhere(['like', 'vendor', $this->vendor])
-            ->andFilterWhere(['like', 'keterangan', $this->keterangan]);
 
         return $dataProvider;
     }

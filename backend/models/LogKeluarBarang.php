@@ -11,20 +11,20 @@ use Yii;
  * @property string $nama_barang
  * @property string $tanggal
  * @property string $vendor
- * @property int $jumlah
+ * @property string $jumlah
  * @property int $created_by
  * @property string $keterangan
  *
  * @property User $createdBy
  */
-class KeluarMasukBarang extends \yii\db\ActiveRecord
+class LogKeluarBarang extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'keluar_masuk_barang';
+        return 'log_keluar_barang';
     }
 
     /**
@@ -33,10 +33,10 @@ class KeluarMasukBarang extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nama_barang', 'tanggal', 'vendor', 'keterangan'], 'required'],
+            [['nama_barang', 'tanggal', 'vendor', 'keterangan', 'jumlah'], 'required'],
             [['tanggal'], 'safe'],
             [['created_by'], 'integer'],
-            [['jumlah'], 'integer'],
+            [['jumlah'], 'string'],
             [['keterangan'], 'string'],
             [['nama_barang'], 'string', 'max' => 500],
             [['vendor'], 'string', 'max' => 255],
@@ -53,7 +53,7 @@ class KeluarMasukBarang extends \yii\db\ActiveRecord
             'id' => 'ID',
             'nama_barang' => 'Nama Barang',
             'tanggal' => 'Tanggal',
-            'vendor' => 'Vendor',
+            'vendor' => 'Yang Membawa Keluar',
             'jumlah' => 'Jumlah',
             'created_by' => 'Created By',
             'keterangan' => 'Keterangan',

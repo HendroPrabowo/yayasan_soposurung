@@ -2,7 +2,9 @@
 
 namespace backend\controllers;
 
+use app\models\KelasSiswa;
 use app\models\MataPelajaranR;
+use app\models\SiswaNilai;
 use app\models\TahunAjaranKelas;
 use app\models\TahunAjaranSemester;
 use Yii;

@@ -4,19 +4,19 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\search\KesehatanSearch */
+/* @var $searchModel app\models\search\LogKeluarBarangSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Kesehatan';
+$this->title = 'Barang Keluar';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="kesehatan-index">
+<div class="keluar-masuk-barang-index">
 
     <h3><?= Html::encode($this->title) ?></h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Tambah Laporan Kesehatan', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Tambah Log Barang Keluar', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -26,25 +26,21 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
 //            'id',
-//            'siswa_id',
-            [
-                    'attribute' => 'NISN',
-                'value' => 'siswa_id'
-            ],
-            [
-                    'attribute' => 'siswa',
-                'value' => 'siswa.nama'
-            ],
-            'penyakit',
-            'keterangan',
-            'semester',
+            'nama_barang',
 //            'tanggal',
-            'created_by',
-
+            'vendor',
+            'jumlah',
+//            'created_by',
+            [
+                'attribute' => 'Created',
+                'value' => 'createdBy.role'
+            ],
             [
                 'attribute' => 'tanggal',
                 'format' => ['date', 'php:d-M-Y']
             ],
+//            'keterangan:ntext',
+
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

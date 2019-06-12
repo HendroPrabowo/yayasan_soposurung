@@ -4,19 +4,19 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\search\KeluarMasukBarangSearch */
+/* @var $searchModel app\models\search\LogMasukBarangSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Log Keluar Masuk Barang';
+$this->title = 'Log Masuk Barang';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="keluar-masuk-barang-index">
+<div class="log-masuk-barang-index">
 
     <h3><?= Html::encode($this->title) ?></h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Tambah Log Keluar Masuk Barang', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Log Masuk Barang', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -27,15 +27,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
 //            'id',
             'nama_barang',
-//            'tanggal',
+            'tanggal',
             'vendor',
             'jumlah',
-            'created_by',
+//            'created_by',
             [
-                'attribute' => 'tanggal',
-                'format' => ['date', 'php:d-M-Y']
+                'attribute' => 'Created',
+                'value' => 'createdBy.role'
             ],
-            //'keterangan:ntext',
+            'keterangan:ntext',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
