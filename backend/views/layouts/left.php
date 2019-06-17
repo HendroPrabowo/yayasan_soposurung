@@ -45,8 +45,9 @@
                             'icon' => 'book',
                             'url' => '#',
                             'items' => [
-                                ['label' => 'Barang Masuk', 'icon' => 'book', 'url' => ['log-masuk-barang/index']],
-                                ['label' => 'Barang Keluar', 'icon' => 'book', 'url' => ['log-keluar-barang/index']],
+                                ['label' => 'Log Tamu', 'icon' => 'inbox', 'url' => ['log-tamu/index']],
+                                ['label' => 'Barang Masuk', 'icon' => 'bookmark', 'url' => ['log-masuk-barang/index']],
+                                ['label' => 'Barang Keluar', 'icon' => 'bookmark', 'url' => ['log-keluar-barang/index']],
                             ]
                         ],
                     ];
