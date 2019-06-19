@@ -4,12 +4,12 @@ namespace app\models\search;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\SiswaNilai;
+use app\models\Penilaian as PenilaianModel;
 
 /**
- * SiswaNilaiSearch represents the model behind the search form of `app\models\SiswaNilai`.
+ * Penilaian represents the model behind the search form of `app\models\Penilaian`.
  */
-class SiswaNilaiSearch extends SiswaNilai
+class Penilaian extends PenilaianModel
 {
     /**
      * {@inheritdoc}
@@ -17,7 +17,7 @@ class SiswaNilaiSearch extends SiswaNilai
     public function rules()
     {
         return [
-            [['id', 'kelas_siswa_id', 'kelas_mata_pelajaran_id'], 'integer'],
+            [['id', 'kelas_siswa_id', 'komponen_nilai_id', 'nilai'], 'integer'],
         ];
     }
 
@@ -39,7 +39,7 @@ class SiswaNilaiSearch extends SiswaNilai
      */
     public function search($params)
     {
-        $query = SiswaNilai::find();
+        $query = PenilaianModel::find();
 
         // add conditions that should always apply here
 
@@ -59,7 +59,8 @@ class SiswaNilaiSearch extends SiswaNilai
         $query->andFilterWhere([
             'id' => $this->id,
             'kelas_siswa_id' => $this->kelas_siswa_id,
-            'kelas_mata_pelajaran_id' => $this->kelas_mata_pelajaran_id,
+            'komponen_nilai_id' => $this->komponen_nilai_id,
+            'nilai' => $this->nilai,
         ]);
 
         return $dataProvider;

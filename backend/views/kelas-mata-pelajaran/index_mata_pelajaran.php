@@ -42,13 +42,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         'class' => 'yii\grid\ActionColumn',
                         'header' => 'Actions',
                         'headerOptions' => ['style' => 'color:black'],
-                        'template' => '{assign} {delete}',
+                        'template' => '{assign} {delete} {komponen-nilai}',
                         'buttons'=>[
                             'assign'=>function ($url, $model) {
                                 return Html::a('</&nbsp;><span class="glyphicon glyphicon-user"></span> Assign Guru', ['assign-guru/assign-guru', 'id' => $model->id]);
                             },
                             'delete'=>function ($url, $model) {
                                 return Html::a('&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-trash" style="color:red;"></span> <z style="color: red">Delete</z>', ['#']);
+                            },
+                            'komponen-nilai'=>function ($url, $model) {
+                                return Html::a('&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-user"></span> Komponen Nilai', ['komponen-nilai/index', 'id' => $model->id]);
                             },
                         ]
                     ],

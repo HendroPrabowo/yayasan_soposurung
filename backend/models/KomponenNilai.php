@@ -5,23 +5,22 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "siswa_nilai".
+ * This is the model class for table "komponen_nilai".
  *
  * @property int $id
- * @property int $kelas_siswa_id
  * @property int $kelas_mata_pelajaran_id
+ * @property string $komponen_nilai
  *
  * @property KelasMataPelajaran $kelasMataPelajaran
- * @property KelasSiswa $kelasSiswa
  */
-class SiswaNilai extends \yii\db\ActiveRecord
+class KomponenNilai extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'siswa_nilai';
+        return 'komponen_nilai';
     }
 
     /**
@@ -30,10 +29,10 @@ class SiswaNilai extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['kelas_siswa_id', 'kelas_mata_pelajaran_id'], 'required'],
-            [['kelas_siswa_id', 'kelas_mata_pelajaran_id'], 'integer'],
+            [['kelas_mata_pelajaran_id', 'komponen_nilai'], 'required'],
+            [['kelas_mata_pelajaran_id'], 'integer'],
+            [['komponen_nilai'], 'string', 'max' => 255],
             [['kelas_mata_pelajaran_id'], 'exist', 'skipOnError' => true, 'targetClass' => KelasMataPelajaran::className(), 'targetAttribute' => ['kelas_mata_pelajaran_id' => 'id']],
-            [['kelas_siswa_id'], 'exist', 'skipOnError' => true, 'targetClass' => KelasSiswa::className(), 'targetAttribute' => ['kelas_siswa_id' => 'id']],
         ];
     }
 
@@ -44,8 +43,8 @@ class SiswaNilai extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'kelas_siswa_id' => 'Kelas Siswa ID',
             'kelas_mata_pelajaran_id' => 'Kelas Mata Pelajaran ID',
+            'komponen_nilai' => 'Komponen Nilai',
         ];
     }
 
@@ -55,13 +54,5 @@ class SiswaNilai extends \yii\db\ActiveRecord
     public function getKelasMataPelajaran()
     {
         return $this->hasOne(KelasMataPelajaran::className(), ['id' => 'kelas_mata_pelajaran_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getKelasSiswa()
-    {
-        return $this->hasOne(KelasSiswa::className(), ['id' => 'kelas_siswa_id']);
     }
 }

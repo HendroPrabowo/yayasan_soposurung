@@ -39,7 +39,6 @@
                         ['label' => 'Aturan Asrama', 'icon' => 'tags', 'url' => ['aturan-asrama/index']],
                         ['label' => 'Kesehatan', 'icon' => 'heart', 'url' => ['kesehatan/index']],
                         ['label' => 'Kedisiplinan', 'icon' => 'warning', 'url' => ['kedisiplinan/index']],
-
                         [
                             'label' => 'Security',
                             'icon' => 'book',
@@ -48,6 +47,14 @@
                                 ['label' => 'Log Tamu', 'icon' => 'inbox', 'url' => ['log-tamu/index']],
                                 ['label' => 'Barang Masuk', 'icon' => 'bookmark', 'url' => ['log-masuk-barang/index']],
                                 ['label' => 'Barang Keluar', 'icon' => 'bookmark', 'url' => ['log-keluar-barang/index']],
+                            ]
+                        ],
+                        [
+                            'label' => 'Penilaian',
+                            'icon' => 'book',
+                            'url' => '#',
+                            'items' => [
+                                ['label' => 'Komponen Nilai', 'icon' => 'inbox', 'url' => ['penilaian/index']],
                             ]
                         ],
                     ];

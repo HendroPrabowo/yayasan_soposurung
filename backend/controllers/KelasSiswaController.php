@@ -5,7 +5,6 @@ namespace backend\controllers;
 use app\models\Angkatan;
 use app\models\KelasMataPelajaran;
 use app\models\Siswa;
-use app\models\SiswaNilai;
 use app\models\TahunAjaranKelas;
 use app\models\TahunAjaranSemester;
 use Yii;
@@ -205,22 +204,20 @@ class KelasSiswaController extends Controller
                             $kelas_siswa->nisn = $value;
                             $kelas_siswa->thn_ajaran_kelas_id = $id;
                             $kelas_siswa->save();
-
-                            foreach ($kelas_mata_pelajaran as $value){
-                                $check_duplikat = SiswaNilai::find()->where(['kelas_siswa_id' => $kelas_siswa, 'kelas_mata_pelajaran_id' => $value->id])->one();
-                                if($check_duplikat == null){
-                                    $siswa_nilai = new SiswaNilai();
-                                    $siswa_nilai->kelas_mata_pelajaran_id = $value->id;
-                                    $siswa_nilai->kelas_siswa_id = $kelas_siswa->id;
-                                    $siswa_nilai->save();
-                                }
-                            }
                         }
                     }
                     $i++;
                 }
 
                 return $this->redirect(['kelas-siswa/view-siswa?id='.$id]);
+            }
+
+            $kelas_mata_pelajaran = KelasMataPelajaran::find()->where(['tahun_ajaran_kelas_id' => $id])->all();
+
+            if($kelas_mata_pelajaran == null){
+                return $this->render('tambah-mata-pelajaran', [
+                    'tahun_ajaran_kelas' => $tahun_ajaran_kelas,
+                ]);
             }
 
             $siswa = Siswa::find()->all();

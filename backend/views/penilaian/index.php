@@ -4,20 +4,16 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\search\SiswaNilaiSearch */
+/* @var $searchModel app\models\search\Penilaian */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Nilai Siswa';
+$this->title = 'Penilaian';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="siswa-nilai-index">
+<div class="penilaian-index">
 
     <h3><?= Html::encode($this->title) ?></h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::a('Tambah Nilai Siswa', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -28,22 +24,28 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'id',
 //            'kelas_siswa_id',
             [
-                'attribute' => "NISN",
+                'attribute' => 'NISN',
                 'value' => 'kelasSiswa.nisn'
             ],
             [
-                'attribute' => "Nama",
+                'attribute' => 'Nama Siswa',
                 'value' => 'kelasSiswa.siswa.nama'
             ],
-//            'kelas_mata_pelajaran_id',
             [
-                'attribute' => "Pelajaran",
-                'value' => 'kelasMataPelajaran.mataPelajaran.pelajaran'
+                'attribute' => 'Kelas',
+                'value' => 'komponenNilai.kelasMataPelajaran.tahunAjaranKelas.kelas.kelas'
             ],
             [
-                'attribute' => "Kelas",
-                'value' => 'kelasSiswa.thnAjaranKelas.kelas.kelas'
+                'attribute' => 'Komponen Nilai',
+                'value' => 'komponenNilai.komponen_nilai'
             ],
+            [
+                'attribute' => 'Pelajaran',
+                'value' => 'komponenNilai.kelasMataPelajaran.mataPelajaran.pelajaran'
+            ],
+//            'komponen_nilai_id',
+            'nilai',
+
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

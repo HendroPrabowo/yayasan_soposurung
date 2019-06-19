@@ -2,18 +2,22 @@
 
 namespace backend\controllers;
 
+use app\models\KelasMataPelajaran;
+use app\models\KelasSiswa;
+use app\models\Penilaian;
 use Yii;
-use app\models\SiswaNilai;
-use app\models\search\SiswaNilaiSearch;
+use app\models\KomponenNilai;
+use app\models\search\KomponenNilai as KomponenNilaiSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\data\ActiveDataProvider;
 
 /**
- * SiswaNilaiController implements the CRUD actions for SiswaNilai model.
+ * KomponenNilaiController implements the CRUD actions for KomponenNilai model.
  */
-class SiswaNilaiController extends Controller
+class KomponenNilaiController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -23,9 +27,6 @@ class SiswaNilaiController extends Controller
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
             ],
             'access' => [
                 'class' => AccessControl::className(),
@@ -46,27 +47,39 @@ class SiswaNilaiController extends Controller
     }
 
     /**
-     * Lists all SiswaNilai models.
+     * Lists all KomponenNilai models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($id)
     {
         if(Yii::$app->user->can('admin')) {
-            $searchModel = new SiswaNilaiSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $kelas_mata_pelajaran = KelasMataPelajaran::findOne($id);
+            $komponen_nilai = KomponenNilai::find()->where(['kelas_mata_pelajaran_id' => $id])->all();
+
+            // Cek apakah siswa sudah di assign ke kelas tersebut
+            $jumlah_siswa = $kelas_mata_pelajaran->tahunAjaranKelas->getJumlahSiswa();
+
+            $dataProvider = new ActiveDataProvider([
+                'query' => KomponenNilai::find()->where(['kelas_mata_pelajaran_id' => $id]),
+                'pagination' => [
+                    'pageSize' => 10,
+                ],
+            ]);
 
             return $this->render('index', [
-                'searchModel' => $searchModel,
+                'kelas_mata_pelajaran' => $kelas_mata_pelajaran,
+                'komponen_nilai' => $komponen_nilai,
                 'dataProvider' => $dataProvider,
+                'id' => $id,
+                'jumlah_siswa' => $jumlah_siswa
             ]);
-        }else{
+        }else {
             return $this->redirect(['error/forbidden-error']);
         }
-
     }
 
     /**
-     * Displays a single SiswaNilai model.
+     * Displays a single KomponenNilai model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -80,21 +93,44 @@ class SiswaNilaiController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
-
     }
 
     /**
-     * Creates a new SiswaNilai model.
+     * Creates a new KomponenNilai model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($id)
     {
         if(Yii::$app->user->can('admin')) {
-            $model = new SiswaNilai();
+            $model = new KomponenNilai();
 
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            // Cek jumlah siswa di kelas yang ingin ditambahkan komponen nilainya
+            $kelas_mata_pelajaran = KelasMataPelajaran::findOne($id);
+            $jumlah_siswa = $kelas_mata_pelajaran->tahunAjaranKelas->getJumlahSiswa();
+
+            if($jumlah_siswa == 0){
+                return $this->actionIndex($id);
+            }
+
+            if ($model->load(Yii::$app->request->post())) {
+                // Ambil semua siswa yang akan dibuat komponen nilainya
+                $id_tahun_ajaran_kelas = $kelas_mata_pelajaran->tahunAjaranKelas->id;
+                $siswa = KelasSiswa::find()->where(['thn_ajaran_kelas_id' => $id_tahun_ajaran_kelas])->all();
+
+                $model->kelas_mata_pelajaran_id = $id;
+
+                if($model->save()){
+                    foreach ($siswa as $value){
+                        $penilaian = new Penilaian();
+                        $penilaian->kelas_siswa_id = $value->id;
+                        $penilaian->komponen_nilai_id = $model->id;
+                        $penilaian->nilai = 0;
+                        $penilaian->save();
+                    }
+                }
+
+                return $this->redirect(['index', 'id' => $id]);
             }
 
             return $this->render('create', [
@@ -103,11 +139,10 @@ class SiswaNilaiController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
-
     }
 
     /**
-     * Updates an existing SiswaNilai model.
+     * Updates an existing KomponenNilai model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -128,11 +163,10 @@ class SiswaNilaiController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
-
     }
 
     /**
-     * Deletes an existing SiswaNilai model.
+     * Deletes an existing KomponenNilai model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -141,25 +175,25 @@ class SiswaNilaiController extends Controller
     public function actionDelete($id)
     {
         if(Yii::$app->user->can('admin')) {
+            $komponen_nilai = KomponenNilai::findOne($id);
             $this->findModel($id)->delete();
 
-            return $this->redirect(['index']);
+            return $this->redirect(['index', 'id' => $komponen_nilai->kelas_mata_pelajaran_id]);
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
-
     }
 
     /**
-     * Finds the SiswaNilai model based on its primary key value.
+     * Finds the KomponenNilai model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return SiswaNilai the loaded model
+     * @return KomponenNilai the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = SiswaNilai::findOne($id)) !== null) {
+        if (($model = KomponenNilai::findOne($id)) !== null) {
             return $model;
         }
 
