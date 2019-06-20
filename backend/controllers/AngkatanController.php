@@ -8,6 +8,7 @@ use app\models\search\AngkatanSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * AngkatanController implements the CRUD actions for Angkatan model.
@@ -26,6 +27,21 @@ class AngkatanController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'allow' => false,
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -35,13 +51,17 @@ class AngkatanController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new AngkatanSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        if(Yii::$app->user->can('admin')) {
+            $searchModel = new AngkatanSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
     }
 
     /**
@@ -52,9 +72,14 @@ class AngkatanController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        if(Yii::$app->user->can('admin')) {
+            return $this->render('view', [
+                'model' => $this->findModel($id),
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
+
     }
 
     /**
@@ -64,15 +89,20 @@ class AngkatanController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Angkatan();
+        if(Yii::$app->user->can('admin')) {
+            $model = new Angkatan();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+
+            return $this->render('create', [
+                'model' => $model,
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
         }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
     }
 
     /**
@@ -84,15 +114,20 @@ class AngkatanController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        if(Yii::$app->user->can('admin')) {
+            $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+
+            return $this->render('update', [
+                'model' => $model,
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
         }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
     }
 
     /**
@@ -104,9 +139,14 @@ class AngkatanController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if(Yii::$app->user->can('admin')) {
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['index']);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
+
     }
 
     /**

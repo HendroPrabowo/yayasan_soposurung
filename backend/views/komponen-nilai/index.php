@@ -24,6 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
         echo 'Komponen nilai belum ada. '.Html::a('Tambah Komponen Nilai' ,\yii\helpers\Url::to(['komponen-nilai/create', 'id' => $id])).'<br>';
     }
     else{
+        echo Html::a('Tambah Komponen Nilai' ,\yii\helpers\Url::to(['komponen-nilai/create', 'id' => $id]), ['class' => 'btn btn-success']).'<br><br>';
         echo GridView::widget([
             'options' => [
                 'style' => [

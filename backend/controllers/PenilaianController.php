@@ -2,12 +2,18 @@
 
 namespace backend\controllers;
 
+use app\models\KelasMataPelajaran;
+use app\models\KomponenNilai;
+use app\models\TahunAjaranKelas;
+use app\models\TahunAjaranSemester;
 use Yii;
 use app\models\Penilaian;
 use app\models\search\Penilaian as PenilaianSearch;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * PenilaianController implements the CRUD actions for Penilaian model.
@@ -26,6 +32,21 @@ class PenilaianController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view-mata-pelajaran', 'view-komponen-nilai', 'view-penilaian', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'allow' => false,
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['index', 'view-mata-pelajaran', 'view-komponen-nilai', 'view-penilaian', 'create', 'update', 'delete'],
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -35,26 +56,25 @@ class PenilaianController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new PenilaianSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        if(Yii::$app->user->can('admin')) {
+            // Cek tahun ajaran aktif untuk mengambil kelas yang ada di tahun ajaran tersebut
+            $tahun_ajaran_aktif = TahunAjaranSemester::find()->where(['is_active' => 1])->one();
+            if($tahun_ajaran_aktif == null){
+                return $this->redirect(['tahun-ajaran-semester/index']);
+            }
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
+            $dataProvider = new ActiveDataProvider([
+                'query' => TahunAjaranKelas::find()->where(['tahun_ajaran_semester_id' => $tahun_ajaran_aktif->id]),
+            ]);
 
-    /**
-     * Displays a single Penilaian model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+            return $this->render('index-kelas', [
+                'dataProvider' => $dataProvider,
+                'tahun_ajaran' => $tahun_ajaran_aktif,
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
+
     }
 
     /**
@@ -64,15 +84,20 @@ class PenilaianController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Penilaian();
+        if(Yii::$app->user->can('admin')) {
+            $model = new Penilaian();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+
+            return $this->render('create', [
+                'model' => $model,
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
         }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
     }
 
     /**
@@ -82,17 +107,22 @@ class PenilaianController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate($id, $komponen_nilai)
     {
-        $model = $this->findModel($id);
+        if(Yii::$app->user->can('admin')) {
+            $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view-penilaian', 'id' => $komponen_nilai]);
+            }
+
+            return $this->render('update', [
+                'model' => $model,
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
         }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
     }
 
     /**
@@ -104,9 +134,14 @@ class PenilaianController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if(Yii::$app->user->can('admin')) {
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['index']);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
+
     }
 
     /**
@@ -123,5 +158,49 @@ class PenilaianController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionViewMataPelajaran($id)
+    {
+        if(Yii::$app->user->can('admin')) {
+
+            $dataProvider = new ActiveDataProvider([
+                'query' => KelasMataPelajaran::find()->where(['tahun_ajaran_kelas_id' => $id])->orderBy('id ASC'),
+                'pagination' => [
+                    'pageSize' => 10,
+                ],
+            ]);
+
+            return $this->render('index-mata-pelajaran', [
+                'dataProvider' => $dataProvider
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
+
+    }
+
+    public function actionViewKomponenNilai($id){
+        $kelas_mata_pelajaran = KelasMataPelajaran::findOne($id);
+        $dataProvider = new ActiveDataProvider([
+            'query' => KomponenNilai::find()->where(['kelas_mata_pelajaran_id' => $id]),
+        ]);
+
+        return $this->render('index-komponen-nilai', [
+            'dataProvider' => $dataProvider,
+            'kelas_mata_pelajaran' => $kelas_mata_pelajaran
+        ]);
+    }
+
+    public function actionViewPenilaian($id){
+        $komponen_nilai = KomponenNilai::findOne($id);
+        $dataProvider = new ActiveDataProvider([
+            'query' => Penilaian::find()->where(['komponen_nilai_id' => $id]),
+        ]);
+
+        return $this->render('index-nilai', [
+            'dataProvider' => $dataProvider,
+            'komponen_nilai' => $komponen_nilai
+        ]);
     }
 }

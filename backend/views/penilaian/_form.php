@@ -12,9 +12,11 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <!--
     <?= $form->field($model, 'kelas_siswa_id')->textInput() ?>
 
     <?= $form->field($model, 'komponen_nilai_id')->textInput() ?>
+    -->
 
     <?= $form->field($model, 'nilai')->textInput() ?>
 
