@@ -2,20 +2,20 @@
 
 namespace backend\controllers;
 
-use app\models\JurnalLaporanPiket;
 use Yii;
-use app\models\SwSenamAplPgi;
-use app\models\search\SwSenamAplPgiSearch;
-use yii\data\ActiveDataProvider;
+use app\models\SwAplMknPgi;
+use app\models\search\SwAplMknPgiSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\data\ActiveDataProvider;
+use app\models\JurnalLaporanPiket;
 
 /**
- * SiswaApelPagiController implements the CRUD actions for SiswaApelPagi model.
+ * SwAplMknPgiController implements the CRUD actions for SwAplMknPgi model.
  */
-class SwSenamAplPgiController extends Controller
+class SwAplMknPgiController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -31,7 +31,7 @@ class SwSenamAplPgiController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'create-apel-hari-ini', 'index-apel'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'create-apel-hari-ini'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -39,7 +39,7 @@ class SwSenamAplPgiController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'create-apel-hari-ini', 'index-apel'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'create-apel-hari-ini'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -48,7 +48,7 @@ class SwSenamAplPgiController extends Controller
     }
 
     /**
-     * Lists all SiswaApelPagi models.
+     * Lists all SwAplMknPgi models.
      * @return mixed
      */
     public function actionIndex()
@@ -70,7 +70,7 @@ class SwSenamAplPgiController extends Controller
     }
 
     /**
-     * Displays a single SiswaApelPagi model.
+     * Displays a single SwAplMknPgi model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -84,11 +84,10 @@ class SwSenamAplPgiController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
-
     }
 
     /**
-     * Creates a new SiswaApelPagi model.
+     * Creates a new SwAplMknPgi model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
@@ -97,7 +96,7 @@ class SwSenamAplPgiController extends Controller
         if(Yii::$app->user->can('admin')) {
             $jurnal_laporan_piket = JurnalLaporanPiket::findOne($id);
 
-            $apel_pagi = SwSenamAplPgi::find()->where(['jurnal_laporan_id' => $id])->all();
+            $apel_pagi = SwAplMknPgi::find()->where(['jurnal_laporan_id' => $id])->all();
             if(count($apel_pagi) != 0){
                 Yii::$app->session->setFlash('error', 'Apel Sudah Dibuat');
                 return $this->actionIndexApel($id);
@@ -105,7 +104,7 @@ class SwSenamAplPgiController extends Controller
 
             if(Yii::$app->request->post()){
                 $request = Yii::$app->request->post();
-                $siswa_kelas_x = new SwSenamAplPgi();
+                $siswa_kelas_x = new SwAplMknPgi();
                 $siswa_kelas_x->kelas = 'Siswa Kelas X';
                 $siswa_kelas_x->jumlah = $request['jumlah_siswa_kelas_x'];
                 $siswa_kelas_x->hadir = $request['hadir_siswa_kelas_x'];;
@@ -114,7 +113,7 @@ class SwSenamAplPgiController extends Controller
                 $siswa_kelas_x->jurnal_laporan_id = $id;
                 $siswa_kelas_x->save();
 
-                $siswa_kelas_xi = new SwSenamAplPgi();
+                $siswa_kelas_xi = new SwAplMknPgi();
                 $siswa_kelas_xi->kelas = 'Siswa Kelas XI';
                 $siswa_kelas_xi->jumlah = $request['jumlah_siswa_kelas_xi'];
                 $siswa_kelas_xi->hadir = $request['hadir_siswa_kelas_xi'];;
@@ -123,7 +122,7 @@ class SwSenamAplPgiController extends Controller
                 $siswa_kelas_xi->jurnal_laporan_id = $id;
                 $siswa_kelas_xi->save();
 
-                $siswa_kelas_xii = new SwSenamAplPgi();
+                $siswa_kelas_xii = new SwAplMknPgi();
                 $siswa_kelas_xii->kelas = 'Siswa Kelas XII';
                 $siswa_kelas_xii->jumlah = $request['jumlah_siswa_kelas_xii'];
                 $siswa_kelas_xii->hadir = $request['hadir_siswa_kelas_xii'];;
@@ -132,7 +131,7 @@ class SwSenamAplPgiController extends Controller
                 $siswa_kelas_xii->jurnal_laporan_id = $id;
                 $siswa_kelas_xii->save();
 
-                $siswi_kelas_x = new SwSenamAplPgi();
+                $siswi_kelas_x = new SwAplMknPgi();
                 $siswi_kelas_x->kelas = 'Siswi Kelas X';
                 $siswi_kelas_x->jumlah = $request['jumlah_siswi_kelas_x'];
                 $siswi_kelas_x->hadir = $request['hadir_siswi_kelas_x'];;
@@ -141,7 +140,7 @@ class SwSenamAplPgiController extends Controller
                 $siswi_kelas_x->jurnal_laporan_id = $id;
                 $siswi_kelas_x->save();
 
-                $siswi_kelas_xi = new SwSenamAplPgi();
+                $siswi_kelas_xi = new SwAplMknPgi();
                 $siswi_kelas_xi->kelas = 'Siswi Kelas XI';
                 $siswi_kelas_xi->jumlah = $request['jumlah_siswi_kelas_xi'];
                 $siswi_kelas_xi->hadir = $request['hadir_siswi_kelas_xi'];;
@@ -150,7 +149,7 @@ class SwSenamAplPgiController extends Controller
                 $siswi_kelas_xi->jurnal_laporan_id = $id;
                 $siswi_kelas_xi->save();
 
-                $siswi_kelas_xii = new SwSenamAplPgi();
+                $siswi_kelas_xii = new SwAplMknPgi();
                 $siswi_kelas_xii->kelas = 'Siswi Kelas XII';
                 $siswi_kelas_xii->jumlah = $request['jumlah_siswi_kelas_xii'];
                 $siswi_kelas_xii->hadir = $request['hadir_siswi_kelas_xii'];;
@@ -171,7 +170,7 @@ class SwSenamAplPgiController extends Controller
     }
 
     /**
-     * Updates an existing SiswaApelPagi model.
+     * Updates an existing SwAplMknPgi model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -192,11 +191,10 @@ class SwSenamAplPgiController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
-
     }
 
     /**
-     * Deletes an existing SiswaApelPagi model.
+     * Deletes an existing SwAplMknPgi model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -211,19 +209,18 @@ class SwSenamAplPgiController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
-
     }
 
     /**
-     * Finds the SiswaApelPagi model based on its primary key value.
+     * Finds the SwAplMknPgi model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return SwSenamAplPgi the loaded model
+     * @return SwAplMknPgi the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = SwSenamAplPgi::findOne($id)) !== null) {
+        if (($model = SwAplMknPgi::findOne($id)) !== null) {
             return $model;
         }
 
@@ -246,7 +243,7 @@ class SwSenamAplPgiController extends Controller
                 // Jika sudah pernah dibuat
                 if($tanggal_sekarang == $tanggal_di_database){
                     date_default_timezone_set('UTC');
-                    Yii::$app->session->setFlash('error', "Apel Senam Pagi Untuk Hari Ini Sudah Dibuat. Silahkan Cek List Apel Dibawah");
+                    Yii::$app->session->setFlash('error', "Apel Pagi Untuk Hari Ini Sudah Dibuat. Silahkan Cek List Apel Dibawah");
                     return $this->actionIndex();
                 }
             }
@@ -258,7 +255,7 @@ class SwSenamAplPgiController extends Controller
             $model->save();
             date_default_timezone_set('UTC');
 
-            Yii::$app->session->setFlash('success', "Apel Pagi Untuk Hari Ini Telah Dibuat");
+            Yii::$app->session->setFlash('success', "Apel Makan Pagi Untuk Hari Ini Telah Dibuat");
             return $this->actionIndex();
         }else{
             return $this->redirect(['error/forbidden-error']);
@@ -267,11 +264,11 @@ class SwSenamAplPgiController extends Controller
 
     public function actionIndexApel($id){
         $jurnal_laporan_piket = JurnalLaporanPiket::findOne($id);
-        $apel_pagi = SwSenamAplPgi::find()->where(['jurnal_laporan_id' => $id])->all();
+        $apel_pagi = SwAplMknPgi::find()->where(['jurnal_laporan_id' => $id])->all();
 //        $apel_pagi = SiswaApelPagi::find()->where(['jurnal_laporan_id' => $id])->all();
 
         $dataProvider = new ActiveDataProvider([
-            'query' => SwSenamAplPgi::find()->where(['jurnal_laporan_id' => $id])->orderBy('id ASC'),
+            'query' => SwAplMknPgi::find()->where(['jurnal_laporan_id' => $id])->orderBy('id ASC'),
             'pagination' => [
                 'pageSize' => 10,
             ],

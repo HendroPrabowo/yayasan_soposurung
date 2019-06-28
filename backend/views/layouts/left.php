@@ -63,6 +63,7 @@
                             'url' => '#',
                             'items' => [
                                 ['label' => 'Apel Senam Pagi', 'icon' => 'inbox', 'url' => ['sw-senam-apl-pgi/index']],
+                                ['label' => 'Apel Makan Pagi', 'icon' => 'inbox', 'url' => ['sw-apl-mkn-pgi/index']],
                             ]
                         ],
                     ];

@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\search\SwSenamAplPgiSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Apel Senam Pagi';
+$this->title = 'Apel Makan Pagi';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="siswa-apel-pagi-index">
@@ -16,9 +16,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php
     if(count($apel_pagi) != 0){
-        echo 'Apel Senam Pagi Sudah Dibuat. Silahkan hubungi Admin Untuk Mengubah';
+        echo 'Apel Makan Pagi Sudah Dibuat. Silahkan hubungi Admin Untuk Mengubah';
     }else{
-        echo Html::a('Isi Apel Senam Pagi', ['sw-senam-apl-pgi/create', 'id' => $jurnal_laporan_piket->id], ['class' => 'btn btn-success']);
+        echo Html::a('Isi Apel Makan Pagi', ['sw-apl-mkn-pgi/create', 'id' => $jurnal_laporan_piket->id], ['class' => 'btn btn-success']);
     }
     ?>
 

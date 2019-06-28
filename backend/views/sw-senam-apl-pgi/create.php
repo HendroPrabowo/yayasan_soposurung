@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\SwSenamAplPgi */
 
-$this->title = 'Apel Pagi';
+$this->title = 'Apel Senam Pagi';
 $this->params['breadcrumbs'][] = ['label' => 'Siswa Apel Pagi', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
