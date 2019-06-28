@@ -81,4 +81,11 @@ class TahunAjaranKelas extends \yii\db\ActiveRecord
         $kelas_siswa = KelasSiswa::find()->where(['thn_ajaran_kelas_id' => $this->id])->all();
         return sizeof($kelas_siswa);
     }
+
+    /*
+     * Kelas Siswa
+     */
+    public function getKelasSiswa(){
+        return $this->hasMany(KelasSiswa::className(), ['thn_ajaran_kelas_id' => 'id']);
+    }
 }

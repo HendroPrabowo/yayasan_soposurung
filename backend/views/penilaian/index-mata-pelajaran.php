@@ -12,8 +12,13 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="penilaian-index">
 
-    <h3><?= Html::encode($this->title) ?></h3>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <h3>Mata Pelajaran Kelas <b><?= $tahun_ajaran_kelas->kelas->kelas ?></b></h3>
+
+    <?php
+    if(count($kelas_mata_pelajaran) == 0){
+        echo  '<p>Mata Belum Di Assign Ke Kelas Ini</p>';
+    }
+    ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

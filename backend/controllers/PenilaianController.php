@@ -59,6 +59,7 @@ class PenilaianController extends Controller
         if(Yii::$app->user->can('admin')) {
             // Cek tahun ajaran aktif untuk mengambil kelas yang ada di tahun ajaran tersebut
             $tahun_ajaran_aktif = TahunAjaranSemester::find()->where(['is_active' => 1])->one();
+
             if($tahun_ajaran_aktif == null){
                 return $this->redirect(['tahun-ajaran-semester/index']);
             }
@@ -163,6 +164,8 @@ class PenilaianController extends Controller
     public function actionViewMataPelajaran($id)
     {
         if(Yii::$app->user->can('admin')) {
+            $tahun_ajaran_kelas = TahunAjaranKelas::findOne($id);
+            $kelas_mata_pelajaran = KelasMataPelajaran::find()->where(['tahun_ajaran_kelas_id' => $id])->all();
 
             $dataProvider = new ActiveDataProvider([
                 'query' => KelasMataPelajaran::find()->where(['tahun_ajaran_kelas_id' => $id])->orderBy('id ASC'),
@@ -172,7 +175,9 @@ class PenilaianController extends Controller
             ]);
 
             return $this->render('index-mata-pelajaran', [
-                'dataProvider' => $dataProvider
+                'dataProvider' => $dataProvider,
+                'tahun_ajaran_kelas' => $tahun_ajaran_kelas,
+                'kelas_mata_pelajaran' => $kelas_mata_pelajaran,
             ]);
         }else{
             return $this->redirect(['error/forbidden-error']);
@@ -186,9 +191,17 @@ class PenilaianController extends Controller
             'query' => KomponenNilai::find()->where(['kelas_mata_pelajaran_id' => $id]),
         ]);
 
+        // Kodingan untuk tabel baru
+        $kelas_siswa = $kelas_mata_pelajaran->tahunAjaranKelas->kelasSiswa;
+        $komponen_nilai = KomponenNilai::find()->where(['kelas_mata_pelajaran_id' => $id])->all();
+        $penilaian = Penilaian::find()->all();
+
         return $this->render('index-komponen-nilai', [
             'dataProvider' => $dataProvider,
-            'kelas_mata_pelajaran' => $kelas_mata_pelajaran
+            'kelas_mata_pelajaran' => $kelas_mata_pelajaran,
+            'kelas_siswa' => $kelas_siswa,
+            'komponen_nilai' => $komponen_nilai,
+            'penilaian' => $penilaian,
         ]);
     }
 

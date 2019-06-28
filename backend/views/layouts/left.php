@@ -57,6 +57,14 @@
                                 ['label' => 'Komponen Nilai', 'icon' => 'inbox', 'url' => ['penilaian/index']],
                             ]
                         ],
+                        [
+                            'label' => 'Jurnal Piket',
+                            'icon' => 'book',
+                            'url' => '#',
+                            'items' => [
+                                ['label' => 'Apel Senam Pagi', 'icon' => 'inbox', 'url' => ['sw-senam-apl-pgi/index']],
+                            ]
+                        ],
                     ];
                 }elseif ($user->role == 'siswa'){
                     $menuItems = [

@@ -12,7 +12,9 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="penilaian-index">
 
-    <h3>Nilai Pelajaran <b><?= $komponen_nilai->kelasMataPelajaran->mataPelajaran->pelajaran ?></b> kelas <b><?= $komponen_nilai->kelasMataPelajaran->tahunAjaranKelas->kelas->kelas ?></b></h3>
+    <h3>Nilai <b><?= $komponen_nilai->komponen_nilai ?></b> Pelajaran <b><?= $komponen_nilai->kelasMataPelajaran->mataPelajaran->pelajaran ?></b> kelas <b><?= $komponen_nilai->kelasMataPelajaran->tahunAjaranKelas->kelas->kelas ?></b></h3>
+
+    <?= Html::a('Back', ['penilaian/view-komponen-nilai', 'id' => $komponen_nilai->kelas_mata_pelajaran_id], ['class' => 'btn btn-primary']) ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

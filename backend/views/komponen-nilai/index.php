@@ -13,7 +13,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="komponen-nilai-index">
 
     <h3><?= Html::encode($this->title) ?> Pelajaran <b><?= $kelas_mata_pelajaran->mataPelajaran->pelajaran ?></b> Kelas <b><?= $kelas_mata_pelajaran->tahunAjaranKelas->kelas->kelas ?></b></h3>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?php
     if($jumlah_siswa == 0){

@@ -130,7 +130,7 @@ class KomponenNilaiController extends Controller
                     }
                 }
 
-                return $this->redirect(['index', 'id' => $id]);
+                return $this->redirect(['penilaian/view-komponen-nilai', 'id' => $id]);
             }
 
             return $this->render('create', [
