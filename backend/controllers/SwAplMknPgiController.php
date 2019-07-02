@@ -263,21 +263,26 @@ class SwAplMknPgiController extends Controller
     }
 
     public function actionIndexApel($id){
-        $jurnal_laporan_piket = JurnalLaporanPiket::findOne($id);
-        $apel_pagi = SwAplMknPgi::find()->where(['jurnal_laporan_id' => $id])->all();
+        if(Yii::$app->user->can('admin')) {
+            $jurnal_laporan_piket = JurnalLaporanPiket::findOne($id);
+            $apel_pagi = SwAplMknPgi::find()->where(['jurnal_laporan_id' => $id])->all();
 //        $apel_pagi = SiswaApelPagi::find()->where(['jurnal_laporan_id' => $id])->all();
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => SwAplMknPgi::find()->where(['jurnal_laporan_id' => $id])->orderBy('id ASC'),
-            'pagination' => [
-                'pageSize' => 10,
-            ],
-        ]);
+            $dataProvider = new ActiveDataProvider([
+                'query' => SwAplMknPgi::find()->where(['jurnal_laporan_id' => $id])->orderBy('id ASC'),
+                'pagination' => [
+                    'pageSize' => 10,
+                ],
+            ]);
 
-        return $this->render('index-apel', [
-            'dataProvider' => $dataProvider,
-            'jurnal_laporan_piket' => $jurnal_laporan_piket,
-            'apel_pagi' => $apel_pagi
-        ]);
+            return $this->render('index-apel', [
+                'dataProvider' => $dataProvider,
+                'jurnal_laporan_piket' => $jurnal_laporan_piket,
+                'apel_pagi' => $apel_pagi
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
+
     }
 }

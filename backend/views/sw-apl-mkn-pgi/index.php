@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{create}',
                 'buttons'=>[
                     'create' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-plus-sign"></span> Apel Pagi', ['index-apel', 'id' => $model->id]);
+                        return Html::a('<span class="glyphicon glyphicon-plus-sign"></span> Apel Makan Pagi', ['index-apel', 'id' => $model->id]);
                     },
                 ],
             ],

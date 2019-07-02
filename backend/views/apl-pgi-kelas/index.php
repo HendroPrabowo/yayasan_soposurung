@@ -4,18 +4,18 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\search\SwSenamAplPgiSearch */
+/* @var $searchModel app\models\search\AplPgiKelas */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Apel Senam Pagi';
+$this->title = 'Apel Pagi Kelas';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="siswa-apel-pagi-index">
+<div class="apl-pgi-kelas-index">
 
     <h3><?= Html::encode($this->title) ?></h3>
 
     <p>
-        <?= Html::a('Tambah Apel Senam Pagi Hari Ini', ['create-apel-hari-ini'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Tambah Apel Hari Ini', ['create-apel-hari-ini'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{create}',
                 'buttons'=>[
                     'create' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-plus-sign"></span> Apel Senam Pagi', ['index-apel', 'id' => $model->id]);
+                        return Html::a('<span class="glyphicon glyphicon-plus-sign"></span> Apel Pagi Kelas', ['index-apel', 'id' => $model->id]);
                     },
                 ],
             ],
