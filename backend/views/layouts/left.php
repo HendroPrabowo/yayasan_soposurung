@@ -64,10 +64,11 @@
                             'items' => [
                                 ['label' => 'Apel Senam Pagi', 'icon' => 'inbox', 'url' => ['sw-senam-apl-pgi/index']],
                                 ['label' => 'Apel Makan Pagi', 'icon' => 'inbox', 'url' => ['sw-apl-mkn-pgi/index']],
-                                ['label' => 'Apel Pagi Kelas', 'icon' => 'inbox', 'url' => ['apl-pgi-kelas/index']],
+                                ['label' => 'Apel Pagi', 'icon' => 'inbox', 'url' => ['apl-pgi-kelas/index']],
                                 ['label' => 'Apel Makan Siang', 'icon' => 'inbox', 'url' => ['apl-mkn-siang/index']],
                                 ['label' => 'Apel Sore', 'icon' => 'inbox', 'url' => ['apl-sore/index']],
                                 ['label' => 'Apel Makan Malam', 'icon' => 'inbox', 'url' => ['apl-mkn-malam/index']],
+                                ['label' => 'Apel Malam', 'icon' => 'inbox', 'url' => ['apl-malam/index']],
                             ]
                         ],
                     ];
