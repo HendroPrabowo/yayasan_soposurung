@@ -243,7 +243,7 @@ class SwAplMknPgiController extends Controller
                 // Jika sudah pernah dibuat
                 if($tanggal_sekarang == $tanggal_di_database){
                     date_default_timezone_set('UTC');
-                    Yii::$app->session->setFlash('error', "Apel Pagi Untuk Hari Ini Sudah Dibuat. Silahkan Cek List Apel Dibawah");
+                    Yii::$app->session->setFlash('error', "Apel Untuk Hari Ini Sudah Dibuat. Silahkan Cek List Apel Dibawah");
                     return $this->actionIndex();
                 }
             }

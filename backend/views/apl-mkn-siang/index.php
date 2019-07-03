@@ -4,15 +4,16 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\search\SwSenamAplPgiSearch */
+/* @var $searchModel app\models\search\AplMknSiang */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Apel Senam Pagi';
+$this->title = 'Apel Makan Siang';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="siswa-apel-pagi-index">
+<div class="apl-mkn-siang-index">
 
     <h3><?= Html::encode($this->title) ?></h3>
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?= Html::a('Tambah Apel Hari Ini', ['create-apel-hari-ini'], ['class' => 'btn btn-success']) ?>
@@ -41,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{create}',
                 'buttons'=>[
                     'create' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-plus-sign"></span> Apel Senam Pagi', ['index-apel', 'id' => $model->id]);
+                        return Html::a('<span class="glyphicon glyphicon-plus-sign"></span> Apel Makan Siang', ['index-apel', 'id' => $model->id]);
                     },
                 ],
             ],
