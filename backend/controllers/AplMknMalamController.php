@@ -2,21 +2,20 @@
 
 namespace backend\controllers;
 
-use app\models\TahunAjaranKelas;
-use app\models\TahunAjaranSemester;
 use Yii;
-use app\models\AplPgiKelas;
+use app\models\AplMknMalam;
+use app\models\search\AplMknMalamSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use app\models\JurnalLaporanPiket;
-use yii\data\ActiveDataProvider;
 
 /**
- * AplPgiKelasController implements the CRUD actions for AplPgiKelas model.
+ * AplMknMalamController implements the CRUD actions for AplMknMalam model.
  */
-class AplPgiKelasController extends Controller
+class AplMknMalamController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -32,7 +31,7 @@ class AplPgiKelasController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'create-apel-hari-ini', 'index-apel'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'index-apel', 'create-apel-hari-ini'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -40,7 +39,7 @@ class AplPgiKelasController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'create-apel-hari-ini', 'index-apel'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'index-apel', 'create-apel-hari-ini'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -49,7 +48,7 @@ class AplPgiKelasController extends Controller
     }
 
     /**
-     * Lists all AplPgiKelas models.
+     * Lists all AplMknMalam models.
      * @return mixed
      */
     public function actionIndex()
@@ -71,7 +70,7 @@ class AplPgiKelasController extends Controller
     }
 
     /**
-     * Displays a single AplPgiKelas model.
+     * Displays a single AplMknMalam model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -85,45 +84,86 @@ class AplPgiKelasController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
-
     }
 
     /**
-     * Creates a new AplPgiKelas model.
+     * Creates a new AplMknMalam model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate($id)
     {
         if(Yii::$app->user->can('admin')) {
-            $apel_pagi = AplPgiKelas::find()->where(['jurnal_laporan_id' => $id])->all();
-            if(count($apel_pagi) != 0){
+            $jurnal_laporan_piket = JurnalLaporanPiket::findOne($id);
+
+            $apel_makan_malam = AplMknMalam::find()->where(['jurnal_laporan_id' => $id])->all();
+            if(count($apel_makan_malam) != 0){
                 Yii::$app->session->setFlash('error', 'Apel Sudah Dibuat');
                 return $this->actionIndexApel($id);
             }
 
-            $tahun_ajaran_aktif = TahunAjaranSemester::find()->where(['is_active' => 1])->one();
-            $tahun_ajaran_kelas = TahunAjaranKelas::find()->where(['tahun_ajaran_semester_id' => $tahun_ajaran_aktif->id])->all();
-
-            $i = 0;
-            if (Yii::$app->request->post()) {
+            if(Yii::$app->request->post()){
                 $request = Yii::$app->request->post();
-                foreach ($tahun_ajaran_kelas as $value){
-                    $model = new AplPgiKelas();
-                    $model->tahun_ajaran_kelas_id = $value->id;
-                    $model->jumlah = $request['jumlah_siswa_kelas_'.$value->id];
-                    $model->hadir = $request['hadir_siswa_kelas_'.$value->id];
-                    $model->tidak_hadir = $request['tidak_hadir_siswa_kelas_'.$value->id];
-                    $model->keterangan_tidak_hadir = $request['keterangan_tidak_hadir_siswa_kelas_'.$value->id];
-                    $model->jurnal_laporan_id = $id;
-                    $model->save();
-                }
+
+                $siswa_kelas_x = new AplMknMalam();
+                $siswa_kelas_x->kelas = 'Siswa Kelas X';
+                $siswa_kelas_x->jumlah = $request['jumlah_siswa_kelas_x'];
+                $siswa_kelas_x->hadir = $request['hadir_siswa_kelas_x'];;
+                $siswa_kelas_x->tidak_hadir = $request['tidak_hadir_siswa_kelas_x'];
+                $siswa_kelas_x->keterangan_tidak_hadir = $request['keterangan_tidak_hadir_siswa_kelas_x'];
+                $siswa_kelas_x->jurnal_laporan_id = $id;
+                $siswa_kelas_x->save();
+
+                $siswa_kelas_xi = new AplMknMalam();
+                $siswa_kelas_xi->kelas = 'Siswa Kelas XI';
+                $siswa_kelas_xi->jumlah = $request['jumlah_siswa_kelas_xi'];
+                $siswa_kelas_xi->hadir = $request['hadir_siswa_kelas_xi'];;
+                $siswa_kelas_xi->tidak_hadir = $request['tidak_hadir_siswa_kelas_xi'];
+                $siswa_kelas_xi->keterangan_tidak_hadir = $request['keterangan_tidak_hadir_siswa_kelas_xi'];
+                $siswa_kelas_xi->jurnal_laporan_id = $id;
+                $siswa_kelas_xi->save();
+
+                $siswa_kelas_xii = new AplMknMalam();
+                $siswa_kelas_xii->kelas = 'Siswa Kelas XII';
+                $siswa_kelas_xii->jumlah = $request['jumlah_siswa_kelas_xii'];
+                $siswa_kelas_xii->hadir = $request['hadir_siswa_kelas_xii'];;
+                $siswa_kelas_xii->tidak_hadir = $request['tidak_hadir_siswa_kelas_xii'];
+                $siswa_kelas_xii->keterangan_tidak_hadir = $request['keterangan_tidak_hadir_siswa_kelas_xii'];
+                $siswa_kelas_xii->jurnal_laporan_id = $id;
+                $siswa_kelas_xii->save();
+
+                $siswi_kelas_x = new AplMknMalam();
+                $siswi_kelas_x->kelas = 'Siswi Kelas X';
+                $siswi_kelas_x->jumlah = $request['jumlah_siswi_kelas_x'];
+                $siswi_kelas_x->hadir = $request['hadir_siswi_kelas_x'];;
+                $siswi_kelas_x->tidak_hadir = $request['tidak_hadir_siswi_kelas_x'];
+                $siswi_kelas_x->keterangan_tidak_hadir = $request['keterangan_tidak_hadir_siswi_kelas_x'];
+                $siswi_kelas_x->jurnal_laporan_id = $id;
+                $siswi_kelas_x->save();
+
+                $siswi_kelas_xi = new AplMknMalam();
+                $siswi_kelas_xi->kelas = 'Siswi Kelas XI';
+                $siswi_kelas_xi->jumlah = $request['jumlah_siswi_kelas_xi'];
+                $siswi_kelas_xi->hadir = $request['hadir_siswi_kelas_xi'];;
+                $siswi_kelas_xi->tidak_hadir = $request['tidak_hadir_siswi_kelas_xi'];
+                $siswi_kelas_xi->keterangan_tidak_hadir = $request['keterangan_tidak_hadir_siswi_kelas_xi'];
+                $siswi_kelas_xi->jurnal_laporan_id = $id;
+                $siswi_kelas_xi->save();
+
+                $siswi_kelas_xii = new AplMknMalam();
+                $siswi_kelas_xii->kelas = 'Siswi Kelas XII';
+                $siswi_kelas_xii->jumlah = $request['jumlah_siswi_kelas_xii'];
+                $siswi_kelas_xii->hadir = $request['hadir_siswi_kelas_xii'];;
+                $siswi_kelas_xii->tidak_hadir = $request['tidak_hadir_siswi_kelas_xii'];
+                $siswi_kelas_xii->keterangan_tidak_hadir = $request['keterangan_tidak_hadir_siswi_kelas_xii'];
+                $siswi_kelas_xii->jurnal_laporan_id = $id;
+                $siswi_kelas_xii->save();
 
                 return $this->actionIndexApel($id);
             }
 
             return $this->render('create', [
-                'tahun_ajaran_kelas' => $tahun_ajaran_kelas
+                'jurnal_laporan_piket' => $jurnal_laporan_piket,
             ]);
         }else{
             return $this->redirect(['error/forbidden-error']);
@@ -131,7 +171,7 @@ class AplPgiKelasController extends Controller
     }
 
     /**
-     * Updates an existing AplPgiKelas model.
+     * Updates an existing AplMknMalam model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -152,11 +192,10 @@ class AplPgiKelasController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
-
     }
 
     /**
-     * Deletes an existing AplPgiKelas model.
+     * Deletes an existing AplMknMalam model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -171,24 +210,24 @@ class AplPgiKelasController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
-
     }
 
     /**
-     * Finds the AplPgiKelas model based on its primary key value.
+     * Finds the AplMknMalam model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return AplPgiKelas the loaded model
+     * @return AplMknMalam the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = AplPgiKelas::findOne($id)) !== null) {
+        if (($model = AplMknMalam::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
 
     public function actionCreateApelHariIni(){
         if(Yii::$app->user->can('admin')) {
@@ -228,10 +267,10 @@ class AplPgiKelasController extends Controller
     public function actionIndexApel($id){
         if(Yii::$app->user->can('admin')) {
             $jurnal_laporan_piket = JurnalLaporanPiket::findOne($id);
-            $apel_pagi_kelas = AplPgiKelas::find()->where(['jurnal_laporan_id' => $id])->all();
+            $apel_makan_malam = AplMknMalam::find()->where(['jurnal_laporan_id' => $id])->all();
 
             $dataProvider = new ActiveDataProvider([
-                'query' => AplPgiKelas::find()->where(['jurnal_laporan_id' => $id])->orderBy('id ASC'),
+                'query' => AplMknMalam::find()->where(['jurnal_laporan_id' => $id])->orderBy('id ASC'),
                 'pagination' => [
                     'pageSize' => 10,
                 ],
@@ -240,7 +279,7 @@ class AplPgiKelasController extends Controller
             return $this->render('index-apel', [
                 'dataProvider' => $dataProvider,
                 'jurnal_laporan_piket' => $jurnal_laporan_piket,
-                'apel_pagi_kelas' => $apel_pagi_kelas
+                'apel_makan_malam' => $apel_makan_malam
             ]);
         }else{
             return $this->redirect(['error/forbidden-error']);

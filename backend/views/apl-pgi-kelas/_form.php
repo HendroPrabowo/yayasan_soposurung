@@ -1,13 +1,3 @@
-<?php
-
-use yii\helpers\Html;
-use yii\widgets\ActiveForm;
-
-/* @var $this yii\web\View */
-/* @var $model app\models\AplPgiKelas */
-/* @var $form yii\widgets\ActiveForm */
-?>
-
 <div class="apl-pgi-kelas-form">
     <form method="post">
         <input type='hidden' name='<?= Yii::$app->request->csrfParam ?>' value='<?= Yii::$app->request->getCsrfToken()?>'>
@@ -44,5 +34,4 @@ use yii\widgets\ActiveForm;
 
         <button class="btn btn-success">Submit</button>
     </form>
-
 </div>
