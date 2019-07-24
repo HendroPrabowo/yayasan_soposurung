@@ -36,7 +36,7 @@
                                 ['label' => 'Nilai Siswa', 'icon' => 'check', 'url' => ['siswa-nilai/index']],
                             ]
                         ],
-                        ['label' => 'Aturan Asrama', 'icon' => 'tags', 'url' => ['aturan-asrama/index']],
+                        ['label' => 'Aturan Asrama', 'icon' => 'exclamation', 'url' => ['aturan-asrama/index']],
                         ['label' => 'Kesehatan', 'icon' => 'heart', 'url' => ['kesehatan/index']],
                         ['label' => 'Kedisiplinan', 'icon' => 'warning', 'url' => ['kedisiplinan/index']],
                         [
@@ -44,22 +44,22 @@
                             'icon' => 'book',
                             'url' => '#',
                             'items' => [
-                                ['label' => 'Log Tamu', 'icon' => 'inbox', 'url' => ['log-tamu/index']],
-                                ['label' => 'Barang Masuk', 'icon' => 'bookmark', 'url' => ['log-masuk-barang/index']],
-                                ['label' => 'Barang Keluar', 'icon' => 'bookmark', 'url' => ['log-keluar-barang/index']],
+                                ['label' => 'Log Tamu', 'icon' => 'phone', 'url' => ['log-tamu/index']],
+                                ['label' => 'Barang Masuk', 'icon' => 'shopping-cart', 'url' => ['log-masuk-barang/index']],
+                                ['label' => 'Barang Keluar', 'icon' => 'shopping-cart', 'url' => ['log-keluar-barang/index']],
                             ]
                         ],
                         [
                             'label' => 'Penilaian',
-                            'icon' => 'book',
+                            'icon' => 'pencil',
                             'url' => '#',
                             'items' => [
-                                ['label' => 'Komponen Nilai', 'icon' => 'inbox', 'url' => ['penilaian/index']],
+                                ['label' => 'Komponen Nilai', 'icon' => 'print', 'url' => ['penilaian/index']],
                             ]
                         ],
                         [
                             'label' => 'Jurnal Piket',
-                            'icon' => 'book',
+                            'icon' => 'cutlery',
                             'url' => '#',
                             'items' => [
                                 ['label' => 'Apel Senam Pagi', 'icon' => 'inbox', 'url' => ['sw-senam-apl-pgi/index']],
@@ -76,6 +76,20 @@
                     $menuItems = [
                         ['label' => 'Akun', 'icon' => 'user', 'url' => ['user/show']],
                         ['label' => 'Data Diri', 'icon' => 'user', 'url' => ['siswa/view-by-siswa']],
+                    ];
+                }elseif ($user->role == 'perawat'){
+                    $menuItems = [
+                        ['label' => 'Kesehatan', 'icon' => 'heart', 'url' => ['kesehatan/index']],
+                    ];
+                }elseif ($user->role == 'security'){
+                    $menuItems = [
+                        ['label' => 'Log Tamu', 'icon' => 'phone', 'url' => ['log-tamu/index']],
+                        ['label' => 'Barang Masuk', 'icon' => 'shopping-cart', 'url' => ['log-masuk-barang/index']],
+                        ['label' => 'Barang Keluar', 'icon' => 'shopping-cart', 'url' => ['log-keluar-barang/index']],
+                    ];
+                }elseif ($user->role == 'wakepas kesiswaan'){
+                    $menuItems = [
+                        ['label' => 'Kedisiplinan', 'icon' => 'warning', 'url' => ['kedisiplinan/index']],
                     ];
                 }
             }

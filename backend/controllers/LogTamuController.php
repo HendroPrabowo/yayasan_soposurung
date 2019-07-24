@@ -51,7 +51,7 @@ class LogTamuController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('security')) {
             $searchModel = new LogTamuSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -72,7 +72,7 @@ class LogTamuController extends Controller
      */
     public function actionView($id)
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('security')) {
             return $this->render('view', [
                 'model' => $this->findModel($id),
             ]);
@@ -88,7 +88,7 @@ class LogTamuController extends Controller
      */
     public function actionCreate()
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('security')) {
             $model = new LogTamu();
 
             if ($model->load(Yii::$app->request->post())) {
@@ -117,7 +117,7 @@ class LogTamuController extends Controller
      */
     public function actionUpdate($id)
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('security')) {
             $model = $this->findModel($id);
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -141,7 +141,7 @@ class LogTamuController extends Controller
      */
     public function actionDelete($id)
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('security')) {
             $this->findModel($id)->delete();
 
             return $this->redirect(['index']);
@@ -167,7 +167,7 @@ class LogTamuController extends Controller
     }
 
     public function actionKeluar($id){
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('security')) {
             $log_tamu = LogTamu::findOne($id);
             date_default_timezone_set('Asia/Jakarta');
             $log_tamu->waktu_keluar = date("Y-m-d H:i:s");

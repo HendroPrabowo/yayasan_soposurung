@@ -53,7 +53,7 @@ class KesehatanController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('perawat')) {
             $searchModel = new KesehatanSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -75,7 +75,7 @@ class KesehatanController extends Controller
      */
     public function actionView($id)
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('perawat')) {
             return $this->render('view', [
                 'model' => $this->findModel($id),
             ]);
@@ -92,7 +92,7 @@ class KesehatanController extends Controller
      */
     public function actionCreate()
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('perawat')) {
             $model = new Kesehatan();
 
             if ($model->load(Yii::$app->request->post())) {
@@ -125,7 +125,7 @@ class KesehatanController extends Controller
      */
     public function actionUpdate($id)
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('perawat')) {
             $model = $this->findModel($id);
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -153,7 +153,7 @@ class KesehatanController extends Controller
      */
     public function actionDelete($id)
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('perawat')) {
             $this->findModel($id)->delete();
 
             return $this->redirect(['index']);

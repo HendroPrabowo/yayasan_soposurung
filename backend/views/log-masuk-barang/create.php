@@ -5,13 +5,13 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\LogMasukBarang */
 
-$this->title = 'Create Log Masuk Barang';
-$this->params['breadcrumbs'][] = ['label' => 'Log Masuk Barang', 'url' => ['index']];
+$this->title = 'Tambah Log Barang Masuk';
+$this->params['breadcrumbs'][] = ['label' => 'Log Barang Masuk', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="log-masuk-barang-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h3><?= Html::encode($this->title) ?></h3>
 
     <?= $this->render('_form', [
         'model' => $model,

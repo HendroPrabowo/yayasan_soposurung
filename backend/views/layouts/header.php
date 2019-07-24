@@ -22,18 +22,19 @@ $user = \app\models\User::findOne(Yii::$app->user->id);
 
             <ul class="nav navbar-nav">
                 <!-- User Account: style can be found in dropdown.less -->
-
+                <!-- <img src="'.$directoryAsset.'/img/yayasan_soposurung.png" class="user-image" alt="User Image"/> -->
+                <!-- <img src="uploads/logo/yayasan_soposurung.png" class="user-image" alt="User Image"/> -->
                 <?php
                     if(Yii::$app->user->isGuest == false){
                         echo '<li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="'.$directoryAsset.'/img/yayasan_soposurung_logo.png" class="user-image" alt="User Image"/>
+                            <img src="'.Yii::getAlias('@web/uploads/logo/yayasan_soposurung.png').'" class="user-image" alt="User Image"/>
                             <span class="hidden-xs">'.$user->username.'</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
                             <li class="user-header">
-                                <img src="'.$directoryAsset.'/img/yayasan_soposurung_logo.png" class="img-circle" alt="User Image"/>
+                                <img src="'.Yii::getAlias('@web/uploads/logo/yayasan_soposurung.png').'" class="img-circle" alt="User Image"/>
                                 <p style="margin-bottom: 0px">'.$user->username.'</p>
                                 <p style="font-size: 12px; margin-top: 0px">Workgroup : <z style="font-size: 10px" class="badge bg-red">'.$user->role.'</z></p>
                             </li>

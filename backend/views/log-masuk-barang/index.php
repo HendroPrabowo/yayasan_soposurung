@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\search\LogMasukBarangSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Log Masuk Barang';
+$this->title = 'Log Barang Masuk';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="log-masuk-barang-index">
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Log Masuk Barang', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Tambah Log Barang Masuk', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([

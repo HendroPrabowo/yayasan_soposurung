@@ -52,13 +52,17 @@ class LogMasukBarangController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new LogMasukBarangSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('security')) {
+            $searchModel = new LogMasukBarangSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
     }
 
     /**
@@ -69,9 +73,13 @@ class LogMasukBarangController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('security')) {
+            return $this->render('view', [
+                'model' => $this->findModel($id),
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
     }
 
     /**
@@ -81,19 +89,23 @@ class LogMasukBarangController extends Controller
      */
     public function actionCreate()
     {
-        $model = new LogMasukBarang();
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('security')) {
+            $model = new LogMasukBarang();
 
-        if ($model->load(Yii::$app->request->post())) {
-            $user = User::findOne(Yii::$app->user->id);
-            $model->created_by = $user->id;
-            $model->save();
+            if ($model->load(Yii::$app->request->post())) {
+                $user = User::findOne(Yii::$app->user->id);
+                $model->created_by = $user->id;
+                $model->save();
 
-            return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+
+            return $this->render('create', [
+                'model' => $model,
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
         }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
     }
 
     /**
@@ -105,15 +117,19 @@ class LogMasukBarangController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('security')) {
+            $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+
+            return $this->render('update', [
+                'model' => $model,
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
         }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
     }
 
     /**
@@ -125,9 +141,13 @@ class LogMasukBarangController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('security')) {
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['index']);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
     }
 
     /**

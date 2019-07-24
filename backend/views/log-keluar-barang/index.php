@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\search\LogKeluarBarangSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Barang Keluar';
+$this->title = 'Log Barang Keluar';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="keluar-masuk-barang-index">

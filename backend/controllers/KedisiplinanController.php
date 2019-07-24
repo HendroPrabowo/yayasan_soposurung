@@ -53,7 +53,7 @@ class KedisiplinanController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan')) {
             $searchModel = new KedisiplinanSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -75,7 +75,7 @@ class KedisiplinanController extends Controller
      */
     public function actionView($id)
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan')) {
             return $this->render('view', [
                 'model' => $this->findModel($id),
             ]);
@@ -92,7 +92,7 @@ class KedisiplinanController extends Controller
      */
     public function actionCreate()
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan')) {
             $model = new Kedisiplinan();
 
             if ($model->load(Yii::$app->request->post())) {
@@ -128,7 +128,7 @@ class KedisiplinanController extends Controller
      */
     public function actionUpdate($id)
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan')) {
             $model = $this->findModel($id);
 
             if ($model->load(Yii::$app->request->post())) {
@@ -178,7 +178,7 @@ class KedisiplinanController extends Controller
      */
     public function actionDelete($id)
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan')) {
             $this->findModel($id)->delete();
 
             return $this->redirect(['index']);

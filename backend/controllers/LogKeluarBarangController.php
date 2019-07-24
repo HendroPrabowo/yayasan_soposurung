@@ -52,7 +52,7 @@ class LogKeluarBarangController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('security')) {
             $searchModel = new LogKeluarBarangSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -74,7 +74,7 @@ class LogKeluarBarangController extends Controller
      */
     public function actionView($id)
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('security')) {
             return $this->render('view', [
                 'model' => $this->findModel($id),
             ]);
@@ -91,7 +91,7 @@ class LogKeluarBarangController extends Controller
      */
     public function actionCreate()
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('security')) {
             $model = new LogKeluarBarang();
 
             if ($model->load(Yii::$app->request->post())) {
@@ -119,7 +119,7 @@ class LogKeluarBarangController extends Controller
      */
     public function actionUpdate($id)
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('security')) {
             $model = $this->findModel($id);
 
             if ($model->load(Yii::$app->request->post())) {
@@ -148,7 +148,7 @@ class LogKeluarBarangController extends Controller
      */
     public function actionDelete($id)
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('security')) {
             $this->findModel($id)->delete();
 
             return $this->redirect(['index']);
