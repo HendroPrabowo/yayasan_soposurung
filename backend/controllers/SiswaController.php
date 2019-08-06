@@ -38,7 +38,7 @@ class SiswaController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'import-excel', 'view-by-siswa'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'import-excel', 'view-by-siswa', 'download-excel'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -46,7 +46,7 @@ class SiswaController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'create', 'update', 'delete',  'import-excel', 'view-by-siswa'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete',  'import-excel', 'view-by-siswa', 'download-excel'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -64,9 +64,17 @@ class SiswaController extends Controller
             $searchModel = new SiswaSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+            $semua_angkatan = new ActiveDataProvider([
+                'query' => Angkatan::find(),
+                'pagination' => [
+                    'pageSize' => 10,
+                ],
+            ]);
+
             return $this->render('index', [
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
+                'semua_angkatan' => $semua_angkatan,
             ]);
         }else{
             return $this->redirect(['error/forbidden-error']);
@@ -308,6 +316,19 @@ class SiswaController extends Controller
             ]);
         }else{
             return $this->redirect(['error/forbidden-error']);
+        }
+    }
+
+    /*
+     * Fungsi download template excel data siswa
+     */
+    public function actionDownloadExcel(){
+        if(Yii::$app->user->can('admin')){
+            $excel = Yii::$app->basePath.'/web/template/TemplateDataSiswa.xlsx';
+
+            if (file_exists($excel)) {
+                return Yii::$app->response->sendFile($excel);
+            }
         }
     }
 }

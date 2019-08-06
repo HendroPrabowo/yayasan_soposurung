@@ -35,7 +35,7 @@ $fieldOptions2 = [
 
     <div class="login-box-body">
         <div class="login-logo">
-            <img src="/yayasan_soposurung/backend/web/uploads/logo/yayasan_soposurung_logo_new.png" class="center" style="height: 100px; width: 100px; margin-bottom: 5px">
+            <img src="<?= Yii::getAlias('@web/uploads/logo/yayasan_soposurung.png') ?>" class="center" style="height: 100px; width: 100px; margin-bottom: 5px">
             <p class="text-center" style="color: black; font-size: 20px">Yayasan Soposurung</p>
         </div>
         <hr>

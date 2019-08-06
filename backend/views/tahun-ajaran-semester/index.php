@@ -22,6 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Tahun Ajaran Aktif',
                 'content' => $this->render('_tahun_ajaran_semester_aktif', [
                     'tahun_ajaran_aktif' => $tahun_ajaran_aktif,
+                    'tahun_ajaran_kelas' => $tahun_ajaran_kelas,
                 ]),
                 'active' => true
             ],

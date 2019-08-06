@@ -23,7 +23,6 @@ use Yii;
  * @property string $pekerjaan_ibu
  * @property int $angkatan_id
  * @property int $user_id
- * @property int $kelas_id
  * @property int $kredit_point
  *
  * @property User $user
@@ -48,7 +47,7 @@ class Siswa extends \yii\db\ActiveRecord
     {
         return [
             [['nisn', 'user_id'], 'required'],
-            [['anak_ke', 'nomor_telepon_orang_tua', 'user_id', 'kelas_id', 'kredit_point', 'angkatan_id'], 'integer'],
+            [['anak_ke', 'nomor_telepon_orang_tua', 'user_id', 'kredit_point', 'angkatan_id', 'siswa_thn_kls'], 'integer'],
             [['alamat_orang_tua'], 'string'],
             [['nisn', 'kelahiran', 'jenis_kelamin', 'agama', 'status_dalam_keluarga', 'pekerjaan_ayah', 'pekerjaan_ibu'], 'string', 'max' => 255],
             [['nama', 'nama_ayah', 'nama_ibu'], 'string', 'max' => 500],
@@ -80,7 +79,7 @@ class Siswa extends \yii\db\ActiveRecord
             'pekerjaan_ibu' => 'Pekerjaan Ibu',
             'angkatan_id' => 'Angkatan',
             'user_id' => 'User ID',
-            'kelas_id' => 'Kelas',
+            'siswa_thn_kls' => 'Siswa Tahun Kelas',
             'kredit_point' => 'Kredit Point',
         ];
     }
@@ -91,13 +90,6 @@ class Siswa extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
-    }
-
-    /**
-     * Mengambil nama kelas
-     */
-    public function getKelas(){
-        return $this->hasOne(KelasR::className(), ['id' => 'kelas_id']);
     }
 
     /*

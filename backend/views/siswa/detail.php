@@ -32,15 +32,7 @@ use yii\widgets\DetailView;
         ],
 //            'user_id'
 //            'kelas_id'
-        [
-            'attribute' => 'Kelas',
-            'value' => function(\yii\base\Model $model){
-                if($model->kelas_id == null)
-                    return '-';
-                else
-                    return $model->kelas->kelas;
-            }
-        ],
+        'siswa_thn_kls',
         'kredit_point',
     ],
 ]) ?>

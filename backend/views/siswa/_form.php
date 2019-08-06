@@ -45,7 +45,7 @@ $angkatan_all = ArrayHelper::map($angkatan, 'id', 'angkatan');
 
     <?= $form->field($model, 'pekerjaan_ibu')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'kelas_id')->dropDownList($kelas_all, ['prompt' => 'Pilih Satu']) ?>
+    <?= $form->field($model, 'siswa_thn_kls')->dropDownList($kelas_all, ['prompt' => 'Pilih Satu']) ?>
 
     <?= $form->field($model, 'angkatan_id')->dropDownList($angkatan_all, ['prompt' => 'Pilih Satu']) ?>
 

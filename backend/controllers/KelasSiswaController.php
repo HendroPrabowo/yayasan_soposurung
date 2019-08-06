@@ -198,7 +198,11 @@ class KelasSiswaController extends Controller
                     if($i !=  0){
                         // Cari siswa yang di assign di kelas tersebut
                         $siswa = KelasSiswa::find()->where(['nisn' => $value, 'thn_ajaran_kelas_id' => $id])->one();
-                        $kelas_mata_pelajaran = KelasMataPelajaran::find()->where(['tahun_ajaran_kelas_id' => $id])->all();
+
+                        $siswa_sebenarnya = Siswa::findOne($value);
+                        $siswa_sebenarnya->kelas_id = $tahun_ajaran_kelas->kelas_id;
+                        $siswa_sebenarnya->save();
+
                         if($siswa == null){
                             $kelas_siswa = new KelasSiswa();
                             $kelas_siswa->nisn = $value;
@@ -237,7 +241,10 @@ class KelasSiswaController extends Controller
     // Ambil siswa dengan jquery
     public function actionGetSiswa(){
         $angkatan_id = Yii::$app->request->post('angkatan_id');
-        $siswa = Siswa::find()->where(['angkatan_id' => $angkatan_id])->all();
+        $siswa = Siswa::find()->where([
+            'angkatan_id' => $angkatan_id,
+            'kelas_id' => null,
+        ])->all();
 
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return [

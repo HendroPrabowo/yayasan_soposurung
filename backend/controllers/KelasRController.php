@@ -94,7 +94,7 @@ class KelasRController extends Controller
             $model = new KelasR();
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['kelas-r/index']);
             }
 
             return $this->render('create', [
@@ -119,7 +119,7 @@ class KelasRController extends Controller
             $model = $this->findModel($id);
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['kelas-r/index']);
             }
 
             return $this->render('update', [
@@ -128,7 +128,6 @@ class KelasRController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
-
     }
 
     /**

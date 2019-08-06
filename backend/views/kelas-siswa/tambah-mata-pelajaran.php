@@ -9,6 +9,7 @@ use yii\grid\GridView;
 
 $this->title = 'Mata Pelajaran';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="kelas-siswa-index">
 

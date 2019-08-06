@@ -3,8 +3,7 @@
 namespace backend\controllers;
 
 use app\models\KelasR;
-use app\models\Siswa;
-use app\models\SiswaAssign;
+use yii\data\ActiveDataProvider;
 use app\models\TahunAjaranKelas;
 use Yii;
 use app\models\TahunAjaranSemester;
@@ -33,7 +32,7 @@ class TahunAjaranSemesterController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'set-active', 'assign-kelas', 'ubah-assign-kelas'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'set-active', 'assign-kelas', 'ubah-assign-kelas', 'delete-kelas'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -41,7 +40,7 @@ class TahunAjaranSemesterController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'set-active', 'assign-kelas', 'ubah-assign-kelas'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'set-active', 'assign-kelas', 'ubah-assign-kelas', 'delete-kelas'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -60,10 +59,15 @@ class TahunAjaranSemesterController extends Controller
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $tahun_ajaran_aktif = TahunAjaranSemester::findOne(['is_active' => 1]);
 
+            $tahun_ajaran_kelas = new ActiveDataProvider([
+                'query' => TahunAjaranKelas::find()->where(['tahun_ajaran_semester_id' => $tahun_ajaran_aktif->id]),
+            ]);
+
             return $this->render('index', [
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
                 'tahun_ajaran_aktif' => $tahun_ajaran_aktif,
+                'tahun_ajaran_kelas' => $tahun_ajaran_kelas,
             ]);
         }else{
             return $this->redirect(['error/forbidden-error']);
@@ -286,8 +290,34 @@ class TahunAjaranSemesterController extends Controller
                 }
                 return $this->actionIndex();
             }else{
+                // Ambil semua id kelas
                 $kelas = KelasR::find()->all();
+                $id_semua_kelas = array();
+                foreach ($kelas as $value){
+                    $id_semua_kelas[] = $value->id;
+                }
+
+                // Ambil semua id dari kelas yang sudah di assign
+                $kelas_yang_sudah_di_assign = TahunAjaranKelas::find()->where(['tahun_ajaran_semester_id' => $tahun_ajaran_aktif->id])->all();
+                $id_kelas_yang_sudah_diassign = array();
+                foreach ($kelas_yang_sudah_di_assign as $value){
+                    $id_kelas_yang_sudah_diassign[] = $value->kelas_id;
+                }
+
+                $id_kelas_terpilih = array();
+                foreach ($id_semua_kelas as $value){
+                    if(!in_array($value, $id_kelas_yang_sudah_diassign)){
+                        $id_kelas_terpilih[] = $value;
+                    }
+                }
+
+                $array = array();
+                foreach ($id_kelas_terpilih as $value){
+                    $array[] = KelasR::findOne($value);
+                }
+
                 return $this->render('_form_assign_kelas', [
+                    'array' => $array,
                     'kelas' => $kelas,
                     'model' => $model,
                     'tahun_ajaran_aktif' => $tahun_ajaran_aktif,
@@ -296,5 +326,23 @@ class TahunAjaranSemesterController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
+    }
+
+    /*
+     * Menghapus kelas
+     */
+    public function actionDeleteKelas($id){
+        $tahun_ajaran_kelas = TahunAjaranKelas::findOne($id);
+
+        $nama_tahun_ajaran = $tahun_ajaran_kelas->tahunAjaranSemester->tahun_ajaran;
+
+        $seluruh_tahun_ajaran_semester = TahunAjaranSemester::find()->where(['tahun_ajaran' => $nama_tahun_ajaran])->all();
+
+        foreach ($seluruh_tahun_ajaran_semester as $value){
+            // Kelas yang mau dihapus dari semester ganjil dan genap
+            $kelas = TahunAjaranKelas::find()->where(['tahun_ajaran_semester_id' => $value->id, 'kelas_id' => $tahun_ajaran_kelas->kelas_id])->one();
+            $kelas->delete();
+        }
+        return $this->actionIndex();
     }
 }

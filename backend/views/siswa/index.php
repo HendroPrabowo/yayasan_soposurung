@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use yii\bootstrap\Tabs;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\SiswaSearch */
@@ -18,47 +18,29 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Tambah Siswa', ['create'], ['class' => 'btn btn-success']) ?>
         <?= Html::a('Import Excel', ['import-excel'], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Download Template Excel', ['download-excel'], ['class' => 'btn btn-warning']) ?>
     </p>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
 
-            'nisn',
-            'nama',
-//            'kelas_id',
+    <?= Tabs::widget([
+        'items' => [
             [
-                'attribute' => 'Kelas',
-                'value' => function(\yii\base\Model $model){
-                    if($model->kelas_id == null)
-                        return '-';
-                    else
-                        return $model->kelas->kelas;
-                }
+                'label' => 'Angkatan',
+                'content' => $this->render('_angkatan', [
+                    'semua_angkatan' => $semua_angkatan,
+                ]),
+                'active' => true
             ],
-//            'kelahiran',
-//            'jenis_kelamin',
-//            'agama',
-            //'status_dalam_keluarga',
-            //'anak_ke',
-            //'sekolah_asal',
-            //'nama_ayah',
-            //'nama_ibu',
-            //'alamat_orang_tua:ntext',
-            //'nomor_telepon_orang_tua',
-            //'pekerjaan_ayah',
-            //'pekerjaan_ibu',
-            //'user_id',
-            'kredit_point',
-//            'angkatan_id',
             [
-                    'attribute' => 'Angkatan',
-                'value' => 'angkatan.angkatan',
+                'label' => 'Semua Siswa',
+                'content' => $this->render('_siswa', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+                ]),
             ],
-
-            ['class' => 'yii\grid\ActionColumn'],
         ],
-    ]); ?>
+    ]);
+    ?>
+
+
 </div>

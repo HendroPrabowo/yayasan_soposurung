@@ -39,16 +39,15 @@ use yii\grid\GridView;
                 }
             },
         ],
-
         [
-                'class' => 'yii\grid\ActionColumn',
+            'class' => 'yii\grid\ActionColumn',
             'template' => '{view} {update} {delete} {set_active}',
             'buttons' => [
-                    'set_active' => function ($url, $model, $key) {
-                        if($model->is_active == 0){
-                            return Html::a('Aktifkan', ['tahun-ajaran-semester/set-active', 'id' => $model->id]);
-                        }
-                    },
+                'set_active' => function ($url, $model, $key) {
+                    if($model->is_active == 0){
+                        return Html::a('Aktifkan', ['tahun-ajaran-semester/set-active', 'id' => $model->id]);
+                    }
+                },
             ],
         ],
     ],

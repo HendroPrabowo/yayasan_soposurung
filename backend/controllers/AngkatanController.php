@@ -93,7 +93,7 @@ class AngkatanController extends Controller
             $model = new Angkatan();
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['siswa/index']);
             }
 
             return $this->render('create', [
@@ -142,7 +142,7 @@ class AngkatanController extends Controller
         if(Yii::$app->user->can('admin')) {
             $this->findModel($id)->delete();
 
-            return $this->redirect(['index']);
+            return $this->redirect(['siswa/index']);
         }else{
             return $this->redirect(['error/forbidden-error']);
         }

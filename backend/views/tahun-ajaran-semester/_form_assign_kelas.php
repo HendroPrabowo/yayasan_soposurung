@@ -9,8 +9,6 @@ use yii\helpers\Url;
 /* @var $form yii\widgets\ActiveForm */
 $this->title = "Assign Kelas";
 
-$kelas_all = \yii\helpers\ArrayHelper::map($kelas, 'id', 'kelas');
-
 ?>
 
 <div class="tahun-ajaran-semester-form">
@@ -22,7 +20,7 @@ $kelas_all = \yii\helpers\ArrayHelper::map($kelas, 'id', 'kelas');
     <div class="form-group">
         <label>Pilih Kelas</label>
         <?php
-        foreach ($kelas as $value){
+        foreach ($array as $value){
             echo "<br>".Html::input('checkbox', 'kelas'.$value->id, $value->id)." ".$value->kelas;
         }
         ?>
