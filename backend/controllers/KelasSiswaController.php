@@ -28,7 +28,7 @@ class KelasSiswaController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'assign-siswa', 'get-siswa', 'view-siswa'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'assign-siswa', 'get-siswa', 'view-siswa', 'hapus-siswa'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -36,7 +36,7 @@ class KelasSiswaController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'assign-siswa', 'get-siswa', 'view-siswa'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'assign-siswa', 'get-siswa', 'view-siswa', 'hapus-siswa'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -45,6 +45,7 @@ class KelasSiswaController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                    'hapus-siswa' => ['POST'],
                 ],
             ],
         ];
@@ -200,7 +201,6 @@ class KelasSiswaController extends Controller
                         $siswa = KelasSiswa::find()->where(['nisn' => $value, 'thn_ajaran_kelas_id' => $id])->one();
 
                         $siswa_sebenarnya = Siswa::findOne($value);
-                        $siswa_sebenarnya->kelas_id = $tahun_ajaran_kelas->kelas_id;
                         $siswa_sebenarnya->save();
 
                         if($siswa == null){
@@ -235,20 +235,49 @@ class KelasSiswaController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
-
     }
 
     // Ambil siswa dengan jquery
-    public function actionGetSiswa(){
-        $angkatan_id = Yii::$app->request->post('angkatan_id');
-        $siswa = Siswa::find()->where([
-            'angkatan_id' => $angkatan_id,
-            'kelas_id' => null,
-        ])->all();
+    public function actionGetSiswa($id){
+        // Ambil semua siswa yang ada sudah di assign ke kelas
+        $tahun_ajaran_semester = TahunAjaranSemester::find()->where(['is_active' => 1])->one();
+        // Ambil semua kelas yang ada
+        $semua_tahun_ajaran_kelas = $tahun_ajaran_semester->tahunAjaranKelas;
+        // Ambil semua siswa yang ada di semua kelas
+        $siswa_sudah_memiliki_kelas = array();
+        foreach ($semua_tahun_ajaran_kelas as $value){
+            $kelas_siswa = $value->kelasSiswa;
+            foreach ($kelas_siswa as $value1){
+                $siswa_sudah_memiliki_kelas[] = $value1->nisn;
+            }
+        }
 
+
+        // Ambil semua siswa yang terpilih per angkatan
+        $angkatan_id = Yii::$app->request->post('angkatan_id');
+        $siswa_per_angkatan = Siswa::find()->where(['angkatan_id' => $angkatan_id])->all();
+        // Masukkan semua nisn siswa yang sudah diambil perangkatan tadi
+        $nisn_semua_siswa_per_angkatan = array();
+        foreach ($siswa_per_angkatan as $value){
+            $nisn_semua_siswa_per_angkatan[] = $value->nisn;
+        }
+
+        // Mencari siswa yang belum memiliki kelas
+        $penampung = array();
+        foreach ($nisn_semua_siswa_per_angkatan as $value){
+            if(!in_array($value, $siswa_sudah_memiliki_kelas)){
+                $penampung[] = $value;
+            }
+        }
+
+        // Ambil model siswa yang belum memiliki kelas
+        $siswa_belum_memiliki_kelas = array();
+        foreach ($penampung as $value){
+            $siswa_belum_memiliki_kelas[] = Siswa::findOne($value);
+        }
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return [
-            'siswa' => $siswa,
+            'siswa' => $siswa_belum_memiliki_kelas,
         ];
     }
 
@@ -257,20 +286,21 @@ class KelasSiswaController extends Controller
             $tahun_ajaran_kelas = TahunAjaranKelas::findOne($id);
             $kelas_siswa = KelasSiswa::find()->where(['thn_ajaran_kelas_id' => $tahun_ajaran_kelas->id])->all();
 
-            $dataProvider = new ActiveDataProvider([
-                'query' => KelasSiswa::find()->where(['thn_ajaran_kelas_id' => $tahun_ajaran_kelas->id])->orderBy('nisn ASC'),
-                'pagination' => [
-                    'pageSize' => 10,
-                ],
-            ]);
-
             return $this->render('view-siswa', [
                 'tahun_ajaran_kelas' => $tahun_ajaran_kelas,
-                'dataProvider' => $dataProvider
+                'kelas_siswa' => $kelas_siswa,
             ]);
 
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
+    }
+
+    public function actionHapusSiswa($id, $id_kelas_siswa){
+        $kelas_siswa = KelasSiswa::findOne($id);
+
+        $kelas_siswa->delete();
+
+        return $this->actionViewSiswa($id_kelas_siswa);
     }
 }

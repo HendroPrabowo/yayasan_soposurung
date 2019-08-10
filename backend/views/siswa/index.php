@@ -25,17 +25,17 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= Tabs::widget([
         'items' => [
             [
-                'label' => 'Angkatan',
-                'content' => $this->render('_angkatan', [
-                    'semua_angkatan' => $semua_angkatan,
-                ]),
-                'active' => true
-            ],
-            [
                 'label' => 'Semua Siswa',
                 'content' => $this->render('_siswa', [
                     'searchModel' => $searchModel,
                     'dataProvider' => $dataProvider,
+                ]),
+                'active' => true
+            ],
+            [
+                'label' => 'Angkatan',
+                'content' => $this->render('_angkatan', [
+                    'semua_angkatan' => $semua_angkatan,
                 ]),
             ],
         ],

@@ -1,8 +1,5 @@
 <?php
 
-use yii\helpers\Html;
-use yii\widgets\ActiveForm;
-use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
 
@@ -10,6 +7,8 @@ use kartik\select2\Select2;
 /* @var $model app\models\KelasSiswa */
 /* @var $form yii\widgets\ActiveForm */
 $angkatan_all = ArrayHelper::map($angkatan, 'id', 'angkatan');
+$id_tahun_ajaran_kelas = $_GET['id'];
+
 ?>
 
 <div class="kelas-siswa-form">
@@ -36,7 +35,7 @@ $angkatan_all = ArrayHelper::map($angkatan, 'id', 'angkatan');
         $("#angkatan").on("change", function () {
             $("#siswa").empty();
             $.ajax({
-                url: '<?php echo Yii::$app->request->baseUrl. '/index.php/kelas-siswa/get-siswa' ?>',
+                url: '<?php echo Yii::$app->request->baseUrl. '/index.php/kelas-siswa/get-siswa?id='.$id_tahun_ajaran_kelas ?>',
                 type: 'post',
                 data:{
                     angkatan_id: $("#angkatan").val(),

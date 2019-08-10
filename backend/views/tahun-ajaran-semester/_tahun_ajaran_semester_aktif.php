@@ -46,7 +46,7 @@ elseif($tahun_ajaran_aktif->tahunAjaranKelas == null){
                 'template' => '{view} {delete}',
                 'buttons'=>[
                     'view' => function ($url, $model, $key) {
-                        return Html::a('', ['kelas-mata-pelajaran/view-mata-pelajaran', 'id' => $model->id], ['class' => 'glyphicon glyphicon-eye-open',]);
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span> Mata Pelajaran', ['kelas-mata-pelajaran/view-mata-pelajaran', 'id' => $model->id]);
                     },
                     'delete' => function ($url, $model, $key) {
                         return Html::a('', ['tahun-ajaran-semester/delete-kelas', 'id' => $model->id], [
@@ -54,6 +54,9 @@ elseif($tahun_ajaran_aktif->tahunAjaranKelas == null){
                             'data' => [
                                 'confirm' => 'Are you sure you want to delete this item?',
                                 'method' => 'post',
+                            ],
+                            'style' => [
+                                'margin-left' => '10px',
                             ],
                         ]);
                     },
