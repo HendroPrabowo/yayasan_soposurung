@@ -10,18 +10,17 @@ use yii\widgets\ActiveForm;
 
 <div class="guru-form">
 
-    <?php $form = ActiveForm::begin(['enableAjaxValidation' => true]); ?>
-
-    <?= $form->field($model, 'no_induk_guru')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'nama')->textInput(['maxlength' => true]) ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Simpan', ['class' => 'btn btn-success']) ?>
-    </div>
-
-    <?php ActiveForm::end(); ?>
+    <form method="post">
+        <input type='hidden' name='<?= Yii::$app->request->csrfParam ?>' value='<?= Yii::$app->request->getCsrfToken()?>'>
+        <div class="form-group">
+            <label>No Induk Guru</label>
+            <input type="text" class="form-control" value="<?= $model->no_induk_guru ?>" name="no_induk_guru">
+        </div>
+        <div class="form-group">
+            <label>Nama</label>
+            <input type="text" class="form-control" value="<?= $model->nama ?>" name="nama">
+        </div>
+        <button type="submit" class="btn btn-success">Submit</button>
+    </form>
 
 </div>

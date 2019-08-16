@@ -30,7 +30,7 @@ class KomponenNilai extends \yii\db\ActiveRecord
     {
         return [
             [['kelas_mata_pelajaran_id', 'komponen_nilai'], 'required'],
-            [['kelas_mata_pelajaran_id'], 'integer'],
+            [['kelas_mata_pelajaran_id', 'excel'], 'integer'],
             [['komponen_nilai'], 'string', 'max' => 255],
             [['kelas_mata_pelajaran_id'], 'exist', 'skipOnError' => true, 'targetClass' => KelasMataPelajaran::className(), 'targetAttribute' => ['kelas_mata_pelajaran_id' => 'id']],
         ];
@@ -45,6 +45,7 @@ class KomponenNilai extends \yii\db\ActiveRecord
             'id' => 'ID',
             'kelas_mata_pelajaran_id' => 'Kelas Mata Pelajaran ID',
             'komponen_nilai' => 'Komponen Nilai',
+            'excel' => 'Excel',
         ];
     }
 
@@ -54,5 +55,9 @@ class KomponenNilai extends \yii\db\ActiveRecord
     public function getKelasMataPelajaran()
     {
         return $this->hasOne(KelasMataPelajaran::className(), ['id' => 'kelas_mata_pelajaran_id']);
+    }
+
+    public function getPenilaian(){
+        return $this->hasMany(Penilaian::className(), ['komponen_nilai_id' => 'id']);
     }
 }

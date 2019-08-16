@@ -8,7 +8,19 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Penilaian';
-$this->params['breadcrumbs'][] = $this->title;
+
+// Beda breadcrumb kalo admin dan guru
+$user = \app\models\User::findOne(Yii::$app->user->id);
+if($user->role == 'admin'){
+    $this->params['breadcrumbs'][] = ['label' => 'Kelas', 'url' => ['penilaian/index']];
+    $this->params['breadcrumbs'][] = ['label' => $kelas_mata_pelajaran->tahunAjaranKelas->kelas->kelas, 'url' => ['penilaian/view-mata-pelajaran', 'id' => $kelas_mata_pelajaran->tahunAjaranKelas->id]];
+    $this->params['breadcrumbs'][] = $this->title;
+}elseif ($user->role == 'guru'){
+    $this->params['breadcrumbs'][] = ['label' => 'Mata Pelajaran Yang Diampu', 'url' => ['guru/mata-pelajaran']];
+    $this->params['breadcrumbs'][] = 'Komponen Nilai';
+}
+
+
 ?>
 <div class="penilaian-index">
 

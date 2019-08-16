@@ -8,7 +8,8 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Penilaian';
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = ['label' => 'Kelas', 'url' => ['penilaian/index']];
+$this->params['breadcrumbs'][] = $tahun_ajaran_kelas->kelas->kelas;
 ?>
 <div class="penilaian-index">
 

@@ -26,7 +26,6 @@ use yii\grid\GridView;
         //'pekerjaan_ibu',
         //'user_id',
         'kredit_point',
-        'siswa_thn_kls',
 //            'angkatan_id',
         [
             'attribute' => 'Angkatan',

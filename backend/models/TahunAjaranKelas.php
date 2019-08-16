@@ -53,7 +53,7 @@ class TahunAjaranKelas extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getKelasMataPelajarans()
+    public function getKelasMataPelajaran()
     {
         return $this->hasMany(KelasMataPelajaran::className(), ['tahun_ajaran_kelas_id' => 'id']);
     }

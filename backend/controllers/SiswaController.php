@@ -136,6 +136,11 @@ class SiswaController extends Controller
                 $model->user_id = $user->id;
                 $model->save();
 
+                $auth_assignment = new AuthAssignment();
+                $auth_assignment->item_name = $user->role;
+                $auth_assignment->user_id = $user->id;
+                $auth_assignment->save();
+
                 Yii::$app->session->addFlash('success', 'Akun '.$user->username.' berhasil dibuat');
                 return $this->redirect(['view', 'id' => $model->nisn]);
             }
@@ -150,7 +155,6 @@ class SiswaController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
-
     }
 
     /**

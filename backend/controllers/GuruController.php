@@ -2,9 +2,12 @@
 
 namespace backend\controllers;
 
+use app\models\GuruUpdate;
+use app\models\TahunAjaranSemester;
 use Yii;
 use app\models\Guru;
 use app\models\search\GuruSearch;
+use yii\bootstrap\Html;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -31,7 +34,7 @@ class GuruController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'mata-pelajaran'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -39,7 +42,7 @@ class GuruController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'mata-pelajaran'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -139,7 +142,15 @@ class GuruController extends Controller
         if(Yii::$app->user->can('admin')) {
             $model = $this->findModel($id);
 
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if(Yii::$app->request->post()){
+                $request = Yii::$app->request->post();
+
+                $guru = GuruUpdate::findOne($id);
+
+                $guru->no_induk_guru = $request['no_induk_guru'];
+                $guru->nama = $request['nama'];
+                $guru->save();
+
                 return $this->redirect(['view', 'id' => $model->id]);
             }
 
@@ -183,5 +194,50 @@ class GuruController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionMataPelajaran(){
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('guru')) {
+            $tahun_ajaran_aktif = TahunAjaranSemester::find()->where(['is_active' => 1])->one();
+            $tahun_ajaran_kelas = $tahun_ajaran_aktif->tahunAjaranKelas;
+            $kelas_mata_pelajaran = array();
+
+            // Ambil semua kelas yang ada pada tahun ajaran tersebut
+            foreach ($tahun_ajaran_kelas as $value){
+//                echo $value->id.' Punya kelas : <br>';
+                foreach ($value->kelasMataPelajaran as $value2){
+//                    echo $value2->id.'<br>';
+                    $kelas_mata_pelajaran[] = $value2;
+                }
+//                echo '<br>';
+            }
+
+            // Ambil semua guru yang sudah diassign ke pelajaran
+            $assign_guru = array();
+            foreach ($kelas_mata_pelajaran as $value){
+                if(!is_null($value->assignGuru)){
+                    $assign_guru[] = $value->assignGuru;
+                }
+//                var_dump($value->assignGuru);
+//                echo '<br><br>';
+            }
+
+            // Ambil id guru yang login
+            $guru = Guru::find()->where(['user_id' => Yii::$app->user->id])->one();
+
+
+            $assign_guru_terpilih = array();
+            foreach ($assign_guru as $value){
+                if($value->guru_id == $guru->id){
+                    $assign_guru_terpilih[] = $value;
+                }
+            }
+
+            return $this->render('index_guru', [
+                'assign_guru_terpilih' => $assign_guru_terpilih,
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
     }
 }

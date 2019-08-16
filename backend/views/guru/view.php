@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Guru */
 
-$this->title = $model->nama;
+$this->title = $model->username;
 $this->params['breadcrumbs'][] = ['label' => 'Guru', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);

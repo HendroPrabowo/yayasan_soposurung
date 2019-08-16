@@ -3,17 +3,25 @@
 namespace backend\controllers;
 
 use app\models\KelasMataPelajaran;
+use app\models\KelasSiswa;
 use app\models\KomponenNilai;
+use app\models\Siswa;
 use app\models\TahunAjaranKelas;
 use app\models\TahunAjaranSemester;
+use app\models\User;
+use yii\web\UploadedFile;
+use backend\models\Excel;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Yii;
 use app\models\Penilaian;
-use app\models\search\Penilaian as PenilaianSearch;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+
 
 /**
  * PenilaianController implements the CRUD actions for Penilaian model.
@@ -34,7 +42,7 @@ class PenilaianController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view-mata-pelajaran', 'view-komponen-nilai', 'view-penilaian', 'create', 'update', 'delete'],
+                'only' => ['index', 'view-mata-pelajaran', 'view-komponen-nilai', 'view-penilaian', 'create', 'update', 'delete', 'download-template', 'upload-nilai', 'view-by-siswa'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -42,7 +50,7 @@ class PenilaianController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view-mata-pelajaran', 'view-komponen-nilai', 'view-penilaian', 'create', 'update', 'delete'],
+                        'actions' => ['index', 'view-mata-pelajaran', 'view-komponen-nilai', 'view-penilaian', 'create', 'update', 'delete', 'download-template', 'upload-nilai', 'view-by-siswa'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -186,34 +194,192 @@ class PenilaianController extends Controller
     }
 
     public function actionViewKomponenNilai($id){
-        $kelas_mata_pelajaran = KelasMataPelajaran::findOne($id);
-        $dataProvider = new ActiveDataProvider([
-            'query' => KomponenNilai::find()->where(['kelas_mata_pelajaran_id' => $id]),
-        ]);
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('guru')) {
+            $kelas_mata_pelajaran = KelasMataPelajaran::findOne($id);
+            $dataProvider = new ActiveDataProvider([
+                'query' => KomponenNilai::find()->where(['kelas_mata_pelajaran_id' => $id]),
+            ]);
 
-        // Kodingan untuk tabel baru
-        $kelas_siswa = $kelas_mata_pelajaran->tahunAjaranKelas->kelasSiswa;
-        $komponen_nilai = KomponenNilai::find()->where(['kelas_mata_pelajaran_id' => $id])->all();
-        $penilaian = Penilaian::find()->all();
+            // Kodingan untuk tabel baru
+            $kelas_siswa = $kelas_mata_pelajaran->tahunAjaranKelas->kelasSiswa;
+            $komponen_nilai = KomponenNilai::find()->where(['kelas_mata_pelajaran_id' => $id])->all();
+            $penilaian = Penilaian::find()->all();
 
-        return $this->render('index-komponen-nilai', [
-            'dataProvider' => $dataProvider,
-            'kelas_mata_pelajaran' => $kelas_mata_pelajaran,
-            'kelas_siswa' => $kelas_siswa,
-            'komponen_nilai' => $komponen_nilai,
-            'penilaian' => $penilaian,
-        ]);
+            return $this->render('index-komponen-nilai', [
+                'dataProvider' => $dataProvider,
+                'kelas_mata_pelajaran' => $kelas_mata_pelajaran,
+                'kelas_siswa' => $kelas_siswa,
+                'komponen_nilai' => $komponen_nilai,
+                'penilaian' => $penilaian,
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
     }
 
     public function actionViewPenilaian($id){
-        $komponen_nilai = KomponenNilai::findOne($id);
-        $dataProvider = new ActiveDataProvider([
-            'query' => Penilaian::find()->where(['komponen_nilai_id' => $id]),
-        ]);
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('guru')) {
+            $komponen_nilai = KomponenNilai::findOne($id);
+            $dataProvider = new ActiveDataProvider([
+                'query' => Penilaian::find()->where(['komponen_nilai_id' => $id]),
+            ]);
 
-        return $this->render('index-nilai', [
-            'dataProvider' => $dataProvider,
-            'komponen_nilai' => $komponen_nilai
-        ]);
+            return $this->render('index-nilai', [
+                'dataProvider' => $dataProvider,
+                'komponen_nilai' => $komponen_nilai
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
+    }
+
+    public function actionDownloadTemplate($id){
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('guru')) {
+            $komponen_nilai = KomponenNilai::findOne($id);
+            $penilaian = $komponen_nilai->penilaian;
+
+            $spreadsheet = new Spreadsheet();
+
+            $sheet = $spreadsheet->getActiveSheet();
+
+            $sheet->getColumnDimension('A')->setWidth(5);
+            $sheet->getColumnDimension('B')->setWidth(20);
+            $sheet->getColumnDimension('C')->setWidth(40);
+
+            $sheet->setCellValue('A1', 'No');
+            $sheet->setCellValue('B1', 'NISN');
+            $sheet->setCellValue('C1', 'NAMA');
+            $sheet->setCellValue('D1', 'Nilai');
+
+            $iterator = 2;
+            foreach ($penilaian  as $value){
+                $sheet->setCellValue('A'.$iterator, $iterator-1);
+                $sheet->setCellValue('B'.$iterator, $value->kelasSiswa->nisn);
+                $sheet->setCellValue('C'.$iterator, $value->kelasSiswa->siswa->nama);
+                $iterator++;
+            }
+
+            $writer = new Xlsx($spreadsheet);
+            $writer->save('template/'.$komponen_nilai->komponen_nilai.'_'.$komponen_nilai->kelasMataPelajaran->mataPelajaran->pelajaran.'_'.$komponen_nilai->kelasMataPelajaran->tahunAjaranKelas->kelas->kelas.'.xlsx');
+
+            $excel = Yii::$app->basePath.'/web/template/'.$komponen_nilai->komponen_nilai.'_'.$komponen_nilai->kelasMataPelajaran->mataPelajaran->pelajaran.'_'.$komponen_nilai->kelasMataPelajaran->tahunAjaranKelas->kelas->kelas.'.xlsx';
+
+            if (file_exists($excel)) {
+                return Yii::$app->response->sendFile($excel);
+            }
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
+    }
+
+    public function actionUploadNilai($id){
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('guru')) {
+            $model = new Excel();
+
+            $komponen_nilai = KomponenNilai::findOne($id);
+            $penilaian = $komponen_nilai->penilaian;
+
+            if($komponen_nilai->excel == 1 && Yii::$app->user->can('guru')){
+                return $this->redirect(['error/forbidden-error']);
+            }
+
+            if(Yii::$app->request->post()){
+                $model->excel = UploadedFile::getInstance($model, 'excel');
+                $path = 'uploads/';
+                $filePath = $path.$model->excel->name;
+                $model->excel->saveAs($filePath);
+
+                // membaca file
+                $spreadsheet = IOFactory::load($filePath);
+                $sheetdata = $spreadsheet->getActiveSheet()->toArray();
+
+                $i = 0;
+                set_time_limit(7200);
+                foreach ($sheetdata as $row) {
+                    if($i > 0){
+                        $nisn = $row[1];
+                        foreach ($penilaian as $value){
+                            if($value->kelasSiswa->nisn == $nisn){
+                                $value->nilai = $row[3];
+                                $value->save();
+                            }
+                        }
+                    }
+                    $i++;
+                }
+
+                $komponen_nilai->excel = 1;
+                $komponen_nilai->save();
+
+                return $this->actionViewPenilaian($id);
+            }
+
+            return $this->render('upload-nilai', [
+                'model' => $model
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
+    }
+
+    public function actionViewBySiswa(){
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('siswa')) {
+            $user = User::findOne(Yii::$app->user->id);
+            $siswa = Siswa::find()->where(['user_id' => $user->id])->one();
+            $kelas_siswa = KelasSiswa::find()->where(['nisn' => $siswa->nisn])->all();
+
+            $penilaian = array();
+            $penilaian_id = array();
+            foreach ($kelas_siswa as $value){
+                if($value->penilaian != null){
+                    foreach ($value->penilaian as $item){
+                        $penilaian[] = $item;
+                        $penilaian_id[] = $item->id;
+                    }
+                }
+            }
+
+            $tahun_ajaran_siswa_aktif = array();
+
+            $temp1 = array();
+            $temp2 = array();
+            $temp3 = array();
+            foreach ($penilaian as $value){
+                // Tampung tahun ajaran siswa aktif
+                if(!in_array($value->komponenNilai->kelasMataPelajaran->tahunAjaranKelas->tahunAjaranSemester, $tahun_ajaran_siswa_aktif)){
+                    $tahun_ajaran_siswa_aktif[] = $value->komponenNilai->kelasMataPelajaran->tahunAjaranKelas->tahunAjaranSemester;
+                }
+
+                // Tampung tahun ajaran kelas aktif id ke temp agar tidak berulang datanya
+                if(!in_array($value->komponenNilai->kelasMataPelajaran->tahunAjaranKelas->id, $temp1)){
+                    $temp1[] = $value->komponenNilai->kelasMataPelajaran->tahunAjaranKelas->id;
+                }
+
+                // Tampung kelas mata pelajaran aktif siswa tersebut
+                if(!in_array($value->komponenNilai->kelasMataPelajaran->id, $temp2)){
+                    $temp2[] = $value->komponenNilai->kelasMataPelajaran->id;
+                }
+
+                // Tampung id komponen nilai siswa tersebut
+                if(!in_array($value->komponenNilai->id, $temp3)){
+                    $temp3[] = $value->komponenNilai->id;
+                }
+
+                // Print cantik
+//                echo $value->komponenNilai->kelasMataPelajaran->tahunAjaranKelas->tahunAjaranSemester->tahun_ajaran.' '.$value->komponenNilai->kelasMataPelajaran->tahunAjaranKelas->tahunAjaranSemester->semester.' '.$value->komponenNilai->kelasMataPelajaran->tahunAjaranKelas->kelas->kelas.' '.$value->komponenNilai->kelasMataPelajaran->mataPelajaran->pelajaran.' '.$value->komponenNilai->komponen_nilai.' '.$value->nilai.'<br>';
+            }
+
+            return $this->render('view-by-siswa', [
+                'tahun_ajaran_siswa_aktif' => $tahun_ajaran_siswa_aktif,
+                'temp1' => $temp1,
+                'temp2' => $temp2,
+                'temp3' => $temp3,
+                'siswa' => $siswa,
+                'penilaian_id' => $penilaian_id,
+
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
     }
 }

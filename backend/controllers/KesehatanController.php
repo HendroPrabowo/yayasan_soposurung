@@ -11,6 +11,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use app\models\Siswa;
+use yii\data\ActiveDataProvider;
 
 /**
  * KesehatanController implements the CRUD actions for Kesehatan model.
@@ -61,7 +62,18 @@ class KesehatanController extends Controller
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
             ]);
-        }else{
+        }else if (Yii::$app->user->can('siswa')){
+            $user = User::find()->where(['id' => Yii::$app->user->id])->one();
+
+            $dataProvider = new ActiveDataProvider([
+                'query' => Kesehatan::find()->where(['siswa_id' => $user->username])->orderBy('tanggal DESC'),
+            ]);
+
+            return $this->render('index-by-siswa', [
+                'dataProvider' => $dataProvider,
+            ]);
+        }
+        else{
             return $this->redirect(['error/forbidden-error']);
         }
 

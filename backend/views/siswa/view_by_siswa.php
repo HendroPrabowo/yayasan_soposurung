@@ -33,16 +33,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'pekerjaan_ayah',
             'pekerjaan_ibu',
 //            'user_id'
-//            'kelas_id'
             [
-                'attribute' => 'Kelas',
-                'value' => function(\yii\base\Model $model){
-                    if($model->kelas_id == null)
-                        return '-';
-                    else
-                        return $model->kelas->kelas;
+                'attribute' => 'Angkatan',
+                'value' => function(yii\base\Model $model){
+                    if($model->angkatan_id != null){
+                        return $model->angkatan->angkatan;
+                    }
                 }
             ],
+            'kredit_point',
         ],
     ]) ?>
 

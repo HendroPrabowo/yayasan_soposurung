@@ -74,8 +74,10 @@
                     ];
                 }elseif ($user->role == 'siswa'){
                     $menuItems = [
-                        ['label' => 'Akun', 'icon' => 'user', 'url' => ['user/show']],
                         ['label' => 'Data Diri', 'icon' => 'user', 'url' => ['siswa/view-by-siswa']],
+                        ['label' => 'Nilai', 'icon' => 'print', 'url' => ['penilaian/view-by-siswa']],
+                        ['label' => 'Kesehatan', 'icon' => 'heart', 'url' => ['kesehatan/index']],
+                        ['label' => 'Pelanggaran', 'icon' => 'warning', 'url' => ['kedisiplinan/index']],
                     ];
                 }elseif ($user->role == 'perawat'){
                     $menuItems = [
@@ -90,6 +92,10 @@
                 }elseif ($user->role == 'wakepas kesiswaan'){
                     $menuItems = [
                         ['label' => 'Kedisiplinan', 'icon' => 'warning', 'url' => ['kedisiplinan/index']],
+                    ];
+                }elseif ($user->role == 'guru'){
+                    $menuItems = [
+                        ['label' => 'Mata Pelajaran', 'icon' => 'book', 'url' => ['guru/mata-pelajaran']],
                     ];
                 }
             }

@@ -17,7 +17,7 @@ class KomponenNilai extends KomponenNilaiModel
     public function rules()
     {
         return [
-            [['id', 'kelas_mata_pelajaran_id'], 'integer'],
+            [['id', 'kelas_mata_pelajaran_id', 'excel'], 'integer'],
             [['komponen_nilai'], 'safe'],
         ];
     }
@@ -60,6 +60,7 @@ class KomponenNilai extends KomponenNilaiModel
         $query->andFilterWhere([
             'id' => $this->id,
             'kelas_mata_pelajaran_id' => $this->kelas_mata_pelajaran_id,
+            'excel' => $this->excel,
         ]);
 
         $query->andFilterWhere(['like', 'komponen_nilai', $this->komponen_nilai]);

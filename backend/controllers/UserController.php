@@ -6,6 +6,7 @@ use app\models\AccountType;
 use app\models\AuthAssignment;
 use app\models\AuthItem;
 use app\models\ChangePassword;
+use app\models\Guru;
 use app\models\ResetPassword;
 use app\models\Siswa;
 use Yii;
@@ -120,6 +121,11 @@ class UserController extends Controller
                     $siswa->save();
 
                     return $this->actionView($user->id);
+                }elseif($user->role == 'guru'){
+                    $guru = new Guru();
+                    $guru->username = $user->username;
+                    $guru->user_id = $user->id;
+                    $guru->save();
                 }
 
                 $role = AuthItem::find()->all();

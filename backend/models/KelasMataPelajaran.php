@@ -73,4 +73,8 @@ class KelasMataPelajaran extends \yii\db\ActiveRecord
     {
         return $this->hasOne(TahunAjaranKelas::className(), ['id' => 'tahun_ajaran_kelas_id']);
     }
+
+    public function getKomponenNilai(){
+        return $this->hasMany(KomponenNilai::className(), ['kelas_mata_pelajaran_id' => 'id']);
+    }
 }

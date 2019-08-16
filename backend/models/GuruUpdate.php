@@ -13,10 +13,10 @@ use Yii;
  * @property string $nama
  * @property int $user_id
  *
- * @property User $user
  * @property AssignGuru[] $assignGurus
+ * @property User $user
  */
-class Guru extends \yii\db\ActiveRecord
+class GuruUpdate extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -32,10 +32,10 @@ class Guru extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['username'], 'required'],
-            ['username', 'validateGuru'],
+            [['username', 'user_id'], 'required'],
             [['user_id'], 'integer'],
             [['no_induk_guru', 'username', 'nama'], 'string', 'max' => 255],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -53,35 +53,19 @@ class Guru extends \yii\db\ActiveRecord
         ];
     }
 
-    /*
-     * Validation
-     */
-    public function validateGuru($attribute, $params, $validator)
-    {
-        $user = Guru::find()->where(['username' => $this->username])->one();
-        if($user != null){
-            $this->addError($attribute, 'Username sudah ada');
-        }
-    }
-
     /**
-     * Get user type
+     * @return \yii\db\ActiveQuery
      */
-    public function getUser(){
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
-    }
-
-    /*
-     * Get assign gurus
-     */
-    public function getAssignGurus(){
+    public function getAssignGurus()
+    {
         return $this->hasMany(AssignGuru::className(), ['guru_id' => 'id']);
     }
 
-    /*
-     * Nama Lengkap untuk dropdown
+    /**
+     * @return \yii\db\ActiveQuery
      */
-    public function getNamaLengkap(){
-        return $this->nama.' ('.$this->username.')';
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 }

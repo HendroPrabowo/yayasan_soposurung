@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use app\models\AturanAsrama;
 use app\models\Siswa;
+use app\models\User;
 use Yii;
 use app\models\Kedisiplinan;
 use app\models\search\KedisiplinanSearch;
@@ -11,6 +12,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\data\ActiveDataProvider;
 
 /**
  * KedisiplinanController implements the CRUD actions for Kedisiplinan model.
@@ -61,7 +63,18 @@ class KedisiplinanController extends Controller
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
             ]);
-        }else{
+        }else if(Yii::$app->user->can('siswa')){
+            $user = User::find()->where(['id' => Yii::$app->user->id])->one();
+
+            $dataProvider = new ActiveDataProvider([
+                'query' => Kedisiplinan::find()->where(['siswa_id' => $user->username])->orderBy('id ASC'),
+            ]);
+
+            return $this->render('index-by-siswa', [
+                'dataProvider' => $dataProvider,
+            ]);
+        }
+        else{
             return $this->redirect(['error/forbidden-error']);
         }
 

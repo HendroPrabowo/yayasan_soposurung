@@ -65,4 +65,8 @@ class KelasSiswa extends \yii\db\ActiveRecord
     {
         return $this->hasOne(TahunAjaranKelas::className(), ['id' => 'thn_ajaran_kelas_id']);
     }
+
+    public function getPenilaian(){
+        return $this->hasMany(Penilaian::className(), ['kelas_siswa_id' => 'id']);
+    }
 }

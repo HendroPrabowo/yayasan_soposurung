@@ -183,7 +183,7 @@ class AturanAsramaController extends Controller
 
                 $i = 0;
                 $peraturan_array = array();
-                set_time_limit(3600);
+                set_time_limit(7200);
                 foreach ($sheetdata as $value) {
                     if($i > 0){
                         $aturan = AturanAsrama::find()->where(['jenis_pelanggaran' => $value[1]])->one();

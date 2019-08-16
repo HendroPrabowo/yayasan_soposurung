@@ -32,7 +32,6 @@ use yii\widgets\DetailView;
         ],
 //            'user_id'
 //            'kelas_id'
-        'siswa_thn_kls',
         'kredit_point',
     ],
 ]) ?>

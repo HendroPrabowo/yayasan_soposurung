@@ -52,7 +52,7 @@ class KomponenNilaiController extends Controller
      */
     public function actionIndex($id)
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('guru')) {
             $kelas_mata_pelajaran = KelasMataPelajaran::findOne($id);
             $komponen_nilai = KomponenNilai::find()->where(['kelas_mata_pelajaran_id' => $id])->all();
 
@@ -102,7 +102,7 @@ class KomponenNilaiController extends Controller
      */
     public function actionCreate($id)
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('guru')) {
             $model = new KomponenNilai();
 
             // Cek jumlah siswa di kelas yang ingin ditambahkan komponen nilainya

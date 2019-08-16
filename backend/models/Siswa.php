@@ -47,8 +47,8 @@ class Siswa extends \yii\db\ActiveRecord
     {
         return [
             [['nisn', 'user_id'], 'required'],
-            [['anak_ke', 'nomor_telepon_orang_tua', 'user_id', 'kredit_point', 'angkatan_id', 'siswa_thn_kls'], 'integer'],
-            [['alamat_orang_tua'], 'string'],
+            [['anak_ke', 'user_id', 'kredit_point', 'angkatan_id'], 'integer'],
+            [['alamat_orang_tua', 'nomor_telepon_orang_tua'], 'string'],
             [['nisn', 'kelahiran', 'jenis_kelamin', 'agama', 'status_dalam_keluarga', 'pekerjaan_ayah', 'pekerjaan_ibu'], 'string', 'max' => 255],
             [['nama', 'nama_ayah', 'nama_ibu'], 'string', 'max' => 500],
             [['sekolah_asal'], 'string', 'max' => 300],
@@ -79,7 +79,6 @@ class Siswa extends \yii\db\ActiveRecord
             'pekerjaan_ibu' => 'Pekerjaan Ibu',
             'angkatan_id' => 'Angkatan',
             'user_id' => 'User ID',
-            'siswa_thn_kls' => 'Siswa Tahun Kelas',
             'kredit_point' => 'Kredit Point',
         ];
     }

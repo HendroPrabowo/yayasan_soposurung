@@ -10,7 +10,7 @@ use kartik\select2\Select2;
 /* @var $model app\models\AssignGuru */
 /* @var $form yii\widgets\ActiveForm */
 
-$guru_all = ArrayHelper::map($guru, 'id', 'nama');
+$guru_all = ArrayHelper::map($guru, 'id', 'namaLengkap');
 
 ?>
 
