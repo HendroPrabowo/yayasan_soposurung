@@ -218,8 +218,6 @@ class GuruController extends Controller
                 if(!is_null($value->assignGuru)){
                     $assign_guru[] = $value->assignGuru;
                 }
-//                var_dump($value->assignGuru);
-//                echo '<br><br>';
             }
 
             // Ambil id guru yang login

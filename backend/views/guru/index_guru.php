@@ -13,7 +13,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="guru-index">
 
     <h3><?= Html::encode($this->title) ?></h3>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <table class="table table-bordered table-striped" style="width: 500px; margin-top: 20px">
         <thead>

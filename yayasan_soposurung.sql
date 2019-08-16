@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 06, 2019 at 04:58 PM
+-- Generation Time: Aug 16, 2019 at 05:39 AM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.3.0
 
@@ -133,6 +133,17 @@ CREATE TABLE `assign_guru` (
   `guru_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `assign_guru`
+--
+
+INSERT INTO `assign_guru` (`id`, `kelas_mata_pelajaran_id`, `guru_id`) VALUES
+(2, 5, 8),
+(3, 1, 9),
+(4, 7, 8),
+(5, 6, 10),
+(6, 4, 8);
+
 -- --------------------------------------------------------
 
 --
@@ -152,7 +163,9 @@ CREATE TABLE `aturan_asrama` (
 INSERT INTO `aturan_asrama` (`id`, `jenis_pelanggaran`, `point`) VALUES
 (8, 'Merokok', 30),
 (9, 'Minum minuman keras', 20),
-(10, 'Buang sampah sembarangan', 10);
+(10, 'Buang sampah sembarangan', 10),
+(11, 'INjak rumput', 5),
+(12, 'Tidur di kelas', 10);
 
 -- --------------------------------------------------------
 
@@ -172,6 +185,9 @@ CREATE TABLE `auth_assignment` (
 
 INSERT INTO `auth_assignment` (`item_name`, `user_id`, `created_at`) VALUES
 ('admin', 21, NULL),
+('guru', 557, NULL),
+('guru', 558, NULL),
+('guru', 563, NULL),
 ('pengawas', 541, NULL),
 ('security', 540, NULL),
 ('siswa', 546, NULL),
@@ -180,6 +196,8 @@ INSERT INTO `auth_assignment` (`item_name`, `user_id`, `created_at`) VALUES
 ('siswa', 549, NULL),
 ('siswa', 550, NULL),
 ('siswa', 551, NULL),
+('siswa', 561, NULL),
+('siswa', 562, NULL),
 ('wakepas kesiswaan', 542, NULL);
 
 -- --------------------------------------------------------
@@ -247,9 +265,9 @@ CREATE TABLE `auth_rule` (
 
 CREATE TABLE `guru` (
   `id` int(11) NOT NULL,
-  `no_induk_guru` varchar(255) NOT NULL,
+  `no_induk_guru` varchar(255) DEFAULT NULL,
   `username` varchar(255) NOT NULL,
-  `nama` varchar(255) NOT NULL,
+  `nama` varchar(255) DEFAULT NULL,
   `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -258,12 +276,9 @@ CREATE TABLE `guru` (
 --
 
 INSERT INTO `guru` (`id`, `no_induk_guru`, `username`, `nama`, `user_id`) VALUES
-(1, '11S15062', 'adrian', 'Adrian Sirait', 395),
-(2, '11S15001', 'santi', 'Santi Siagian', 396),
-(3, '11S15032', 'sapto', 'Sapto Gokma', 397),
-(4, '11S15009', 'devi', 'Devi Pakpahan', 398),
-(5, '11S15048', 'hendro', 'Hendro Prabowo', 399),
-(6, '11S15099', 'ruben', 'Ruben Ambarita', 400);
+(8, '11S15001', 'santi', 'Santi Siagian', 557),
+(9, '11S15042', 'ruben', 'Ruben Ambarita', 558),
+(10, '11S15053', 'kevin', 'Kevin Siahaan', 563);
 
 -- --------------------------------------------------------
 
@@ -300,6 +315,14 @@ CREATE TABLE `kedisiplinan` (
   `tambah_ke_point` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `kedisiplinan`
+--
+
+INSERT INTO `kedisiplinan` (`id`, `siswa_id`, `aturan_asrama_id`, `keterangan`, `tambah_ke_point`) VALUES
+(1, '0030897853', 8, 'SUdah ditebus', 1),
+(2, '0030897853', 9, 'Alkohol', 0);
+
 -- --------------------------------------------------------
 
 --
@@ -311,6 +334,20 @@ CREATE TABLE `kelas_mata_pelajaran` (
   `tahun_ajaran_kelas_id` int(11) NOT NULL,
   `mata_pelajaran_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `kelas_mata_pelajaran`
+--
+
+INSERT INTO `kelas_mata_pelajaran` (`id`, `tahun_ajaran_kelas_id`, `mata_pelajaran_id`) VALUES
+(1, 7, 1),
+(2, 10, 1),
+(3, 15, 2),
+(4, 16, 2),
+(5, 17, 5),
+(6, 18, 5),
+(7, 7, 3),
+(8, 10, 3);
 
 -- --------------------------------------------------------
 
@@ -344,6 +381,27 @@ CREATE TABLE `kelas_siswa` (
   `thn_ajaran_kelas_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `kelas_siswa`
+--
+
+INSERT INTO `kelas_siswa` (`id`, `nisn`, `thn_ajaran_kelas_id`) VALUES
+(2, '0030897853', 7),
+(3, '11S15001', 15),
+(4, '0033895291', 10),
+(5, '0034212419', 10),
+(7, '0030897853', 16),
+(8, '0040072254', 16),
+(9, '0048830270', 16),
+(11, '0033895291', 7),
+(12, '0034212419', 7),
+(13, '0048830270', 15),
+(14, '0040072254', 17),
+(15, '11S15047', 17),
+(16, '11S15048', 17),
+(17, '11S15047', 18),
+(18, '11S15048', 18);
+
 -- --------------------------------------------------------
 
 --
@@ -360,6 +418,13 @@ CREATE TABLE `kesehatan` (
   `created_by` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `kesehatan`
+--
+
+INSERT INTO `kesehatan` (`id`, `siswa_id`, `penyakit`, `keterangan`, `semester`, `tanggal`, `created_by`) VALUES
+(1, '0030897853', 'Sakit gigi', 'Diantar ke dokter gigi', 1, '2019-08-16', 'admin');
+
 -- --------------------------------------------------------
 
 --
@@ -369,8 +434,28 @@ CREATE TABLE `kesehatan` (
 CREATE TABLE `komponen_nilai` (
   `id` int(11) NOT NULL,
   `kelas_mata_pelajaran_id` int(11) NOT NULL,
-  `komponen_nilai` varchar(255) NOT NULL
+  `komponen_nilai` varchar(255) NOT NULL,
+  `excel` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `komponen_nilai`
+--
+
+INSERT INTO `komponen_nilai` (`id`, `kelas_mata_pelajaran_id`, `komponen_nilai`, `excel`) VALUES
+(1, 1, 'Tugas 1', 0),
+(2, 1, 'Tugas 2', 0),
+(3, 1, 'Tugas 3', 0),
+(4, 1, 'Tugas 4', 0),
+(5, 1, 'Tugas 5', 0),
+(6, 1, 'Tugas 6', 0),
+(7, 7, 'Tugas 1', 0),
+(8, 7, 'Tugas 2', 0),
+(9, 7, 'Kuis 1', 0),
+(10, 5, 'UTS', 1),
+(11, 4, 'Proyek', 0),
+(12, 3, 'Remedial', 0),
+(13, 6, 'PR 1', 0);
 
 -- --------------------------------------------------------
 
@@ -506,6 +591,47 @@ CREATE TABLE `penilaian` (
   `nilai` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `penilaian`
+--
+
+INSERT INTO `penilaian` (`id`, `kelas_siswa_id`, `komponen_nilai_id`, `nilai`) VALUES
+(1, 2, 1, 0),
+(2, 11, 1, 0),
+(3, 12, 1, 0),
+(4, 2, 2, 0),
+(5, 11, 2, 0),
+(6, 12, 2, 0),
+(7, 2, 3, 0),
+(8, 11, 3, 0),
+(9, 12, 3, 0),
+(10, 2, 4, 0),
+(11, 11, 4, 0),
+(12, 12, 4, 0),
+(13, 2, 5, 0),
+(14, 11, 5, 0),
+(15, 12, 5, 0),
+(16, 2, 6, 0),
+(17, 11, 6, 0),
+(18, 12, 6, 0),
+(19, 2, 7, 90),
+(20, 11, 7, 80),
+(21, 12, 7, 70),
+(22, 2, 8, 0),
+(23, 11, 8, 0),
+(24, 12, 8, 0),
+(25, 2, 9, 0),
+(26, 11, 9, 0),
+(27, 12, 9, 0),
+(29, 14, 10, 90),
+(30, 7, 11, 0),
+(31, 8, 11, 0),
+(32, 9, 11, 0),
+(33, 3, 12, 0),
+(34, 13, 12, 0),
+(35, 17, 13, 0),
+(36, 18, 13, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -524,12 +650,11 @@ CREATE TABLE `siswa` (
   `nama_ayah` varchar(500) DEFAULT NULL,
   `nama_ibu` varchar(500) DEFAULT NULL,
   `alamat_orang_tua` text,
-  `nomor_telepon_orang_tua` int(100) DEFAULT NULL,
+  `nomor_telepon_orang_tua` varchar(100) DEFAULT NULL,
   `pekerjaan_ayah` varchar(255) DEFAULT NULL,
   `pekerjaan_ibu` varchar(255) DEFAULT NULL,
   `angkatan_id` int(11) DEFAULT NULL,
   `user_id` int(11) NOT NULL,
-  `siswa_thn_kls` int(11) DEFAULT NULL,
   `kredit_point` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -537,27 +662,15 @@ CREATE TABLE `siswa` (
 -- Dumping data for table `siswa`
 --
 
-INSERT INTO `siswa` (`nisn`, `nama`, `kelahiran`, `jenis_kelamin`, `agama`, `status_dalam_keluarga`, `anak_ke`, `sekolah_asal`, `nama_ayah`, `nama_ibu`, `alamat_orang_tua`, `nomor_telepon_orang_tua`, `pekerjaan_ayah`, `pekerjaan_ibu`, `angkatan_id`, `user_id`, `siswa_thn_kls`, `kredit_point`) VALUES
-('0030897853', 'AGREROGATES TAMBUNAN', 'Timika, 5 Oktober 2003', 'L', 'Kristen Protestan', 'Anak Kandung', 2, 'SMPK SHINING STARS', 'Doliamen Tambunan', 'Perpe Simanjuntak', 'Jl Budiutomo, gg Getsemani rt 17_x000D_\nSempan-Timika', 811493298, 'Pegawai Swasta', 'IRT', 2, 550, NULL, 0),
-('0033895291', 'ABRAHAM SOPAR HAMONANGAN SITORUS', 'Medan, 1 Juni 2003', 'L', 'Kristen Protestan', 'Anak Kandung', 4, 'SMPS ST THOMAS 1 MEDAN', 'Maston Sitorus', 'Desry Sianturi', 'Jln Bunga Mawar XV No 92', 2147483647, 'Pegawai Swasta', 'PNS', 1, 547, NULL, 0),
-('0034212419', 'ABEDNEGO LUMBAN GAOL', 'Tanjung Beringin, 15 Mei 2003', 'L', 'Kristen Protestan', 'Anak Kandung', 4, 'SMPS ST PAULUS SIDIKALANG', 'Mantok LumbanGaol', 'Nurmaida Pandiangan', 'Tanjung Beringin, Tiga Lingga, Dairi', 2147483647, 'Petani', 'Petani', 1, 546, NULL, 0),
-('0040072254', 'AGNES YULIA ELISABETH PERDEDE', 'Medan, 6 September 2004', 'P', 'Kristen Protestan', 'Anak Kandung', 2, 'SMPS ST. THOMAS 1 MEDAN', 'Hiro Pingkir Pardede', 'Merry Naibaho', 'Jalan Sejahtera Gang Bahagia NO. 17', 2147483647, 'Pegawai BUMN', 'IRT', 2, 549, NULL, 0),
-('0048830270', 'AGATHA ROSAULINA SITANGGANG', 'Air Molek, 5 Oktober 2003', 'P', 'Kristen Protestan', 'Anak Kandung', 2, 'SMPS BUDHI DHARMA BALIGE ', 'Lekson Sitanggang', 'Tiurma Sitohang', 'JL DI PANJAITAN RT 002/001 SEKAR MAWAR AIR MOLEK, INHU, RIAU', 2147483647, 'Berkebun', 'IRT', 2, 548, NULL, 0),
-('11S15001', 'Poltak Sibaarni', 'Sipahutar/31 Desember 2000', 'L', 'Protestan', 'Anak Kanduang', 1, 'SMP Budi Mull', 'Ja', 'Ma', 'Ah', 1, 'Gatau', 'IRT', 1, 551, NULL, 0),
-('11S15048', 'Hendro Prabowo', 'Medan', 'L', 'Protestan', 'Anak Kandung', 1, 'Santo Thomas 3 Medan', 'Sahlan Tampubolon', 'Martha Sihombing', 'Jl.Cempaka Gg.Baru No.7 Gaperta Ujung Medan', 2147483647, 'Dosen', 'Ibu Rumah Tangga', 2, 545, NULL, 0);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `siswa_thn_kls`
---
-
-CREATE TABLE `siswa_thn_kls` (
-  `id` int(11) NOT NULL,
-  `nisn` varchar(255) NOT NULL,
-  `kelas_id` int(11) NOT NULL,
-  `tahun_ajaran_kelas_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+INSERT INTO `siswa` (`nisn`, `nama`, `kelahiran`, `jenis_kelamin`, `agama`, `status_dalam_keluarga`, `anak_ke`, `sekolah_asal`, `nama_ayah`, `nama_ibu`, `alamat_orang_tua`, `nomor_telepon_orang_tua`, `pekerjaan_ayah`, `pekerjaan_ibu`, `angkatan_id`, `user_id`, `kredit_point`) VALUES
+('0030897853', 'AGREROGATES TAMBUNAN', 'Timika, 5 Oktober 2003', 'L', 'Kristen Protestan', 'Anak Kandung', 2, 'SMPK SHINING STARS', 'Doliamen Tambunan', 'Perpe Simanjuntak', 'Jl Budiutomo, gg Getsemani rt 17_x000D_\nSempan-Timika', '811493298', 'Pegawai Swasta', 'IRT', 2, 550, 30),
+('0033895291', 'ABRAHAM SOPAR HAMONANGAN SITORUS', 'Medan, 1 Juni 2003', 'L', 'Kristen Protestan', 'Anak Kandung', 4, 'SMPS ST THOMAS 1 MEDAN', 'Maston Sitorus', 'Desry Sianturi', 'Jln Bunga Mawar XV No 92', '2147483647', 'Pegawai Swasta', 'PNS', 1, 547, 0),
+('0034212419', 'ABEDNEGO LUMBAN GAOL', 'Tanjung Beringin, 15 Mei 2003', 'L', 'Kristen Protestan', 'Anak Kandung', 4, 'SMPS ST PAULUS SIDIKALANG', 'Mantok LumbanGaol', 'Nurmaida Pandiangan', 'Tanjung Beringin, Tiga Lingga, Dairi', '2147483647', 'Petani', 'Petani', 1, 546, 0),
+('0040072254', 'AGNES YULIA ELISABETH PERDEDE', 'Medan, 6 September 2004', 'P', 'Kristen Protestan', 'Anak Kandung', 2, 'SMPS ST. THOMAS 1 MEDAN', 'Hiro Pingkir Pardede', 'Merry Naibaho', 'Jalan Sejahtera Gang Bahagia NO. 17', '2147483647', 'Pegawai BUMN', 'IRT', 2, 549, 0),
+('0048830270', 'AGATHA ROSAULINA SITANGGANG', 'Air Molek, 5 Oktober 2003', 'P', 'Kristen Protestan', 'Anak Kandung', 2, 'SMPS BUDHI DHARMA BALIGE ', 'Lekson Sitanggang', 'Tiurma Sitohang', 'JL DI PANJAITAN RT 002/001 SEKAR MAWAR AIR MOLEK, INHU, RIAU', '2147483647', 'Berkebun', 'IRT', 2, 548, 0),
+('11S15001', 'Poltak Sibaarni', 'Sipahutar/31 Desember 2000', 'L', 'Protestan', 'Anak Kanduang', 1, 'SMP Budi Mull', 'Ja', 'Ma', 'Ah', '1', 'Gatau', 'IRT', 1, 551, 0),
+('11S15047', 'Elida', '', '', '', '', 2, '', '', '', '', '08989801234', '', '', 2, 562, 0),
+('11S15048', 'Hendro Prabowo .T', 'Medan 31, Oktober 1997', 'Laki Laki', 'Protestan', 'Anak Kanding', 1, 'St Thomas 3 Medan', 'Sahlan Tampubolon', 'Martha Sihombing', 'Jl.Cempaka Gg.Baru No.7 Gaperta Ujung Medan', '821231231', 'Dosen', 'Ibu Rumah Tangga', 2, 561, 0);
 
 -- --------------------------------------------------------
 
@@ -633,8 +746,8 @@ CREATE TABLE `tahun_ajaran_semester` (
 --
 
 INSERT INTO `tahun_ajaran_semester` (`id`, `tahun_ajaran`, `semester`, `is_active`) VALUES
-(1, '2020/2021', 'Ganjil', 1),
-(2, '2020/2021', 'Genap', 0);
+(1, '2020/2021', 'Ganjil', 0),
+(2, '2020/2021', 'Genap', 1);
 
 -- --------------------------------------------------------
 
@@ -662,24 +775,20 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `username`, `auth_key`, `password_hash`, `password_reset_token`, `email`, `role`, `status`, `is_active`, `created_at`, `updated_at`) VALUES
 (21, 'admin', '1WvATcvQctacoRtTI7PiC4Of_9X0oXk0', '$2y$13$1LMVZn/HwBbUlWBYfBygi.9lb0Rg0/gmEPe4RAjUv5YCBEwmniZLu', NULL, 'admin@gmail.com', 'admin', 10, 1, 1548747182, 1548747182),
-(273, 'tohap', 'hLtkdDU-LDuCNV0Q0stHvwPQJtc9pALc', '$2y$13$nrvBfa1V/ZcK1LWG0gfjbOKmVZ98AeF6Go6BZzv/Q1yMYlDQdswaG', NULL, NULL, 'guru', 10, 0, 0, 0),
-(393, 'devis', 'x_e3Bq1H9pD8FRaw6nOrVk29OocqSwry', '$2y$13$QcBSINNj6K2Q4JsXjyihVusS.oN3QSNCVkCk9FgcOg0qQ1JT0D8Ua', NULL, NULL, 'guru', 10, 0, 0, 0),
-(395, 'adrian', 'VuU8gTyoB5chlbFLcSdAiENnuuqKMlie', '$2y$13$FN53nak504jZHDQqkjCiJO24TxkOtstwvraPx.xz.zjCELP4S12eO', NULL, NULL, 'guru', 10, 1, 0, 0),
-(396, 'santi', 'cHWs1eCfvuUAWNWQRNHkn8VYQ8T3u7zC', '$2y$13$9U01OTQkb.zXzGLh4s8Uru9qrPFvi9bDLaH1b8GY8YY3fq5jhdzG.', NULL, NULL, 'guru', 10, 0, 0, 0),
-(397, 'sapto', 'RKFr7k6_COF8jwWXjLlR8lsEDPG7sa-F', '$2y$13$nMsmRz.saw91vVMXzlpV0uU6Mp3ODB61Tlunrs9jXENUIQVFpP6Zu', NULL, NULL, 'guru', 10, 0, 0, 0),
-(398, 'devi', 'TuoYsuGPNp6h3IxAwM-Px8jj-I-84o2w', '$2y$13$J8HuGRZq3fnBfGFL1.qAy.pobm1Zeb1l7OwE/arUry/epxTJhxIFe', NULL, NULL, 'guru', 10, 1, 0, 0),
-(399, 'hendro', 'uk8jkbl7kcefEXUgJv3FVyvWFTyhNRft', '$2y$13$t5rDL.0PQ8YUtNVfbnUFROzwD/QOWHSDK7C6WFVfiAvxsOYCIfAgu', NULL, NULL, 'guru', 10, 1, 0, 0),
-(400, 'ruben', 'tCZ5z62t-ThBUY0JRPi-1AzHazRw0zTD', '$2y$13$/S8rqYVx5vK5tlZ1llBc.uwnmrIF.Q5zdEtdmOqtPI10v8QPaA6ai', NULL, NULL, 'guru', 10, 1, 0, 0),
 (540, 'security1', 'iKgCM0QcU-FajgwnwOGPPkhn6m62Q5pE', '$2y$13$h8eDHY5jp1En52SsXqpseuwTnaG.ImRN1y3M2surXd8.cdWLiEXz6', NULL, NULL, 'security', 10, 1, 0, 0),
 (541, 'pengawas1', 'eWh9FltfSgOoWtb9drC-AunQxKtcHDZi', '$2y$13$RaMXMPTbtJABBbH8d3i0Yu9fCpQ7kVkg8w0ojzn6FGRQDWw8Y3kRm', NULL, NULL, 'pengawas', 10, 1, 0, 0),
 (542, 'wakepas1', 'fIpq63OMsT6vXw8I2L2GIGKuiaM6YvxM', '$2y$13$sTDRudFEo.2yTnPMxWLBhenyfz3hyobrxGqs9E9sKUB3HLPMR4DnC', NULL, NULL, 'wakepas kesiswaan', 10, 1, 0, 0),
-(545, '11S15048', 'FdGeX_TA-1B_Oxr0jTTrxzQO3QaLieDt', '$2y$13$yIrlNJtdjSba8vFP6q.kWOnzKTtVPN4/Dwyzptny2SpOm30EqtJKW', NULL, NULL, 'siswa', 10, 1, 0, 0),
 (546, '0034212419', '89TPxwrKLziGziUmM9t9qPYm8e6jvSyi', '$2y$13$Mz4a8BP.hw2fUiAVANLhsOqH2Lm.VrRiAkXipXra8HhkgVH0ik.Xm', NULL, NULL, 'siswa', 10, 1, 0, 0),
 (547, '0033895291', '214K3UJkbvTm1gv5qK-RLBHopARD7FDw', '$2y$13$mCn2iNpVrF7m9qmqtPmcZOxWnhOas5x7nVHgvUh9Uw3v3Tw22Jlwm', NULL, NULL, 'siswa', 10, 1, 0, 0),
 (548, '0048830270', 'Viz-L33xdv2NZvJvttzaHnNpVzQZMLvh', '$2y$13$IZsNWE7tct5KDDhU8tGua.8kuHVCt3..mvJKsOyrIUSHe9brhawXS', NULL, NULL, 'siswa', 10, 1, 0, 0),
 (549, '0040072254', 'JwUN_fsGC15_SFR_IrRkjZJRxd8dc_N7', '$2y$13$LfyqJzkVGMBLQyy3erIBJuba6dFl5ZXpN.xqZJDD2n/2UEmRgcqJG', NULL, NULL, 'siswa', 10, 1, 0, 0),
 (550, '0030897853', 'TPLGQYwfBCEKQFO-rQb5SDfeoYHWPQit', '$2y$13$E5CM8d2GdjocqpPLFkj0N.cTcDT8KwG/J3RMCDKbNaA/ia/13XExi', NULL, NULL, 'siswa', 10, 1, 0, 0),
-(551, '11S15001', '4h_mWV1NsORDeCvk40vEpKiV1PDczC9R', '$2y$13$KFl35U/5wF.xbLt5439.eOU1kHJHIKwNJUbRDCcvMtJBd/aSIk6yu', NULL, NULL, 'siswa', 10, 1, 0, 0);
+(551, '11S15001', '4h_mWV1NsORDeCvk40vEpKiV1PDczC9R', '$2y$13$KFl35U/5wF.xbLt5439.eOU1kHJHIKwNJUbRDCcvMtJBd/aSIk6yu', NULL, NULL, 'siswa', 10, 1, 0, 0),
+(557, 'santi', '0Sq4Pv64hqlxYPBx-uqHBIuZD2Rb9fU5', '$2y$13$Z1zCwQzkUrhlsIb5LJ50je8abdq696MmbwWXbIrzbVnKjvdVuIt4S', NULL, NULL, 'guru', 10, 1, 0, 0),
+(558, 'ruben', 'ZI4ONdWGFyP2fCFJrlu2eRA8KZj_hT5z', '$2y$13$sdSXwqPbz39URHO4bl8kUOpgqBNeImsKNdeBy.e9dF3ex/wwHHIfG', NULL, NULL, 'guru', 10, 1, 0, 0),
+(561, '11S15048', 'dmkuSfeXakiPNM480uFUkcqyDoerK8WG', '$2y$13$Rm8heFXtyFCAJD0D4uSlbOIz0BFpdJ9XMCFq3SSMp9A5uXDg9TAjS', NULL, NULL, 'siswa', 10, 1, 0, 0),
+(562, '11S15047', 'dSUMgMsIjkLzJhyt6a094uniI66e3BCT', '$2y$13$5FagxoYqR7Cia.AgkkBHnuwR5HM26QaJyXqdgb3Kmnf75L1I7OfW.', NULL, NULL, 'siswa', 10, 1, 0, 0),
+(563, 'kevin', 'N7ewc4_Ox7Yb5vVb2LY3wZULuJ-iqASg', '$2y$13$JnR3smvPmMCdTuSfkB2Nvex9xtnY9Q5cQGYZnCbhIfaC19FIKV9S.', NULL, NULL, 'guru', 10, 1, 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -878,15 +987,6 @@ ALTER TABLE `siswa`
   ADD KEY `user` (`user_id`);
 
 --
--- Indexes for table `siswa_thn_kls`
---
-ALTER TABLE `siswa_thn_kls`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `nisn` (`nisn`),
-  ADD KEY `kelas_id` (`kelas_id`),
-  ADD KEY `tahun_ajaran_kelas_id` (`tahun_ajaran_kelas_id`);
-
---
 -- Indexes for table `sw_apl_mkn_pgi`
 --
 ALTER TABLE `sw_apl_mkn_pgi`
@@ -931,7 +1031,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `angkatan`
 --
 ALTER TABLE `angkatan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `apl_malam`
@@ -967,19 +1067,19 @@ ALTER TABLE `apl_sore`
 -- AUTO_INCREMENT for table `assign_guru`
 --
 ALTER TABLE `assign_guru`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `aturan_asrama`
 --
 ALTER TABLE `aturan_asrama`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `guru`
 --
 ALTER TABLE `guru`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `jurnal_laporan_piket`
@@ -991,13 +1091,13 @@ ALTER TABLE `jurnal_laporan_piket`
 -- AUTO_INCREMENT for table `kedisiplinan`
 --
 ALTER TABLE `kedisiplinan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `kelas_mata_pelajaran`
 --
 ALTER TABLE `kelas_mata_pelajaran`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `kelas_r`
@@ -1009,19 +1109,19 @@ ALTER TABLE `kelas_r`
 -- AUTO_INCREMENT for table `kelas_siswa`
 --
 ALTER TABLE `kelas_siswa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `kesehatan`
 --
 ALTER TABLE `kesehatan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `komponen_nilai`
 --
 ALTER TABLE `komponen_nilai`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `log_keluar_barang`
@@ -1051,13 +1151,7 @@ ALTER TABLE `mata_pelajaran_r`
 -- AUTO_INCREMENT for table `penilaian`
 --
 ALTER TABLE `penilaian`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `siswa_thn_kls`
---
-ALTER TABLE `siswa_thn_kls`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `sw_apl_mkn_pgi`
@@ -1087,7 +1181,7 @@ ALTER TABLE `tahun_ajaran_semester`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=552;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=564;
 
 --
 -- Constraints for dumped tables
@@ -1221,21 +1315,13 @@ ALTER TABLE `log_tamu`
 --
 ALTER TABLE `penilaian`
   ADD CONSTRAINT `penilaian_ibfk_1` FOREIGN KEY (`kelas_siswa_id`) REFERENCES `kelas_siswa` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `penilaian_ibfk_2` FOREIGN KEY (`komponen_nilai_id`) REFERENCES `komponen_nilai` (`id`);
+  ADD CONSTRAINT `penilaian_ibfk_2` FOREIGN KEY (`komponen_nilai_id`) REFERENCES `komponen_nilai` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `siswa`
 --
 ALTER TABLE `siswa`
   ADD CONSTRAINT `user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `siswa_thn_kls`
---
-ALTER TABLE `siswa_thn_kls`
-  ADD CONSTRAINT `siswa_thn_kls_ibfk_1` FOREIGN KEY (`nisn`) REFERENCES `siswa` (`nisn`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `siswa_thn_kls_ibfk_2` FOREIGN KEY (`kelas_id`) REFERENCES `kelas_r` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `siswa_thn_kls_ibfk_3` FOREIGN KEY (`tahun_ajaran_kelas_id`) REFERENCES `tahun_ajaran_kelas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `sw_apl_mkn_pgi`

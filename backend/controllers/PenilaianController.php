@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use app\models\Guru;
 use app\models\KelasMataPelajaran;
 use app\models\KelasSiswa;
 use app\models\KomponenNilai;
@@ -196,6 +197,14 @@ class PenilaianController extends Controller
     public function actionViewKomponenNilai($id){
         if(Yii::$app->user->can('admin') || Yii::$app->user->can('guru')) {
             $kelas_mata_pelajaran = KelasMataPelajaran::findOne($id);
+
+            $user = User::find()->where(['id' => Yii::$app->user->id])->one();
+            $guru = Guru::find()->where(['user_id' => $user->id])->one();
+
+            if($kelas_mata_pelajaran->assignGuru->guru_id != $guru->id){
+                return $this->redirect(['error/forbidden-error']);
+            }
+
             $dataProvider = new ActiveDataProvider([
                 'query' => KomponenNilai::find()->where(['kelas_mata_pelajaran_id' => $id]),
             ]);

@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use backend\models\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use yii\data\ActiveDataProvider;
 use yii\web\UploadedFile;
 use Yii;
 use app\models\AturanAsrama;
@@ -26,7 +27,7 @@ class AturanAsramaController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'import-excel'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -34,7 +35,7 @@ class AturanAsramaController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'import-excel'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -54,7 +55,7 @@ class AturanAsramaController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan') || Yii::$app->user->can('pengawas')) {
             $searchModel = new AturanAsramaSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -76,7 +77,7 @@ class AturanAsramaController extends Controller
      */
     public function actionView($id)
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan') || Yii::$app->user->can('pengawas')) {
             return $this->render('view', [
                 'model' => $this->findModel($id),
             ]);
@@ -93,7 +94,7 @@ class AturanAsramaController extends Controller
      */
     public function actionCreate()
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan') || Yii::$app->user->can('pengawas')) {
             $model = new AturanAsrama();
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -117,7 +118,7 @@ class AturanAsramaController extends Controller
      */
     public function actionUpdate($id)
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan')) {
             $model = $this->findModel($id);
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -141,7 +142,7 @@ class AturanAsramaController extends Controller
      */
     public function actionDelete($id)
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan')) {
             $this->findModel($id)->delete();
 
             return $this->redirect(['index']);
@@ -168,7 +169,7 @@ class AturanAsramaController extends Controller
 
     public function actionImportExcel()
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan')) {
             $model = new Excel();
 
             if(Yii::$app->request->post()){

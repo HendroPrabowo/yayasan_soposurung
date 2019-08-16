@@ -92,6 +92,11 @@
                 }elseif ($user->role == 'wakepas kesiswaan'){
                     $menuItems = [
                         ['label' => 'Kedisiplinan', 'icon' => 'warning', 'url' => ['kedisiplinan/index']],
+                        ['label' => 'Aturan Asrama', 'icon' => 'exclamation', 'url' => ['aturan-asrama/index']],
+                    ];
+                }elseif ($user->role == 'pengawas'){
+                    $menuItems = [
+                        ['label' => 'Aturan Asrama', 'icon' => 'exclamation', 'url' => ['aturan-asrama/index']],
                     ];
                 }elseif ($user->role == 'guru'){
                     $menuItems = [

@@ -17,23 +17,47 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Tambah Aturan Asrama', ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('Import Excel', ['import-excel'], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Download Template Excel', ['download-excel'], ['class' => 'btn btn-warning']) ?>
-
-<!--        src="'.$directoryAsset.'/img/yayasan_soposurung_logo.png"-->
+        <?php
+        if(!Yii::$app->user->can('pengawas')){
+            echo Html::a('Import Excel', ['import-excel'], ['class' => 'btn btn-primary']).'&nbsp';
+            echo Html::a('Download Template Excel', ['download-excel'], ['class' => 'btn btn-warning']);
+        }
+        ?>
     </p>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+    <?php
+
+    if(Yii::$app->user->can('pengawas')){
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
 
 //            'id',
-            'jenis_pelanggaran',
-            'point',
+                'jenis_pelanggaran',
+                'point',
 
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{view}',
+                ],
+            ],
+        ]);
+    }else{
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+
+//            'id',
+                'jenis_pelanggaran',
+                'point',
+
+                ['class' => 'yii\grid\ActionColumn'],
+            ],
+        ]);
+    }
+    ?>
 </div>
