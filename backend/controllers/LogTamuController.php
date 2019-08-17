@@ -5,10 +5,12 @@ namespace backend\controllers;
 use Yii;
 use app\models\LogTamu;
 use app\models\search\LogTamuSearch;
+use yii\debug\models\search\Log;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use Mpdf\Mpdf;
 
 /**
  * LogTamuController implements the CRUD actions for LogTamu model.
@@ -29,7 +31,7 @@ class LogTamuController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'print-laporan'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -37,7 +39,7 @@ class LogTamuController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'print-laporan'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -180,6 +182,37 @@ class LogTamuController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
+    }
 
+    public function actionPrintLaporan(){
+        $tanggal = Yii::$app->request->post('tanggal');
+        $tanggal_awal = Yii::$app->request->post('tanggal');
+        $log_tamu = array();
+        $semua_log_tamu = LogTamu::find()->all();
+        $date_all = array();
+        for($i=0;$i<7;$i++){
+            $date_all[] = $tanggal;
+            $tanggal = date('Y-m-d', strtotime('-1 days', strtotime($tanggal)));
+        }
+
+        foreach ($semua_log_tamu as $value){
+            $waktu = date('Y-m-d', strtotime($value->waktu_masuk));
+            if(in_array($waktu, $date_all)){
+                $log_tamu[] = $value;
+            }
+        }
+
+        $pdf = $this->renderPartial('view-pdf', [
+            'tanggal_awal' => $tanggal_awal,
+            'log_tamu' => $log_tamu,
+        ]);
+
+        $mpdf = new Mpdf([
+            'format' => 'A4',
+            'orientation' => 'L',
+        ]);
+
+        $mpdf->WriteHTML($pdf);
+        $mpdf->Output();
     }
 }

@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use app\models\User;
+use Mpdf\Mpdf;
 use Yii;
 use app\models\LogKeluarBarang;
 use app\models\search\LogKeluarBarangSearch;
@@ -30,7 +31,7 @@ class LogKeluarBarangController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'print-laporan'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -38,7 +39,7 @@ class LogKeluarBarangController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'print-laporan'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -172,5 +173,32 @@ class LogKeluarBarangController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionPrintLaporan(){
+        $tanggal = Yii::$app->request->post('tanggal');
+        $tanggal_awal = Yii::$app->request->post('tanggal');
+        $log_barang = array();
+
+        for($i=0;$i<7;$i++){
+            $log_keluar_barang = LogKeluarBarang::find()->where(['tanggal' => $tanggal])->all();
+            foreach ($log_keluar_barang as $value){
+                $log_barang[] = $value;
+            }
+            $tanggal = date('Y-m-d', strtotime('-1 days', strtotime($tanggal)));
+        }
+
+        $pdf = $this->renderPartial('view-pdf', [
+            'tanggal_awal' => $tanggal_awal,
+            'log_barang' => $log_barang,
+        ]);
+
+        $mpdf = new Mpdf([
+            'format' => 'A4',
+            'orientation' => 'L',
+        ]);
+
+        $mpdf->WriteHTML($pdf);
+        $mpdf->Output();
     }
 }

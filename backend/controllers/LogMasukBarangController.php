@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use Mpdf\Mpdf;
 use Yii;
 use app\models\User;
 use app\models\LogMasukBarang;
@@ -10,6 +11,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\data\ActiveDataProvider;
 
 /**
  * LogMasukBarangController implements the CRUD actions for LogMasukBarang model.
@@ -30,7 +32,7 @@ class LogMasukBarangController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'print-laporan'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -38,7 +40,7 @@ class LogMasukBarangController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'print-laporan'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -54,7 +56,13 @@ class LogMasukBarangController extends Controller
     {
         if(Yii::$app->user->can('admin') || Yii::$app->user->can('security')) {
             $searchModel = new LogMasukBarangSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider = new ActiveDataProvider([
+                'query' => LogMasukBarang::find()->orderBy('id DESC'),
+                'pagination' => [
+                    'pageSize' => 20,
+                ],
+            ]);
 
             return $this->render('index', [
                 'searchModel' => $searchModel,
@@ -164,5 +172,32 @@ class LogMasukBarangController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionPrintLaporan(){
+        $tanggal = Yii::$app->request->post('tanggal');
+        $tanggal_awal = Yii::$app->request->post('tanggal');
+        $log_barang = array();
+
+        for($i=0;$i<7;$i++){
+            $log_masuk_barang = LogMasukBarang::find()->where(['tanggal' => $tanggal])->all();
+            foreach ($log_masuk_barang as $value){
+                $log_barang[] = $value;
+            }
+            $tanggal = date('Y-m-d', strtotime('-1 days', strtotime($tanggal)));
+        }
+
+        $pdf = $this->renderPartial('view-pdf', [
+            'tanggal_awal' => $tanggal_awal,
+            'log_barang' => $log_barang,
+        ]);
+
+        $mpdf = new Mpdf([
+            'format' => 'A4',
+            'orientation' => 'L',
+        ]);
+
+        $mpdf->WriteHTML($pdf);
+        $mpdf->Output();
     }
 }

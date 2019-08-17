@@ -19,6 +19,32 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Tambah Log Barang Masuk', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
+    <?php
+    if(Yii::$app->user->can('admin')){
+        echo '<div class="row">
+        <div class="col-md-5">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <b>Print Laporan</b>
+                </div>
+                <div class="panel-body">
+                    <form action="'.\yii\helpers\Url::to(['print-laporan']).'" method="post">
+                        <input type="hidden" name="'.Yii::$app->request->csrfParam.'" value="'.Yii::$app->request->getCsrfToken().'">
+                        <div class="form-group">
+                            <label>Masukkan Tanggal</label>
+                            <input type="date" name="tanggal" class="form-control" required>
+                        </div>
+
+                        <input type="submit" class="btn btn-success" value="Submit">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>';
+    }
+    ?>
+
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -27,13 +53,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
 //            'id',
             'nama_barang',
-            'tanggal',
+
             'vendor',
             'jumlah',
 //            'created_by',
             [
                 'attribute' => 'Created',
-                'value' => 'createdBy.role'
+                'value' => 'createdBy.username'
+            ],
+//            'tanggal',
+            [
+                'attribute' => 'tanggal',
+                'format' => ['date', 'php:d-M-Y']
             ],
             'keterangan:ntext',
 
