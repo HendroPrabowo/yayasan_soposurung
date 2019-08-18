@@ -30,7 +30,8 @@ if($user->role == 'admin'){
         if($kelas_mata_pelajaran->tahunAjaranKelas->jumlahSiswa == 0){
             echo 'Siswa Belum Di Assign Ke Kelas Ini';
         }else{
-            echo Html::a('Tambah Komponen Nilai', ['komponen-nilai/index', 'id' => $kelas_mata_pelajaran->id], ['class' => 'btn btn-primary']);
+            echo Html::a('Tambah Komponen Nilai', ['komponen-nilai/index', 'id' => $kelas_mata_pelajaran->id], ['class' => 'btn btn-primary']).'&nbsp';
+            echo Html::a('Laporan Nilai Siswa', ['penilaian/laporan-nilai', 'id' => $kelas_mata_pelajaran->id], ['class' => 'btn btn-warning']);
             echo GridView::widget([
                 'dataProvider' => $dataProvider,
                 'options' => [

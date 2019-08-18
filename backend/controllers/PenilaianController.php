@@ -10,6 +10,7 @@ use app\models\Siswa;
 use app\models\TahunAjaranKelas;
 use app\models\TahunAjaranSemester;
 use app\models\User;
+use Mpdf\Mpdf;
 use yii\web\UploadedFile;
 use backend\models\Excel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -43,7 +44,7 @@ class PenilaianController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view-mata-pelajaran', 'view-komponen-nilai', 'view-penilaian', 'create', 'update', 'delete', 'download-template', 'upload-nilai', 'view-by-siswa'],
+                'only' => ['index', 'view-mata-pelajaran', 'view-komponen-nilai', 'view-penilaian', 'create', 'update', 'delete', 'download-template', 'upload-nilai', 'view-by-siswa', 'laporan-nilai'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -51,7 +52,7 @@ class PenilaianController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view-mata-pelajaran', 'view-komponen-nilai', 'view-penilaian', 'create', 'update', 'delete', 'download-template', 'upload-nilai', 'view-by-siswa'],
+                        'actions' => ['index', 'view-mata-pelajaran', 'view-komponen-nilai', 'view-penilaian', 'create', 'update', 'delete', 'download-template', 'upload-nilai', 'view-by-siswa', 'laporan-nilai'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -199,10 +200,13 @@ class PenilaianController extends Controller
             $kelas_mata_pelajaran = KelasMataPelajaran::findOne($id);
 
             $user = User::find()->where(['id' => Yii::$app->user->id])->one();
-            $guru = Guru::find()->where(['user_id' => $user->id])->one();
 
-            if($kelas_mata_pelajaran->assignGuru->guru_id != $guru->id){
-                return $this->redirect(['error/forbidden-error']);
+            if(Yii::$app->user->can('guru')){
+                $guru = Guru::find()->where(['user_id' => $user->id])->one();
+
+                if($kelas_mata_pelajaran->assignGuru->guru_id != $guru->id){
+                    return $this->redirect(['error/forbidden-error']);
+                }
             }
 
             $dataProvider = new ActiveDataProvider([
@@ -387,6 +391,53 @@ class PenilaianController extends Controller
                 'penilaian_id' => $penilaian_id,
 
             ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
+    }
+
+    public function actionLaporanNilai($id){
+        $kelas_mata_pelajaran = KelasMataPelajaran::find()->where(['id' => $id])->one();
+
+//        die();
+
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('guru')) {
+            $kelas_mata_pelajaran = KelasMataPelajaran::findOne($id);
+
+            $user = User::find()->where(['id' => Yii::$app->user->id])->one();
+
+            if(Yii::$app->user->can('guru')){
+                $guru = Guru::find()->where(['user_id' => $user->id])->one();
+
+                if($kelas_mata_pelajaran->assignGuru->guru_id != $guru->id){
+                    return $this->redirect(['error/forbidden-error']);
+                }
+            }
+
+            $dataProvider = new ActiveDataProvider([
+                'query' => KomponenNilai::find()->where(['kelas_mata_pelajaran_id' => $id]),
+            ]);
+
+            // Kodingan untuk tabel baru
+            $kelas_siswa = $kelas_mata_pelajaran->tahunAjaranKelas->kelasSiswa;
+            $komponen_nilai = KomponenNilai::find()->where(['kelas_mata_pelajaran_id' => $id])->all();
+            $penilaian = Penilaian::find()->all();
+
+            $pdf = $this->renderPartial('view-pdf', [
+                'dataProvider' => $dataProvider,
+                'kelas_mata_pelajaran' => $kelas_mata_pelajaran,
+                'kelas_siswa' => $kelas_siswa,
+                'komponen_nilai' => $komponen_nilai,
+                'penilaian' => $penilaian,
+            ]);
+
+            $mpdf = new Mpdf([
+                'format' => 'A4',
+                'orientation' => 'L',
+            ]);
+
+            $mpdf->WriteHTML($pdf);
+            $mpdf->Output();
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
