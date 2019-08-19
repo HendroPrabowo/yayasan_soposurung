@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <b>Print Laporan</b>
                 </div>
                 <div class="panel-body">
-                    <form action="'.\yii\helpers\Url::to(['print-laporan']).'" method="post">
+                    <form action="'.\yii\helpers\Url::to(['print-laporan']).'" method="post" target="_blank">
                         <input type="hidden" name="'.Yii::$app->request->csrfParam.'" value="'.Yii::$app->request->getCsrfToken().'">
                         <div class="form-group">
                             <label>Masukkan Tanggal</label>

@@ -62,6 +62,7 @@
                             'icon' => 'cutlery',
                             'url' => '#',
                             'items' => [
+                                ['label' => 'Laporan Piket', 'icon' => 'inbox', 'url' => ['jurnal-laporan-piket/index']],
                                 ['label' => 'Apel Senam Pagi', 'icon' => 'inbox', 'url' => ['sw-senam-apl-pgi/index']],
                                 ['label' => 'Apel Makan Pagi', 'icon' => 'inbox', 'url' => ['sw-apl-mkn-pgi/index']],
                                 ['label' => 'Apel Pagi', 'icon' => 'inbox', 'url' => ['apl-pgi-kelas/index']],

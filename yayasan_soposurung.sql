@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 16, 2019 at 05:39 AM
+-- Generation Time: Aug 19, 2019 at 01:24 PM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.3.0
 
@@ -57,6 +57,15 @@ CREATE TABLE `apl_malam` (
   `jurnal_laporan_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `apl_malam`
+--
+
+INSERT INTO `apl_malam` (`id`, `tahun_ajaran_kelas_id`, `jumlah`, `hadir`, `tidak_hadir`, `keterangan_tidak_hadir`, `jurnal_laporan_id`) VALUES
+(1, 7, 30, 30, 0, '-', 9),
+(2, 15, 30, 30, 0, '-', 9),
+(3, 17, 30, 30, 0, '-', 9);
+
 -- --------------------------------------------------------
 
 --
@@ -72,6 +81,18 @@ CREATE TABLE `apl_mkn_malam` (
   `keterangan_tidak_hadir` text,
   `jurnal_laporan_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `apl_mkn_malam`
+--
+
+INSERT INTO `apl_mkn_malam` (`id`, `kelas`, `jumlah`, `hadir`, `tidak_hadir`, `keterangan_tidak_hadir`, `jurnal_laporan_id`) VALUES
+(1, 'Siswa Kelas X', 30, 30, 0, '-', 9),
+(2, 'Siswa Kelas XI', 30, 30, 0, '-', 9),
+(3, 'Siswa Kelas XII', 30, 30, 0, '-', 9),
+(4, 'Siswi Kelas X', 30, 30, 0, '-', 9),
+(5, 'Siswi Kelas XI', 30, 30, 0, '-', 9),
+(6, 'Siswi Kelas XII', 30, 30, 0, '-', 9);
 
 -- --------------------------------------------------------
 
@@ -89,6 +110,18 @@ CREATE TABLE `apl_mkn_siang` (
   `jurnal_laporan_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `apl_mkn_siang`
+--
+
+INSERT INTO `apl_mkn_siang` (`id`, `kelas`, `jumlah`, `hadir`, `tidak_hadir`, `keterangan_tidak_hadir`, `jurnal_laporan_id`) VALUES
+(1, 'Siswa Kelas X', 30, 30, 0, '-', 9),
+(2, 'Siswa Kelas XI', 30, 30, 0, '-', 9),
+(3, 'Siswa Kelas XII', 30, 30, 0, '-', 9),
+(4, 'Siswi Kelas X', 30, 30, 0, '-', 9),
+(5, 'Siswi Kelas XI', 30, 30, 0, '-', 9),
+(6, 'Siswi Kelas XII', 30, 30, 0, '-', 9);
+
 -- --------------------------------------------------------
 
 --
@@ -105,6 +138,15 @@ CREATE TABLE `apl_pgi_kelas` (
   `jurnal_laporan_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `apl_pgi_kelas`
+--
+
+INSERT INTO `apl_pgi_kelas` (`id`, `tahun_ajaran_kelas_id`, `jumlah`, `hadir`, `tidak_hadir`, `keterangan_tidak_hadir`, `jurnal_laporan_id`) VALUES
+(1, 7, 30, 30, 0, '-', 9),
+(2, 15, 30, 30, 0, '-', 9),
+(3, 17, 30, 30, 0, '-', 9);
+
 -- --------------------------------------------------------
 
 --
@@ -120,6 +162,15 @@ CREATE TABLE `apl_sore` (
   `keterangan_tidak_hadir` text,
   `jurnal_laporan_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `apl_sore`
+--
+
+INSERT INTO `apl_sore` (`id`, `tahun_ajaran_kelas_id`, `jumlah`, `hadir`, `tidak_hadir`, `keterangan_tidak_hadir`, `jurnal_laporan_id`) VALUES
+(1, 7, 30, 30, 0, '-', 9),
+(2, 15, 30, 30, 0, '-', 9),
+(3, 17, 30, 30, 0, '-', 9);
 
 -- --------------------------------------------------------
 
@@ -299,7 +350,8 @@ CREATE TABLE `jurnal_laporan_piket` (
 --
 
 INSERT INTO `jurnal_laporan_piket` (`id`, `jam`, `tanggal`, `user_id`, `wakil_piket`) VALUES
-(8, NULL, '2019-08-06', 21, 'testing');
+(8, NULL, '2019-08-06', 21, 'Hendro'),
+(9, NULL, '2019-08-18', 21, 'Prabowo');
 
 -- --------------------------------------------------------
 
@@ -443,7 +495,7 @@ CREATE TABLE `komponen_nilai` (
 --
 
 INSERT INTO `komponen_nilai` (`id`, `kelas_mata_pelajaran_id`, `komponen_nilai`, `excel`) VALUES
-(1, 1, 'Tugas 1', 0),
+(1, 1, 'Tugas 1', 1),
 (2, 1, 'Tugas 2', 0),
 (3, 1, 'Tugas 3', 0),
 (4, 1, 'Tugas 4', 0),
@@ -505,7 +557,12 @@ CREATE TABLE `log_masuk_barang` (
 INSERT INTO `log_masuk_barang` (`id`, `nama_barang`, `tanggal`, `vendor`, `jumlah`, `created_by`, `keterangan`) VALUES
 (3, 'Meja Kayu', '2019-06-26', 'Made in China', '90', 21, 'bebas'),
 (4, 'Sayur', '2019-07-10', 'Parpajak', '10', 21, 'Bagus smua'),
-(5, 'Laptop Lenobo', '2019-07-24', 'Lenobo', '30', 540, 'Bagus smua');
+(5, 'Laptop Lenobo', '2019-07-24', 'Lenobo', '30', 540, 'Bagus smua'),
+(6, 'Cleaner', '2019-08-16', 'Indonesia', '2', 21, 'Bagus'),
+(7, 'Komputer', '2019-08-15', 'Lenovo', '5', 21, 'Rusak 1'),
+(8, 'Meja Belajar', '2019-08-17', 'Pabrik kayu', '4', 21, 'Bagus smua'),
+(9, 'Sapu', '2019-08-16', 'Rajawali', '5', 21, 'Bagus smua'),
+(10, 'Senter Malam', '2019-08-11', 'Surya', '10', 540, 'Bagus smua');
 
 -- --------------------------------------------------------
 
@@ -529,7 +586,8 @@ CREATE TABLE `log_tamu` (
 INSERT INTO `log_tamu` (`id`, `nama_tamu`, `tujuan_dan_keperluan`, `waktu_masuk`, `waktu_keluar`, `user_id`) VALUES
 (5, 'Hendro', 'masuk aja', '2019-06-17 09:09:50', '2019-07-10 09:30:35', 21),
 (6, 'Prabowo', 'belajar', '2019-06-17 09:13:46', '2019-06-17 09:13:59', 21),
-(7, 'Hendro', 'Proyek', '2019-07-10 08:59:40', '2019-07-10 08:59:54', 21);
+(7, 'Hendro', 'Proyek', '2019-07-10 08:59:40', '2019-07-10 08:59:54', 21),
+(8, 'Tampubolon', 'Mengunjungi saudara', '2019-08-17 16:50:08', NULL, 21);
 
 -- --------------------------------------------------------
 
@@ -596,9 +654,9 @@ CREATE TABLE `penilaian` (
 --
 
 INSERT INTO `penilaian` (`id`, `kelas_siswa_id`, `komponen_nilai_id`, `nilai`) VALUES
-(1, 2, 1, 0),
-(2, 11, 1, 0),
-(3, 12, 1, 0),
+(1, 2, 1, 70),
+(2, 11, 1, 90),
+(3, 12, 1, 70),
 (4, 2, 2, 0),
 (5, 11, 2, 0),
 (6, 12, 2, 0),
@@ -688,6 +746,18 @@ CREATE TABLE `sw_apl_mkn_pgi` (
   `jurnal_laporan_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `sw_apl_mkn_pgi`
+--
+
+INSERT INTO `sw_apl_mkn_pgi` (`id`, `kelas`, `jumlah`, `hadir`, `tidak_hadir`, `keterangan_tidak_hadir`, `jurnal_laporan_id`) VALUES
+(1, 'Siswa Kelas X', 30, 30, 0, '-', 9),
+(2, 'Siswa Kelas XI', 30, 30, 0, '-', 9),
+(3, 'Siswa Kelas XII', 30, 30, 0, '-', 9),
+(4, 'Siswi Kelas X', 30, 30, 0, '-', 9),
+(5, 'Siswi Kelas XI', 30, 30, 0, '-', 9),
+(6, 'Siswi Kelas XII', 30, 30, 0, '-', 9);
+
 -- --------------------------------------------------------
 
 --
@@ -703,6 +773,18 @@ CREATE TABLE `sw_senam_apl_pgi` (
   `keterangan_tidak_hadir` text,
   `jurnal_laporan_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `sw_senam_apl_pgi`
+--
+
+INSERT INTO `sw_senam_apl_pgi` (`id`, `kelas`, `jumlah`, `hadir`, `tidak_hadir`, `keterangan_tidak_hadir`, `jurnal_laporan_id`) VALUES
+(1, 'Siswa Kelas X', 30, 30, 0, 'Nihil', 9),
+(2, 'Siswa Kelas XI', 31, 30, 1, 'Sakit', 9),
+(3, 'Siswa Kelas XII', 32, 32, 0, 'Nihil', 9),
+(4, 'Siswi Kelas X', 29, 29, 0, 'Nihil', 9),
+(5, 'Siswi Kelas XI', 31, 31, 0, 'Nihil', 9),
+(6, 'Siswi Kelas XII', 31, 31, 0, 'Nihil', 9);
 
 -- --------------------------------------------------------
 
@@ -746,8 +828,8 @@ CREATE TABLE `tahun_ajaran_semester` (
 --
 
 INSERT INTO `tahun_ajaran_semester` (`id`, `tahun_ajaran`, `semester`, `is_active`) VALUES
-(1, '2020/2021', 'Ganjil', 0),
-(2, '2020/2021', 'Genap', 1);
+(1, '2020/2021', 'Ganjil', 1),
+(2, '2020/2021', 'Genap', 0);
 
 -- --------------------------------------------------------
 
@@ -1037,31 +1119,31 @@ ALTER TABLE `angkatan`
 -- AUTO_INCREMENT for table `apl_malam`
 --
 ALTER TABLE `apl_malam`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `apl_mkn_malam`
 --
 ALTER TABLE `apl_mkn_malam`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `apl_mkn_siang`
 --
 ALTER TABLE `apl_mkn_siang`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `apl_pgi_kelas`
 --
 ALTER TABLE `apl_pgi_kelas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `apl_sore`
 --
 ALTER TABLE `apl_sore`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `assign_guru`
@@ -1085,7 +1167,7 @@ ALTER TABLE `guru`
 -- AUTO_INCREMENT for table `jurnal_laporan_piket`
 --
 ALTER TABLE `jurnal_laporan_piket`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `kedisiplinan`
@@ -1133,13 +1215,13 @@ ALTER TABLE `log_keluar_barang`
 -- AUTO_INCREMENT for table `log_masuk_barang`
 --
 ALTER TABLE `log_masuk_barang`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `log_tamu`
 --
 ALTER TABLE `log_tamu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `mata_pelajaran_r`
@@ -1157,13 +1239,13 @@ ALTER TABLE `penilaian`
 -- AUTO_INCREMENT for table `sw_apl_mkn_pgi`
 --
 ALTER TABLE `sw_apl_mkn_pgi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `sw_senam_apl_pgi`
 --
 ALTER TABLE `sw_senam_apl_pgi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `tahun_ajaran_kelas`

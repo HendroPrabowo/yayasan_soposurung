@@ -60,4 +60,32 @@ class JurnalLaporanPiket extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
+    public function getSwSenamAplPgi(){
+        return $this->hasMany(SwSenamAplPgi::className(), ['jurnal_laporan_id' => 'id']);
+    }
+
+    public function getSwAplMknPgi(){
+        return $this->hasMany(SwAplMknPgi::className(), ['jurnal_laporan_id' => 'id']);
+    }
+
+    public function getAplPgiKelas(){
+        return $this->hasMany(AplPgiKelas::className(), ['jurnal_laporan_id' => 'id']);
+    }
+
+    public function getAplMknSiang(){
+        return $this->hasMany(AplMknSiang::className(), ['jurnal_laporan_id' => 'id']);
+    }
+
+    public function getAplSore(){
+        return $this->hasMany(AplSore::className(), ['jurnal_laporan_id' => 'id']);
+    }
+
+    public function getAplMknMalam(){
+        return $this->hasMany(AplMknMalam::className(), ['jurnal_laporan_id' => 'id']);
+    }
+
+    public function getAplMalam(){
+        return $this->hasMany(AplMalam::className(), ['jurnal_laporan_id' => 'id']);
+    }
 }
