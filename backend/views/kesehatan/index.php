@@ -45,7 +45,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'tanggal',
                 'format' => ['date', 'php:d-M-Y']
             ],
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view}'
+            ],
         ],
     ]); ?>
 </div>

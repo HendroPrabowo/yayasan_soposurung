@@ -143,7 +143,7 @@ class LogTamuController extends Controller
      */
     public function actionDelete($id)
     {
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('security')) {
+        if(Yii::$app->user->can('admin')) {
             $this->findModel($id)->delete();
 
             return $this->redirect(['index']);

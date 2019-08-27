@@ -137,7 +137,7 @@ class KesehatanController extends Controller
      */
     public function actionUpdate($id)
     {
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('perawat')) {
+        if(Yii::$app->user->can('admin')) {
             $model = $this->findModel($id);
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {

@@ -41,34 +41,66 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>';
+
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+
+//            'id',
+                'nama_barang',
+
+                'vendor',
+                'jumlah',
+//            'created_by',
+                [
+                    'attribute' => 'Created',
+                    'value' => 'createdBy.username'
+                ],
+//            'tanggal',
+                [
+                    'attribute' => 'tanggal',
+                    'format' => ['date', 'php:d-M-Y']
+                ],
+                'keterangan:ntext',
+
+                ['class' => 'yii\grid\ActionColumn'],
+            ],
+        ]);
+    }elseif (Yii::$app->user->can('security')){
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+
+//            'id',
+                'nama_barang',
+
+                'vendor',
+                'jumlah',
+//            'created_by',
+                [
+                    'attribute' => 'Created',
+                    'value' => 'createdBy.username'
+                ],
+//            'tanggal',
+                [
+                    'attribute' => 'tanggal',
+                    'format' => ['date', 'php:d-M-Y']
+                ],
+                'keterangan:ntext',
+
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{view}',
+
+                ],
+            ],
+        ]
+        );
     }
     ?>
 
-
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-//            'id',
-            'nama_barang',
-
-            'vendor',
-            'jumlah',
-//            'created_by',
-            [
-                'attribute' => 'Created',
-                'value' => 'createdBy.username'
-            ],
-//            'tanggal',
-            [
-                'attribute' => 'tanggal',
-                'format' => ['date', 'php:d-M-Y']
-            ],
-            'keterangan:ntext',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
 </div>

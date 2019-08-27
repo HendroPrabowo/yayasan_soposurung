@@ -72,6 +72,15 @@
                                 ['label' => 'Apel Malam', 'icon' => 'inbox', 'url' => ['apl-malam/index']],
                             ]
                         ],
+                        [
+                            'label' => 'Wali Angkatan',
+                            'icon' => 'users    ',
+                            'url' => '#',
+                            'items' => [
+                                ['label' => 'Wali Angkatan', 'icon' => 'users', 'url' => ['#']],
+                                ['label' => 'Laporan Wali Angkatan', 'icon' => 'print', 'url' => ['laporan-wali/index']],
+                            ]
+                        ],
                     ];
                 }elseif ($user->role == 'siswa'){
                     $menuItems = [
@@ -102,6 +111,10 @@
                 }elseif ($user->role == 'guru'){
                     $menuItems = [
                         ['label' => 'Mata Pelajaran', 'icon' => 'book', 'url' => ['guru/mata-pelajaran']],
+                    ];
+                }elseif($user->role == 'wali angkatan'){
+                    $menuItems = [
+                        ['label' => 'Laporan Wali Angkatan', 'icon' => 'print', 'url' => ['laporan-wali/index']],
                     ];
                 }
             }

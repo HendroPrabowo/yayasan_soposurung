@@ -41,32 +41,62 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>';
-    }
-    ?>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
 
 //            'id',
-            'nama_barang',
+                'nama_barang',
 //            'tanggal',
-            'vendor',
-            'jumlah',
+                'vendor',
+                'jumlah',
 //            'created_by',
-            [
-                'attribute' => 'Created',
-                'value' => 'createdBy.username'
-            ],
-            [
-                'attribute' => 'tanggal',
-                'format' => ['date', 'php:d-M-Y']
-            ],
+                [
+                    'attribute' => 'Created',
+                    'value' => 'createdBy.username'
+                ],
+                [
+                    'attribute' => 'tanggal',
+                    'format' => ['date', 'php:d-M-Y']
+                ],
 //            'keterangan:ntext',
 
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+                ['class' => 'yii\grid\ActionColumn'],
+            ],
+        ]);
+    }else{
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+
+//            'id',
+                'nama_barang',
+//            'tanggal',
+                'vendor',
+                'jumlah',
+//            'created_by',
+                [
+                    'attribute' => 'Created',
+                    'value' => 'createdBy.username'
+                ],
+                [
+                    'attribute' => 'tanggal',
+                    'format' => ['date', 'php:d-M-Y']
+                ],
+//            'keterangan:ntext',
+
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{view}',
+
+                ],
+            ],
+        ]);
+    }
+    ?>
 </div>
