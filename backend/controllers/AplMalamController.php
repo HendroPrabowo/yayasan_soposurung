@@ -55,7 +55,7 @@ class AplMalamController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('piket')) {
             $dataProvider = $dataProvider = new ActiveDataProvider([
                 'query' => JurnalLaporanPiket::find()->orderBy('tanggal DESC'),
                 'pagination' => [
@@ -91,7 +91,7 @@ class AplMalamController extends Controller
      */
     public function actionCreate($id)
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('piket')) {
             $apel_malam = AplMalam::find()->where(['jurnal_laporan_id' => $id])->all();
             if(count($apel_malam) != 0){
                 Yii::$app->session->setFlash('error', 'Apel Sudah Dibuat');
@@ -212,7 +212,7 @@ class AplMalamController extends Controller
     }
 
     public function actionIndexApel($id){
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('piket')) {
             $jurnal_laporan_piket = JurnalLaporanPiket::findOne($id);
             $apel_pagi_kelas = AplMalam::find()->where(['jurnal_laporan_id' => $id])->all();
 

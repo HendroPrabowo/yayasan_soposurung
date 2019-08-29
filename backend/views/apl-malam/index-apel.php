@@ -22,27 +22,52 @@ $this->params['breadcrumbs'][] = $this->title;
     }
     ?>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'options' => [
-            'style' => [
-                'margin-top' => '10px'
-            ]
-        ],
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-//            'id',
-//            'tahun_ajaran_kelas_id',
-            [
-                'attribute' => 'Kelas',
-                'value' => 'tahunAjaranKelas.kelas.kelas'
+    <?php
+    if(Yii::$app->user->can('admin')){
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'options' => [
+                'style' => [
+                    'margin-top' => '10px'
+                ]
             ],
-            'jumlah',
-            'hadir',
-            'tidak_hadir',
-            'keterangan_tidak_hadir',
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                [
+                    'attribute' => 'Kelas',
+                    'value' => 'tahunAjaranKelas.kelas.kelas'
+                ],
+                'jumlah',
+                'hadir',
+                'tidak_hadir',
+                'keterangan_tidak_hadir',
 //            'jurnal_laporan_id',
-        ],
-    ]); ?>
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{update}',
+                ],
+            ],
+        ]);
+    }else{
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'options' => [
+                'style' => [
+                    'margin-top' => '10px'
+                ]
+            ],
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                [
+                    'attribute' => 'Kelas',
+                    'value' => 'tahunAjaranKelas.kelas.kelas'
+                ],
+                'jumlah',
+                'hadir',
+                'tidak_hadir',
+                'keterangan_tidak_hadir',
+            ],
+        ]);
+    }
+    ?>
 </div>

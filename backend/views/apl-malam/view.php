@@ -29,13 +29,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'tahun_ajaran_kelas_id',
+            [
+                'attribute' => 'Kelas',
+                'value' => $model->tahunAjaranKelas->kelas->kelas
+            ],
             'jumlah',
             'hadir',
             'tidak_hadir',
             'keterangan_tidak_hadir:ntext',
-            'jurnal_laporan_id',
         ],
     ]) ?>
 

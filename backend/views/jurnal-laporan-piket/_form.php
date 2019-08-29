@@ -12,9 +12,13 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'tanggal')->textInput() ?>
+    <?= $form->field($model, 'piket1')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'wakil_piket')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'piket2')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'wakil_piket1')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'wakil_piket2')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

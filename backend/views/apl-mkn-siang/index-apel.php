@@ -22,22 +22,48 @@ $this->params['breadcrumbs'][] = $this->title;
     }
     ?>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'options' => [
-            'style' => [
-                'margin-top' => '10px'
-            ]
-        ],
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+    <?php
+    if(Yii::$app->user->can('admin')){
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'options' => [
+                'style' => [
+                    'margin-top' => '10px'
+                ]
+            ],
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
 
-            'kelas',
-            'jumlah',
-            'hadir',
-            'tidak_hadir',
-            'keterangan_tidak_hadir',
+                'kelas',
+                'jumlah',
+                'hadir',
+                'tidak_hadir',
+                'keterangan_tidak_hadir',
 //            'jurnal_laporan_id',
-        ],
-    ]); ?>
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{update}',
+                ],
+            ],
+        ]);
+    }else{
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'options' => [
+                'style' => [
+                    'margin-top' => '10px'
+                ]
+            ],
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+
+                'kelas',
+                'jumlah',
+                'hadir',
+                'tidak_hadir',
+                'keterangan_tidak_hadir',
+            ],
+        ]);
+    }
+    ?>
 </div>

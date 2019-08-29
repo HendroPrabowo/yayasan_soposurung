@@ -18,7 +18,7 @@ class JurnalLaporanPiket extends JurnalLaporanPiketModel
     {
         return [
             [['id', 'user_id'], 'integer'],
-            [['jam', 'tanggal', 'wakil_piket'], 'safe'],
+            [['tanggal', 'piket1', 'piket2', 'wakil_piket1', 'wakil_piket2'], 'safe'],
         ];
     }
 
@@ -59,12 +59,14 @@ class JurnalLaporanPiket extends JurnalLaporanPiketModel
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'jam' => $this->jam,
             'tanggal' => $this->tanggal,
             'user_id' => $this->user_id,
         ]);
 
-        $query->andFilterWhere(['like', 'wakil_piket', $this->wakil_piket]);
+        $query->andFilterWhere(['like', 'piket1', $this->piket1]);
+        $query->andFilterWhere(['like', 'piket2', $this->piket2]);
+        $query->andFilterWhere(['like', 'wakil_piket1', $this->wakil_piket1]);
+        $query->andFilterWhere(['like', 'wakil_piket2', $this->wakil_piket2]);
 
         return $dataProvider;
     }

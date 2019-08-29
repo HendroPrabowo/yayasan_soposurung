@@ -24,8 +24,10 @@ $this->params['breadcrumbs'][] = 'View';
     <h3 class="center">Jurnal Laporan Piket Siswa/I Asrama Yayasan Soposurung</h3>
 
     <p>Tanggal = <?= $model->tanggal ?></p>
-    <p>Petugas = <?= $model->user->username ?></p>
-    <p>Wakil Piket = <?= $model->wakil_piket ?></p>
+    <p>Piket 1 = <?= $model->piket1 ?></p>
+    <p>Piket 2 = <?= $model->piket2 ?></p>
+    <p>Wakil Piket 1 = <?= $model->wakil_piket1 ?></p>
+    <p>Wakil Piket 2 = <?= $model->wakil_piket2 ?></p>
 
     <p>1. Senam Pagi</p>
     <table>

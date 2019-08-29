@@ -53,7 +53,7 @@ class JurnalLaporanPiketController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('piket')) {
             $searchModel = new JurnalLaporanPiketSearch();
             $dataProvider = new ActiveDataProvider([
                 'query' => JurnalLaporanPiket::find()->orderBy('id DESC'),
@@ -107,13 +107,41 @@ class JurnalLaporanPiketController extends Controller
      */
     public function actionCreate()
     {
-        $model = new JurnalLaporanPiket();
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('piket')) {
+            $model = new JurnalLaporanPiket();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            // Pengecekan waktu sekarang kalo sudah dibuat
+            $jurnal_laporan_piket = JurnalLaporanPiket::find()->all();
+            date_default_timezone_set('Asia/Jakarta');
+            $tanggal_sekarang = date("Y-m-d");
+
+            foreach ($jurnal_laporan_piket as $item){
+                $tanggal = $item->tanggal;
+                $tanggal_di_database = $item->tanggal;
+
+                // Jika sudah pernah dibuat
+                if($tanggal_sekarang == $tanggal_di_database){
+                    date_default_timezone_set('UTC');
+                    Yii::$app->session->setFlash('error', "Apel Untuk Hari Ini Sudah Dibuat. Silahkan Cek List Apel Dibawah");
+                    return $this->actionIndex();
+                }
+            }
+
+            if (Yii::$app->request->post()) {
+                $model->load(Yii::$app->request->post());
+                $model->user_id = Yii::$app->user->id;
+                $model->tanggal = date("Y-m-d");
+                $model->save();
+
+                date_default_timezone_set('UTC');
+
+                return $this->redirect(['index']);
+            }
+
+            return $this->render('create', ['model' => $model]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
         }
-
-        return $this->actionIndex();
     }
 
     /**

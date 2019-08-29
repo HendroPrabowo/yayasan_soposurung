@@ -8,12 +8,21 @@ use Yii;
  * This is the model class for table "jurnal_laporan_piket".
  *
  * @property int $id
- * @property string $jam
  * @property string $tanggal
  * @property int $user_id
- * @property string $wakil_piket
+ * @property string $piket1
+ * @property string $piket2
+ * @property string $wakil_piket1
+ * @property string $wakil_piket2
  *
+ * @property AplMalam[] $aplMalam
+ * @property AplMknMalam[] $aplMknMalam
+ * @property AplMknSiang[] $aplMknSiang
+ * @property AplPgiKelas[] $aplPgiKelas
+ * @property AplSore[] $aplSore
  * @property User $user
+ * @property SwAplMknPgi[] $swAplMknPgi
+ * @property SwSenamAplPgi[] $swSenamAplPgi
  */
 class JurnalLaporanPiket extends \yii\db\ActiveRecord
 {
@@ -31,10 +40,10 @@ class JurnalLaporanPiket extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tanggal', 'user_id', 'wakil_piket'], 'required'],
-            [['jam', 'tanggal'], 'safe'],
+            [['tanggal', 'user_id'], 'required'],
+            [['tanggal'], 'safe'],
             [['user_id'], 'integer'],
-            [['wakil_piket'], 'string', 'max' => 255],
+            [['piket1', 'piket2', 'wakil_piket1', 'wakil_piket2'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -46,10 +55,12 @@ class JurnalLaporanPiket extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'jam' => 'Jam',
             'tanggal' => 'Tanggal',
             'user_id' => 'User ID',
-            'wakil_piket' => 'Wakil Piket',
+            'piket1' => 'Piket 1',
+            'piket2' => 'Piket 2',
+            'wakil_piket1' => 'Wakil Piket 1',
+            'wakil_piket2' => 'Wakil Piket 2',
         ];
     }
 

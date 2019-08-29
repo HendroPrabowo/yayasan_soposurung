@@ -116,6 +116,17 @@
                     $menuItems = [
                         ['label' => 'Laporan Wali Angkatan', 'icon' => 'print', 'url' => ['laporan-wali/index']],
                     ];
+                }elseif($user->role == 'piket'){
+                    $menuItems = [
+                        ['label' => 'Laporan Piket', 'icon' => 'inbox', 'url' => ['jurnal-laporan-piket/index']],
+                        ['label' => 'Apel Senam Pagi', 'icon' => 'cutlery', 'url' => ['sw-senam-apl-pgi/index']],
+                        ['label' => 'Apel Makan Pagi', 'icon' => 'cutlery', 'url' => ['sw-apl-mkn-pgi/index']],
+                        ['label' => 'Apel Pagi', 'icon' => 'cutlery', 'url' => ['apl-pgi-kelas/index']],
+                        ['label' => 'Apel Makan Siang', 'icon' => 'cutlery', 'url' => ['apl-mkn-siang/index']],
+                        ['label' => 'Apel Sore', 'icon' => 'cutlery', 'url' => ['apl-sore/index']],
+                        ['label' => 'Apel Makan Malam', 'icon' => 'cutlery', 'url' => ['apl-mkn-malam/index']],
+                        ['label' => 'Apel Malam', 'icon' => 'cutlery', 'url' => ['apl-malam/index']],
+                    ];
                 }
             }
         ?>

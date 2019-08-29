@@ -54,7 +54,7 @@ class AplPgiKelasController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('piket')) {
             $dataProvider = $dataProvider = new ActiveDataProvider([
                 'query' => JurnalLaporanPiket::find()->orderBy('tanggal DESC'),
                 'pagination' => [
@@ -95,7 +95,7 @@ class AplPgiKelasController extends Controller
      */
     public function actionCreate($id)
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('piket')) {
             $apel_pagi = AplPgiKelas::find()->where(['jurnal_laporan_id' => $id])->all();
             if(count($apel_pagi) != 0){
                 Yii::$app->session->setFlash('error', 'Apel Sudah Dibuat');
@@ -226,7 +226,7 @@ class AplPgiKelasController extends Controller
     }
 
     public function actionIndexApel($id){
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('piket')) {
             $jurnal_laporan_piket = JurnalLaporanPiket::findOne($id);
             $apel_pagi_kelas = AplPgiKelas::find()->where(['jurnal_laporan_id' => $id])->all();
 

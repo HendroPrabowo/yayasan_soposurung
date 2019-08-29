@@ -19,27 +19,48 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Tambah Jurnal Laporan Piket', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+    <?php
+    if(Yii::$app->user->can('admin')){
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
 
 //            'id',
-//            'jam',
-            'tanggal',
+                'tanggal',
 //            'user_id',
-            'wakil_piket',
-
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{update} {view} {print}',
-                'buttons'=>[
-                    'print' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-print"></span> Print', ['print-laporan', 'id' => $model->id], ['target' => '_blank']);
-                    },
+                'piket1',
+                'piket2',
+                'wakil_piket1',
+                'wakil_piket2',
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{update} {view} {print}',
+                    'buttons'=>[
+                        'print' => function ($url, $model) {
+                            return Html::a('<span class="glyphicon glyphicon-print"></span> Print', ['print-laporan', 'id' => $model->id], ['target' => '_blank']);
+                        },
+                    ],
                 ],
             ],
-        ],
-    ]); ?>
+        ]);
+    }else{
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+
+//            'id',
+                'tanggal',
+//            'user_id',
+                'piket1',
+                'piket2',
+                'wakil_piket1',
+                'wakil_piket2',
+            ],
+        ]);
+    }
+    ?>
 </div>
