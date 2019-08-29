@@ -35,7 +35,13 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'penyakit',
             'keterangan',
-            'semester',
+//            'tahun_ajaran_semester_id',
+            [
+                'attribute' => 'Semester',
+                'value' => function($model){
+                    return $model->tahunAjaranSemester->tahun_ajaran.' '.$model->tahunAjaranSemester->semester;
+                }
+            ],
 //            'tanggal',
 //            'created_by',
 

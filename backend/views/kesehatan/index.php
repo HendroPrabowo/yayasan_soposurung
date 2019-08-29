@@ -28,16 +28,22 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'id',
 //            'siswa_id',
             [
-                    'attribute' => 'NISN',
+                'attribute' => 'NISN',
                 'value' => 'siswa_id'
             ],
             [
-                    'attribute' => 'siswa',
+                'attribute' => 'siswa',
                 'value' => 'siswa.nama'
             ],
             'penyakit',
             'keterangan',
-            'semester',
+//            'tahun_ajaran_semester_id',
+            [
+                'attribute' => 'Semester',
+                'value' => function($model){
+                    return $model->tahunAjaranSemester->tahun_ajaran.' '.$model->tahunAjaranSemester->semester;
+                }
+            ],
 //            'tanggal',
             'created_by',
 

@@ -26,10 +26,6 @@ $item_siswa = ArrayHelper::map($siswa, 'nisn', 'KeteranganSiswa');
 
     <?= $form->field($model, 'keterangan')->textarea(['rows' => 4]) ?>
 
-    <?= $form->field($model, 'semester')->textInput([
-            'type' => 'number'
-    ]) ?>
-
     <?= $form->field($model, 'tanggal')->widget(DatePicker::classname(), [
         'options' => ['placeholder' => 'Masukkan Tanggal ....'],
         'readonly' => true,

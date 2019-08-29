@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use app\models\TahunAjaranSemester;
 use app\models\User;
 use Yii;
 use app\models\Kesehatan;
@@ -111,7 +112,13 @@ class KesehatanController extends Controller
                 $user = User::findOne(Yii::$app->user->getId());
                 if($user->role == 'admin'){
                     $model->created_by = 'admin';
+                }else{
+                    $user = User::findOne(Yii::$app->user->id);
+                    $model->created_by = $user->username;
                 }
+                $tahun_ajaran_semester_aktif = TahunAjaranSemester::find()->where(['is_active' => 1])->one();
+                $model->tahun_ajaran_semester_id = $tahun_ajaran_semester_aktif->id;
+
                 $model->save();
 
                 return $this->redirect(['view', 'id' => $model->id]);

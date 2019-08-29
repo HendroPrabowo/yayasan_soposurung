@@ -17,7 +17,7 @@ class KesehatanSearch extends Kesehatan
     public function rules()
     {
         return [
-            [['id', 'semester'], 'integer'],
+            [['id', 'tahun_ajaran_semester_id'], 'integer'],
             [['siswa_id', 'keterangan', 'penyakit', 'tanggal', 'created_by'], 'safe'],
         ];
     }
@@ -59,7 +59,7 @@ class KesehatanSearch extends Kesehatan
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'semester' => $this->semester,
+            'tahun_ajaran_semester_id' => $this->tahun_ajaran_semester_id,
             'tanggal' => $this->tanggal,
             'created_by' => $this->created_by
         ]);
