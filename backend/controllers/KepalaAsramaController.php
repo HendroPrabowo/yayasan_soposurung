@@ -2,21 +2,18 @@
 
 namespace backend\controllers;
 
-use Mpdf\Mpdf;
 use Yii;
-use app\models\User;
-use app\models\LogMasukBarang;
-use app\models\search\LogMasukBarangSearch;
+use app\models\KepalaAsrama;
+use app\models\search\KepalaAsramaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use yii\data\ActiveDataProvider;
 
 /**
- * LogMasukBarangController implements the CRUD actions for LogMasukBarang model.
+ * KepalaAsramaController implements the CRUD actions for KepalaAsrama model.
  */
-class LogMasukBarangController extends Controller
+class KepalaAsramaController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -32,7 +29,7 @@ class LogMasukBarangController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'print-laporan', 'index-kepala-asrama'],
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -40,7 +37,7 @@ class LogMasukBarangController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'print-laporan', 'index-kepala-asrama'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -49,20 +46,14 @@ class LogMasukBarangController extends Controller
     }
 
     /**
-     * Lists all LogMasukBarang models.
+     * Lists all KepalaAsrama models.
      * @return mixed
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('security')) {
-            $searchModel = new LogMasukBarangSearch();
-//            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-            $dataProvider = new ActiveDataProvider([
-                'query' => LogMasukBarang::find()->orderBy('id DESC'),
-                'pagination' => [
-                    'pageSize' => 20,
-                ],
-            ]);
+        if(Yii::$app->user->can('admin')) {
+            $searchModel = new KepalaAsramaSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
             return $this->render('index', [
                 'searchModel' => $searchModel,
@@ -71,40 +62,38 @@ class LogMasukBarangController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
+
     }
 
     /**
-     * Displays a single LogMasukBarang model.
+     * Displays a single KepalaAsrama model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('security')) {
+        if(Yii::$app->user->can('admin')) {
             return $this->render('view', [
                 'model' => $this->findModel($id),
             ]);
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
+
     }
 
     /**
-     * Creates a new LogMasukBarang model.
+     * Creates a new KepalaAsrama model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('security')) {
-            $model = new LogMasukBarang();
+        if(Yii::$app->user->can('admin')) {
+            $model = new KepalaAsrama();
 
-            if ($model->load(Yii::$app->request->post())) {
-                $user = User::findOne(Yii::$app->user->id);
-                $model->created_by = $user->id;
-                $model->save();
-
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
 
@@ -114,10 +103,11 @@ class LogMasukBarangController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
+
     }
 
     /**
-     * Updates an existing LogMasukBarang model.
+     * Updates an existing KepalaAsrama model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -138,10 +128,11 @@ class LogMasukBarangController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
+
     }
 
     /**
-     * Deletes an existing LogMasukBarang model.
+     * Deletes an existing KepalaAsrama model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -156,57 +147,22 @@ class LogMasukBarangController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
+
     }
 
     /**
-     * Finds the LogMasukBarang model based on its primary key value.
+     * Finds the KepalaAsrama model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return LogMasukBarang the loaded model
+     * @return KepalaAsrama the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = LogMasukBarang::findOne($id)) !== null) {
+        if (($model = KepalaAsrama::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
-    }
-
-    public function actionPrintLaporan(){
-        $tanggal = Yii::$app->request->post('tanggal');
-        $tanggal_awal = Yii::$app->request->post('tanggal');
-        $log_barang = array();
-
-        for($i=0;$i<7;$i++){
-            $log_masuk_barang = LogMasukBarang::find()->where(['tanggal' => $tanggal])->all();
-            foreach ($log_masuk_barang as $value){
-                $log_barang[] = $value;
-            }
-            $tanggal = date('Y-m-d', strtotime('-1 days', strtotime($tanggal)));
-        }
-
-        $pdf = $this->renderPartial('view-pdf', [
-            'tanggal_awal' => $tanggal_awal,
-            'log_barang' => $log_barang,
-        ]);
-
-        $mpdf = new Mpdf([
-            'format' => 'A4',
-            'orientation' => 'L',
-        ]);
-
-        $mpdf->WriteHTML($pdf);
-        $mpdf->Output();
-    }
-
-    public function actionIndexKepalaAsrama(){
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('kepala asrama')) {
-
-            return $this->render('index-kepala-asrama');
-        }else{
-            return $this->redirect(['error/forbidden-error']);
-        }
     }
 }

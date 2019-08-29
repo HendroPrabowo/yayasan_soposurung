@@ -53,7 +53,7 @@ class JurnalLaporanPiketController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('piket')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('piket') || Yii::$app->user->can('kepala asrama')) {
             $searchModel = new JurnalLaporanPiketSearch();
             $dataProvider = new ActiveDataProvider([
                 'query' => JurnalLaporanPiket::find()->orderBy('id DESC'),
@@ -181,7 +181,7 @@ class JurnalLaporanPiketController extends Controller
     }
 
     public function actionPrintLaporan($id){
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('kepala asrama')) {
             $model = $this->findModel($id);
             $senam_pagi = $model->swSenamAplPgi;
             $makan_pagi = $model->swAplMknPgi;

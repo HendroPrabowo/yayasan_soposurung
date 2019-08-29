@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model app\models\Angkatan */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Angkatans', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Angkatan', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -31,6 +31,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'angkatan',
+            [
+                'attribute' => 'Wali Angkatan',
+                'value' => function($model){
+                    if($model->waliAngkatan == null){
+                        return '';
+                    }else{
+                        return $model->waliAngkatan->nama;
+                    }
+                }
+            ]
         ],
     ]) ?>
 

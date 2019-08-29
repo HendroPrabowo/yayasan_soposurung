@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ],
         ]);
-    }else{
+    }elseif (Yii::$app->user->can('piket')){
         echo GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
@@ -59,6 +59,31 @@ $this->params['breadcrumbs'][] = $this->title;
                 'piket2',
                 'wakil_piket1',
                 'wakil_piket2',
+            ],
+        ]);
+    }elseif (Yii::$app->user->can('kepala asrama')){
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+
+//            'id',
+                'tanggal',
+//            'user_id',
+                'piket1',
+                'piket2',
+                'wakil_piket1',
+                'wakil_piket2',
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{print}',
+                    'buttons'=>[
+                        'print' => function ($url, $model) {
+                            return Html::a('<span class="glyphicon glyphicon-print"></span> Print', ['print-laporan', 'id' => $model->id], ['target' => '_blank']);
+                        },
+                    ],
+                ],
             ],
         ]);
     }

@@ -18,13 +18,15 @@
                             'url' => '#',
                             'items' => [
                                 ['label' => 'Semua User', 'icon' => 'user', 'url' => ['user/index']],
+                                ['label' => 'Guru', 'icon' => 'users', 'url' => ['guru/index']],
+                                ['label' => 'Wali Angkatan', 'icon' => 'users', 'url' => ['wali-angkatan/index']],
+                                ['label' => 'Kepala Asrama', 'icon' => 'users', 'url' => ['kepala-asrama/index']],
                                 ['label' => 'Jenis Akun', 'icon' => 'drivers-license-o', 'url' => ['auth-item/index']],
                             ]
                         ],
                         ['label' => 'Data Siswa', 'icon' => 'user', 'url' => ['siswa/index']],
                         ['label' => 'Semua Kelas', 'icon' => 'cog', 'url' => ['kelas-r/index']],
                         ['label' => 'Semua Mata Pelajaran', 'icon' => 'book', 'url' => ['mata-pelajaran-r/index']],
-                        ['label' => 'Semua Guru', 'icon' => 'users', 'url' => ['guru/index']],
                         [
                             'label' => 'Tahun Ajaran',
                             'icon' => 'list-alt',
@@ -73,11 +75,11 @@
                             ]
                         ],
                         [
-                            'label' => 'Wali Angkatan',
+                            'label' => 'Angkatan',
                             'icon' => 'users    ',
                             'url' => '#',
                             'items' => [
-                                ['label' => 'Wali Angkatan', 'icon' => 'users', 'url' => ['#']],
+                                ['label' => 'Angkatan', 'icon' => 'users', 'url' => ['angkatan/index']],
                                 ['label' => 'Laporan Wali Angkatan', 'icon' => 'print', 'url' => ['laporan-wali/index']],
                             ]
                         ],
@@ -114,7 +116,7 @@
                     ];
                 }elseif($user->role == 'wali angkatan'){
                     $menuItems = [
-                        ['label' => 'Laporan Wali Angkatan', 'icon' => 'print', 'url' => ['laporan-wali/index']],
+                        ['label' => 'Laporan Wali Angkatan', 'icon' => 'print', 'url' => ['laporan-wali/index-wali-angkatan']],
                     ];
                 }elseif($user->role == 'piket'){
                     $menuItems = [
@@ -126,6 +128,21 @@
                         ['label' => 'Apel Sore', 'icon' => 'cutlery', 'url' => ['apl-sore/index']],
                         ['label' => 'Apel Makan Malam', 'icon' => 'cutlery', 'url' => ['apl-mkn-malam/index']],
                         ['label' => 'Apel Malam', 'icon' => 'cutlery', 'url' => ['apl-malam/index']],
+                    ];
+                }elseif($user->role == 'kepala asrama'){
+                    $menuItems = [
+                        [
+                            'label' => 'Security',
+                            'icon' => 'book',
+                            'url' => '#',
+                            'items' => [
+                                ['label' => 'Laporan Log Tamu', 'icon' => 'phone', 'url' => ['log-tamu/index-kepala-asrama']],
+                                ['label' => 'Laporan Barang Masuk', 'icon' => 'shopping-cart', 'url' => ['log-masuk-barang/index-kepala-asrama']],
+                                ['label' => 'Laporan Barang Keluar', 'icon' => 'shopping-cart', 'url' => ['log-keluar-barang/index-kepala-asrama']],
+                            ]
+                        ],
+                        ['label' => 'Laporan Piket', 'icon' => 'cutlery', 'url' => ['jurnal-laporan-piket/index']],
+                        ['label' => 'Laporan Wali Angkatan', 'icon' => 'print', 'url' => ['laporan-wali/index']],
                     ];
                 }
             }

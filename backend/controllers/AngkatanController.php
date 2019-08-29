@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use app\models\WaliAngkatan;
 use Yii;
 use app\models\Angkatan;
 use app\models\search\AngkatanSearch;
@@ -91,13 +92,15 @@ class AngkatanController extends Controller
     {
         if(Yii::$app->user->can('admin')) {
             $model = new Angkatan();
+            $wali_angkatan = WaliAngkatan::find()->all();
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->redirect(['siswa/index']);
+                return $this->actionIndex();
             }
 
             return $this->render('create', [
                 'model' => $model,
+                'wali_angkatan' => $wali_angkatan,
             ]);
         }else{
             return $this->redirect(['error/forbidden-error']);
@@ -116,6 +119,7 @@ class AngkatanController extends Controller
     {
         if(Yii::$app->user->can('admin')) {
             $model = $this->findModel($id);
+            $wali_angkatan = WaliAngkatan::find()->all();
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -123,6 +127,7 @@ class AngkatanController extends Controller
 
             return $this->render('update', [
                 'model' => $model,
+                'wali_angkatan' => $wali_angkatan,
             ]);
         }else{
             return $this->redirect(['error/forbidden-error']);
@@ -142,7 +147,7 @@ class AngkatanController extends Controller
         if(Yii::$app->user->can('admin')) {
             $this->findModel($id)->delete();
 
-            return $this->redirect(['siswa/index']);
+            return $this->actionIndex();
         }else{
             return $this->redirect(['error/forbidden-error']);
         }

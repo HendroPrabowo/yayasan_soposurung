@@ -7,8 +7,10 @@ use app\models\AuthAssignment;
 use app\models\AuthItem;
 use app\models\ChangePassword;
 use app\models\Guru;
+use app\models\KepalaAsrama;
 use app\models\ResetPassword;
 use app\models\Siswa;
+use app\models\WaliAngkatan;
 use Yii;
 use app\models\User;
 use app\models\search\UserSearch;
@@ -119,13 +121,20 @@ class UserController extends Controller
                     $siswa->nisn = $user->username;
                     $siswa->user_id = $user->id;
                     $siswa->save();
-
                     return $this->actionView($user->id);
                 }elseif($user->role == 'guru'){
                     $guru = new Guru();
                     $guru->username = $user->username;
                     $guru->user_id = $user->id;
                     $guru->save();
+                }elseif ($user->role == 'wali angkatan'){
+                    $wali_angaktan = new WaliAngkatan();
+                    $wali_angaktan->user_id = $user->id;
+                    $wali_angaktan->save();
+                }elseif ($user->role == 'kepala asrama'){
+                    $kepala_asrama = new KepalaAsrama();
+                    $kepala_asrama->user_id = $user->id;
+                    $kepala_asrama->save();
                 }
 
                 $role = AuthItem::find()->all();

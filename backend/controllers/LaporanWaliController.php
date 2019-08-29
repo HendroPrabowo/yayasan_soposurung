@@ -3,9 +3,12 @@
 namespace backend\controllers;
 
 use app\models\Angkatan;
+use app\models\KepalaAsrama;
+use app\models\Kesehatan;
 use app\models\SemesterAngkatan;
 use app\models\Siswa;
 use app\models\TahunAjaranSemester;
+use app\models\WaliAngkatan;
 use Mpdf\Mpdf;
 use Yii;
 use app\models\LaporanWali;
@@ -35,7 +38,7 @@ class LaporanWaliController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'print', 'index-laporan'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'print', 'index-laporan', 'index-wali-angkatan'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -43,7 +46,7 @@ class LaporanWaliController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'print', 'index-laporan'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'print', 'index-laporan', 'index-wali-angkatan'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -57,7 +60,7 @@ class LaporanWaliController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wali angkatan')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('kepala asrama')) {
             $dataProvider = new ActiveDataProvider([
                 'query' => SemesterAngkatan::find()->orderBy('id ASC'),
                 'pagination' => [
@@ -233,7 +236,27 @@ class LaporanWaliController extends Controller
             }
         }
 
-        $pdf  = $this->renderPartial('view-pdf', ['laporan_wali' => $laporan_wali, 'kelas_siswa' => $kelas_siswa]);
+        $kesehatan = Kesehatan::find()->where([
+            'tahun_ajaran_semester_id' => $laporan_wali->semesterAngkatan->tahunAjaranSemester->id,
+            'siswa_id' => $laporan_wali->siswa_id,
+        ])->all();
+        $kepala_asrama = KepalaAsrama::find()->one();
+
+        // Preview
+//        return $this->render('view-pdf', [
+//            'laporan_wali' => $laporan_wali,
+//            'kelas_siswa' => $kelas_siswa,
+//            'kesehatan' => $kesehatan,
+//            'kepala_asrama' => $kepala_asrama,
+//        ]);
+//        die();
+
+        $pdf  = $this->renderPartial('view-pdf', [
+            'laporan_wali' => $laporan_wali,
+            'kelas_siswa' => $kelas_siswa,
+            'kesehatan' => $kesehatan,
+            'kepala_asrama' => $kepala_asrama,
+        ]);
         $mpdf = new Mpdf([
             'format' => 'A4',
         ]);
@@ -244,10 +267,40 @@ class LaporanWaliController extends Controller
     }
 
     public function actionIndexLaporan($id){
+        $semester_angkatan = SemesterAngkatan::findOne($id);
         $dataProvider = new ActiveDataProvider([
             'query' => LaporanWali::find()->where(['semester_angkatan_id' => $id]),
         ]);
 
-        return $this->render('index-laporan', ['dataProvider' => $dataProvider]);
+        return $this->render('index-laporan', [
+            'dataProvider' => $dataProvider,
+            'semester_angkatan' => $semester_angkatan,
+        ]);
+    }
+
+    public function actionIndexWaliAngkatan(){
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wali angkatan')) {
+            $wali_angkatan = WaliAngkatan::find()->where(['user_id' => Yii::$app->user->id])->one();
+            $angkatan = $wali_angkatan->angkatan;
+            $semester_angkatan = array();
+
+            foreach ($angkatan as $value){
+                foreach ($value->semesterAngkatan as $value1){
+                    $semester_angkatan[] = $value1;
+                }
+            }
+
+//            echo '<pre>';
+//            var_dump($semester_angkatan);
+//            echo '</pre>';
+//
+//            die();
+
+            return $this->render('index-wali-angkatan', [
+                'semester_angkatan' => $semester_angkatan,
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
     }
 }

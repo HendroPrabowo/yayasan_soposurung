@@ -81,7 +81,15 @@
     </tr>
     <tr>
         <td class="td" style="font-weight: bold;">Catatan Medis</td>
-        <td class="td"></td>
+        <td class="td">
+            <?php
+            $i = 1;
+            foreach ($kesehatan as $value){
+                echo $i.'. '.$value->penyakit.' ('.$value->tanggal.')<br>';
+                $i++;
+            }
+            ?>
+        </td>
     </tr>
     <tr>
         <td class="td" style="font-weight: bold;">Organisasi</td>
@@ -104,8 +112,8 @@
         <td style="text-align: left;">Mengetahui,</td>
     </tr>
     <tr>
-        <td>Kepala Asrama Yasop Balige<br><br><br><br><br>Rahmat J Sinaga,B.Sc,S.Pd</td>
+        <td>Kepala Asrama Yasop Balige<br><br><br><br><br><?= $kepala_asrama->nama ?></td>
         <td></td>
-        <td style="text-align: right;">Wali Angkatan Kelas XI<br><br><br><br><br>Harapan B Nababan, S.Pd</td>
+        <td style="text-align: right;">Wali Angkatan Kelas XI<br><br><br><br><br><?= $laporan_wali->semesterAngkatan->angkatan->waliAngkatan->nama ?></td>
     </tr>
 </table>

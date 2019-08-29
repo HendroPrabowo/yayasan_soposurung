@@ -3,19 +3,19 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Angkatan */
+/* @var $model app\models\WaliAngkatan */
 
-$this->title = 'Tambah Angkatan';
-$this->params['breadcrumbs'][] = ['label' => 'Angkatans', 'url' => ['index']];
+$this->title = 'Create Wali Angkatan';
+$this->params['breadcrumbs'][] = ['label' => 'Wali Angkatan', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
-<div class="angkatan-create">
+<div class="wali-angkatan-create">
 
     <h3><?= Html::encode($this->title) ?></h3>
 
     <?= $this->render('_form', [
         'model' => $model,
-        'wali_angkatan' => $wali_angkatan,
     ]) ?>
 
 </div>

@@ -31,7 +31,7 @@ class LogKeluarBarangController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'print-laporan'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'print-laporan', 'index-kepala-asrama'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -39,7 +39,7 @@ class LogKeluarBarangController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'print-laporan'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'print-laporan', 'index-kepala-asrama'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -200,5 +200,14 @@ class LogKeluarBarangController extends Controller
 
         $mpdf->WriteHTML($pdf);
         $mpdf->Output();
+    }
+
+    public function actionIndexKepalaAsrama(){
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('kepala asrama')) {
+
+            return $this->render('index-kepala-asrama');
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
     }
 }

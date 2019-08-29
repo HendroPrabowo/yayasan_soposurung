@@ -13,11 +13,11 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="laporan-wali-index">
 
     <h3><?= Html::encode($this->title) ?></h3>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::a('Tambah Laporan Wali Angkatan Semester Ini', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <?php
+    if(Yii::$app->user->can('admin')){
+        echo Html::a('Tambah Laporan Wali Angkatan Semester Ini', ['create'], ['class' => 'btn btn-success']);
+    }
+    ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -37,6 +37,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => 'tahunAjaranSemester.semester'
             ],
 //            'tahun_ajaran_semester_id'
+            [
+                'attribute' => 'Wali',
+                'value' => 'angkatan.waliAngkatan.nama'
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{laporan}',
