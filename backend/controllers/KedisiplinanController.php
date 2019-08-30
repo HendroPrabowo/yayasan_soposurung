@@ -202,7 +202,7 @@ class KedisiplinanController extends Controller
      */
     public function actionDelete($id)
     {
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan')) {
+        if(Yii::$app->user->can('admin')) {
             $this->findModel($id)->delete();
 
             return $this->redirect(['index']);
