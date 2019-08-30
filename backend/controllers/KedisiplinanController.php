@@ -27,7 +27,7 @@ class KedisiplinanController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'create-by-pengawas'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -35,7 +35,7 @@ class KedisiplinanController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'create-by-pengawas'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -55,9 +55,16 @@ class KedisiplinanController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan') || Yii::$app->user->can('pengawas')) {
             $searchModel = new KedisiplinanSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+            $dataProvider = new ActiveDataProvider([
+                'query' => Kedisiplinan::find()->orderBy('id DESC'),
+                'pagination' => [
+                    'pageSize' => 10,
+                ],
+            ]);
 
             return $this->render('index', [
                 'searchModel' => $searchModel,
@@ -129,7 +136,33 @@ class KedisiplinanController extends Controller
         }else{
             return $this->redirect(['error/forbidden-error']);
         }
+    }
 
+    public function actionCreateByPengawas(){
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan')) {
+            $model = new Kedisiplinan();
+
+            if ($model->load(Yii::$app->request->post())) {
+                if($model->tambah_ke_point == 1){
+                    $siswa = Siswa::findOne($model->siswa_id);
+                    $siswa->kredit_point += $model->aturanAsrama->point;
+                    $siswa->save();
+                }
+
+                $model->save();
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+
+            $aturan_asrama = AturanAsrama::find()->all();
+            $siswa = Siswa::find()->all();
+            return $this->render('create', [
+                'model' => $model,
+                'siswa' => $siswa,
+                'aturan_asrama' => $aturan_asrama
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
     }
 
     /**

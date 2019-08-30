@@ -11,6 +11,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use Mpdf\Mpdf;
+use yii\data\ActiveDataProvider;
 
 /**
  * LogTamuController implements the CRUD actions for LogTamu model.
@@ -55,7 +56,10 @@ class LogTamuController extends Controller
     {
         if(Yii::$app->user->can('admin') || Yii::$app->user->can('security')) {
             $searchModel = new LogTamuSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+            $dataProvider = new ActiveDataProvider([
+                'query' => LogTamu::find()->orderBy('id DESC'),
+            ]);
 
             return $this->render('index', [
                 'searchModel' => $searchModel,

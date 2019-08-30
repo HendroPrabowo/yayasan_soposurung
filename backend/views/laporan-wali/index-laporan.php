@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h3><?= Html::encode($this->title) ?></h3>
 
     <?php
-    if(Yii::$app->user->can('admin')){
+    if(Yii::$app->user->can('admin') || Yii::$app->user->can('wali angkatan')){
         echo GridView::widget([
             'dataProvider' => $dataProvider,
             'columns' => [

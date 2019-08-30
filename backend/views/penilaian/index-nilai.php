@@ -31,35 +31,61 @@ $user = \app\models\User::findOne(Yii::$app->user->id);
     }
     ?>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'options' => [
-            'style' => [
-                'width' => '800px',
-                'margin-top' => '20px'
-            ]
-        ],
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            [
-                 'attribute' => 'NISN',
-                'value' => 'kelasSiswa.nisn'
+    <?php
+    if(Yii::$app->user->can('admin')){
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'options' => [
+                'style' => [
+                    'width' => '800px',
+                    'margin-top' => '20px'
+                ]
             ],
-            [
-                'attribute' => 'Nama',
-                'value' => 'kelasSiswa.siswa.nama'
-            ],
-            'nilai',
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                [
+                    'attribute' => 'NISN',
+                    'value' => 'kelasSiswa.nisn'
+                ],
+                [
+                    'attribute' => 'Nama',
+                    'value' => 'kelasSiswa.siswa.nama'
+                ],
+                'nilai',
 
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{ubah-nilai}',
-                'buttons'=>[
-                    'ubah-nilai'=>function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-pencil"></span> Ubah Nilai', ['penilaian/update', 'id' => $model->id, 'komponen_nilai' => $_GET['id']]);
-                    },
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{ubah-nilai}',
+                    'buttons'=>[
+                        'ubah-nilai'=>function ($url, $model) {
+                            return Html::a('<span class="glyphicon glyphicon-pencil"></span> Ubah Nilai', ['penilaian/update', 'id' => $model->id, 'komponen_nilai' => $_GET['id']]);
+                        },
+                    ],
                 ],
             ],
-        ],
-    ]); ?>
+        ]);
+    }else{
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'options' => [
+                'style' => [
+                    'width' => '800px',
+                    'margin-top' => '20px'
+                ]
+            ],
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                [
+                    'attribute' => 'NISN',
+                    'value' => 'kelasSiswa.nisn'
+                ],
+                [
+                    'attribute' => 'Nama',
+                    'value' => 'kelasSiswa.siswa.nama'
+                ],
+                'nilai',
+            ],
+        ]);
+    }
+    ?>
 </div>

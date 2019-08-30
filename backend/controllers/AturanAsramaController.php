@@ -55,7 +55,7 @@ class AturanAsramaController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan') || Yii::$app->user->can('pengawas')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan')) {
             $searchModel = new AturanAsramaSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -77,7 +77,7 @@ class AturanAsramaController extends Controller
      */
     public function actionView($id)
     {
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan') || Yii::$app->user->can('pengawas')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan')) {
             return $this->render('view', [
                 'model' => $this->findModel($id),
             ]);
@@ -94,7 +94,7 @@ class AturanAsramaController extends Controller
      */
     public function actionCreate()
     {
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan') || Yii::$app->user->can('pengawas')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan')) {
             $model = new AturanAsrama();
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {

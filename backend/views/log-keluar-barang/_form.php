@@ -17,7 +17,7 @@ use kartik\date\DatePicker;
 
     <?= $form->field($model, 'vendor')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'jumlah')->textInput(['type' => 'number']) ?>
+    <?= $form->field($model, 'jumlah')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'keterangan')->textarea(['rows' => 4]) ?>
 

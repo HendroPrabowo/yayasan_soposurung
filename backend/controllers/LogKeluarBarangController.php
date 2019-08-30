@@ -11,6 +11,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\data\ActiveDataProvider;
 
 /**
  * LogKeluarBarangController implements the CRUD actions for LogKeluarBarang model.
@@ -55,7 +56,14 @@ class LogKeluarBarangController extends Controller
     {
         if(Yii::$app->user->can('admin') || Yii::$app->user->can('security')) {
             $searchModel = new LogKeluarBarangSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+            $dataProvider = new ActiveDataProvider([
+                'query' => LogKeluarBarang::find()->orderBy('id DESC'),
+                'pagination' => [
+                    'pageSize' => 10,
+                ],
+            ]);
 
             return $this->render('index', [
                 'searchModel' => $searchModel,
