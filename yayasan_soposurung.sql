@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 30, 2019 at 12:49 AM
+-- Generation Time: Aug 31, 2019 at 01:54 AM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.3.0
 
@@ -421,7 +421,7 @@ CREATE TABLE `kedisiplinan` (
   `siswa_id` varchar(255) NOT NULL,
   `aturan_asrama_id` int(11) NOT NULL,
   `keterangan` text NOT NULL,
-  `tambah_ke_point` int(11) NOT NULL
+  `tambah_ke_point` int(11) NOT NULL DEFAULT '3'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -431,7 +431,10 @@ CREATE TABLE `kedisiplinan` (
 INSERT INTO `kedisiplinan` (`id`, `siswa_id`, `aturan_asrama_id`, `keterangan`, `tambah_ke_point`) VALUES
 (1, '0030897853', 8, 'SUdah ditebus', 1),
 (2, '0030897853', 9, 'Alkohol', 0),
-(3, '0033895291', 8, 'Test', 1);
+(3, '0033895291', 8, 'Test', 1),
+(6, '0048830270', 11, 'Depan asrama', 1),
+(7, '0048830270', 12, 'Pelajaran MM', 1),
+(8, '0048830270', 10, 'a', 3);
 
 -- --------------------------------------------------------
 
@@ -585,7 +588,8 @@ INSERT INTO `komponen_nilai` (`id`, `kelas_mata_pelajaran_id`, `komponen_nilai`,
 (10, 5, 'UTS', 1),
 (11, 4, 'Proyek', 0),
 (12, 3, 'Remedial', 1),
-(13, 6, 'PR 1', 0);
+(13, 6, 'PR 1', 0),
+(14, 4, 'Pekerjaan Rumah', 1);
 
 -- --------------------------------------------------------
 
@@ -651,7 +655,9 @@ CREATE TABLE `log_keluar_barang` (
 INSERT INTO `log_keluar_barang` (`id`, `nama_barang`, `tanggal`, `vendor`, `jumlah`, `created_by`, `keterangan`) VALUES
 (1, 'Wortel', '2019-05-04', 'Pajak horas', '11', 21, 'BEBAS'),
 (2, 'Botol Minuman', '2019-05-04', 'Tupperware', '200 buah', 21, 'Bagus'),
-(3, 'Makanan', '2019-05-04', 'Toba', '200 buah', 21, 'Bebas');
+(3, 'Makanan', '2019-05-04', 'Toba', '200 buah', 21, 'Bebas'),
+(4, 'Sayuran', '2019-08-30', 'Daniel', '200', 21, 'Bagus smua'),
+(5, 'Buku Bekas', '2019-08-31', 'Satpam', '10 buah', 540, 'Bagus smua');
 
 -- --------------------------------------------------------
 
@@ -681,7 +687,8 @@ INSERT INTO `log_masuk_barang` (`id`, `nama_barang`, `tanggal`, `vendor`, `jumla
 (7, 'Komputer', '2019-08-15', 'Lenovo', '5', 21, 'Rusak 1'),
 (8, 'Meja Belajar', '2019-08-17', 'Pabrik kayu', '4', 21, 'Bagus smua'),
 (9, 'Sapu', '2019-08-16', 'Rajawali', '5', 21, 'Bagus smua'),
-(10, 'Senter Malam', '2019-08-11', 'Surya', '10', 540, 'Bagus smua');
+(10, 'Senter Malam', '2019-08-11', 'Surya', '10', 540, 'Bagus smua'),
+(11, 'Kain Kasa', '2019-08-30', 'Rajawali', '20', 540, 'Bagus mua');
 
 -- --------------------------------------------------------
 
@@ -706,7 +713,8 @@ INSERT INTO `log_tamu` (`id`, `nama_tamu`, `tujuan_dan_keperluan`, `waktu_masuk`
 (5, 'Hendro', 'masuk aja', '2019-06-17 09:09:50', '2019-07-10 09:30:35', 21),
 (6, 'Prabowo', 'belajar', '2019-06-17 09:13:46', '2019-06-17 09:13:59', 21),
 (7, 'Hendro', 'Proyek', '2019-07-10 08:59:40', '2019-07-10 08:59:54', 21),
-(8, 'Tampubolon', 'Mengunjungi saudara', '2019-08-17 16:50:08', NULL, 21);
+(8, 'Tampubolon', 'Mengunjungi saudara', '2019-08-17 16:50:08', '2019-08-30 11:24:40', 21),
+(9, 'Daniel', 'Menjemput saudara', '2019-08-30 11:24:25', '2019-08-30 11:24:43', 540);
 
 -- --------------------------------------------------------
 
@@ -807,7 +815,10 @@ INSERT INTO `penilaian` (`id`, `kelas_siswa_id`, `komponen_nilai_id`, `nilai`) V
 (33, 3, 12, 80),
 (34, 13, 12, 90),
 (35, 17, 13, 0),
-(36, 18, 13, 0);
+(36, 18, 13, 0),
+(37, 7, 14, 90),
+(38, 8, 14, 90),
+(39, 9, 14, 85);
 
 -- --------------------------------------------------------
 
@@ -866,7 +877,7 @@ INSERT INTO `siswa` (`nisn`, `nama`, `kelahiran`, `jenis_kelamin`, `agama`, `sta
 ('0033895291', 'ABRAHAM SOPAR HAMONANGAN SITORUS', 'Medan, 1 Juni 2003', 'L', 'Kristen Protestan', 'Anak Kandung', 4, 'SMPS ST THOMAS 1 MEDAN', 'Maston Sitorus', 'Desry Sianturi', 'Jln Bunga Mawar XV No 92', '2147483647', 'Pegawai Swasta', 'PNS', 1, 547, 30),
 ('0034212419', 'ABEDNEGO LUMBAN GAOL', 'Tanjung Beringin, 15 Mei 2003', 'L', 'Kristen Protestan', 'Anak Kandung', 4, 'SMPS ST PAULUS SIDIKALANG', 'Mantok LumbanGaol', 'Nurmaida Pandiangan', 'Tanjung Beringin, Tiga Lingga, Dairi', '2147483647', 'Petani', 'Petani', 1, 546, 0),
 ('0040072254', 'AGNES YULIA ELISABETH PERDEDE', 'Medan, 6 September 2004', 'P', 'Kristen Protestan', 'Anak Kandung', 2, 'SMPS ST. THOMAS 1 MEDAN', 'Hiro Pingkir Pardede', 'Merry Naibaho', 'Jalan Sejahtera Gang Bahagia NO. 17', '2147483647', 'Pegawai BUMN', 'IRT', 2, 549, 0),
-('0048830270', 'AGATHA ROSAULINA SITANGGANG', 'Air Molek, 5 Oktober 2003', 'P', 'Kristen Protestan', 'Anak Kandung', 2, 'SMPS BUDHI DHARMA BALIGE ', 'Lekson Sitanggang', 'Tiurma Sitohang', 'JL DI PANJAITAN RT 002/001 SEKAR MAWAR AIR MOLEK, INHU, RIAU', '2147483647', 'Berkebun', 'IRT', 2, 548, 0),
+('0048830270', 'AGATHA ROSAULINA SITANGGANG', 'Air Molek, 5 Oktober 2003', 'P', 'Kristen Protestan', 'Anak Kandung', 2, 'SMPS BUDHI DHARMA BALIGE ', 'Lekson Sitanggang', 'Tiurma Sitohang', 'JL DI PANJAITAN RT 002/001 SEKAR MAWAR AIR MOLEK, INHU, RIAU', '2147483647', 'Berkebun', 'IRT', 2, 548, 15),
 ('11S15001', 'Poltak Sibaarni', 'Sipahutar/31 Desember 2000', 'L', 'Protestan', 'Anak Kanduang', 1, 'SMP Budi Mull', 'Ja', 'Ma', 'Ah', '1', 'Gatau', 'IRT', 1, 551, 0),
 ('11S15047', 'Elida', '', '', '', '', 2, '', '', '', '', '08989801234', '', '', 2, 562, 0),
 ('11S15048', 'Hendro Prabowo .T', 'Medan 31, Oktober 1997', 'Laki Laki', 'Protestan', 'Anak Kanding', 1, 'St Thomas 3 Medan', 'Sahlan Tampubolon', 'Martha Sihombing', 'Jl.Cempaka Gg.Baru No.7 Gaperta Ujung Medan', '821231231', 'Dosen', 'Ibu Rumah Tangga', 2, 561, 0);
@@ -1405,7 +1416,7 @@ ALTER TABLE `jurnal_laporan_piket`
 -- AUTO_INCREMENT for table `kedisiplinan`
 --
 ALTER TABLE `kedisiplinan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `kelas_mata_pelajaran`
@@ -1441,7 +1452,7 @@ ALTER TABLE `kesehatan`
 -- AUTO_INCREMENT for table `komponen_nilai`
 --
 ALTER TABLE `komponen_nilai`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `laporan_wali`
@@ -1453,19 +1464,19 @@ ALTER TABLE `laporan_wali`
 -- AUTO_INCREMENT for table `log_keluar_barang`
 --
 ALTER TABLE `log_keluar_barang`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `log_masuk_barang`
 --
 ALTER TABLE `log_masuk_barang`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `log_tamu`
 --
 ALTER TABLE `log_tamu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `mata_pelajaran_r`
@@ -1477,7 +1488,7 @@ ALTER TABLE `mata_pelajaran_r`
 -- AUTO_INCREMENT for table `penilaian`
 --
 ALTER TABLE `penilaian`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `semester_angkatan`

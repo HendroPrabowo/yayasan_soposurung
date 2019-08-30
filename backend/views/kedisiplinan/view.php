@@ -15,16 +15,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h3><?= Html::encode($this->title) ?></h3>
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+    <?php
+    if(Yii::$app->user->can('admin')){
+        echo Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']);
+        echo Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
                 'method' => 'post',
             ],
-        ]) ?>
-    </p>
+        ]);
+    }
+    ?>
 
     <?= DetailView::widget([
         'model' => $model,
@@ -51,8 +53,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function($model){
                     if($model->tambah_ke_point == 0){
                         return "Tidak";
-                    }else{
+                    }else if($model->tambah_ke_point == 1){
                         return "Ya";
+                    }else{
+                        return "-----";
                     }
                 }
             ],

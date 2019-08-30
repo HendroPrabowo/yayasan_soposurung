@@ -95,7 +95,7 @@ class KedisiplinanController extends Controller
      */
     public function actionView($id)
     {
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan') || Yii::$app->user->can('pengawas')) {
             return $this->render('view', [
                 'model' => $this->findModel($id),
             ]);
@@ -112,34 +112,7 @@ class KedisiplinanController extends Controller
      */
     public function actionCreate()
     {
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan')) {
-            $model = new Kedisiplinan();
-
-            if ($model->load(Yii::$app->request->post())) {
-                if($model->tambah_ke_point == 1){
-                    $siswa = Siswa::findOne($model->siswa_id);
-                    $siswa->kredit_point += $model->aturanAsrama->point;
-                    $siswa->save();
-                }
-
-                $model->save();
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-
-            $aturan_asrama = AturanAsrama::find()->all();
-            $siswa = Siswa::find()->all();
-            return $this->render('create', [
-                'model' => $model,
-                'siswa' => $siswa,
-                'aturan_asrama' => $aturan_asrama
-            ]);
-        }else{
-            return $this->redirect(['error/forbidden-error']);
-        }
-    }
-
-    public function actionCreateByPengawas(){
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan') || Yii::$app->user->can('pengawas')) {
             $model = new Kedisiplinan();
 
             if ($model->load(Yii::$app->request->post())) {
@@ -192,7 +165,12 @@ class KedisiplinanController extends Controller
                         $siswa->kredit_point -=  $aturan_asrama_lama->point;
                         $siswa->kredit_point += $model->aturanAsrama->point;
                         $siswa->save();
-                    }else if($model->getOldAttribute('tambah_ke_point') == 0){
+                    }
+                    else if($model->getOldAttribute('tambah_ke_point') == 0){
+                        $siswa->kredit_point += $model->aturanAsrama->point;
+                        $siswa->save();
+                    }
+                    else if($model->getOldAttribute('tambah_ke_point') == 3){
                         $siswa->kredit_point += $model->aturanAsrama->point;
                         $siswa->save();
                     }

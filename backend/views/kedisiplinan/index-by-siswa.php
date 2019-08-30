@@ -42,12 +42,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function(\yii\base\Model $model){
                     if($model->tambah_ke_point == 0){
                         return "Tidak";
-                    }else{
+                    }elseif($model->tambah_ke_point == 1){
                         return "Ya";
+                    }else{
+                        return '-----';
                     }
                 }
             ],
-            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 </div>

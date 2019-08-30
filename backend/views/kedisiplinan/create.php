@@ -13,10 +13,20 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h3><?= Html::encode($this->title) ?></h3>
 
-    <?= $this->render('_form', [
-        'model' => $model,
-        'siswa' => $siswa,
-        'aturan_asrama' => $aturan_asrama,
-    ]) ?>
+    <?php
+    if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan')){
+        echo $this->render('_form', [
+            'model' => $model,
+            'siswa' => $siswa,
+            'aturan_asrama' => $aturan_asrama,
+        ]);
+    }elseif(Yii::$app->user->can('pengawas')){
+        echo $this->render('_form_pengawas', [
+            'model' => $model,
+            'siswa' => $siswa,
+            'aturan_asrama' => $aturan_asrama,
+        ]);
+    }
+    ?>
 
 </div>

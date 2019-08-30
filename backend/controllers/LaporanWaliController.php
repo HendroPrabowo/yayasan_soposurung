@@ -267,15 +267,20 @@ class LaporanWaliController extends Controller
     }
 
     public function actionIndexLaporan($id){
-        $semester_angkatan = SemesterAngkatan::findOne($id);
-        $dataProvider = new ActiveDataProvider([
-            'query' => LaporanWali::find()->where(['semester_angkatan_id' => $id]),
-        ]);
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wali angkatan')) {
+            $semester_angkatan = SemesterAngkatan::findOne($id);
+            $dataProvider = new ActiveDataProvider([
+                'query' => LaporanWali::find()->where(['semester_angkatan_id' => $id]),
+            ]);
 
-        return $this->render('index-laporan', [
-            'dataProvider' => $dataProvider,
-            'semester_angkatan' => $semester_angkatan,
-        ]);
+            return $this->render('index-laporan', [
+                'dataProvider' => $dataProvider,
+                'semester_angkatan' => $semester_angkatan,
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
+
     }
 
     public function actionIndexWaliAngkatan(){
