@@ -19,42 +19,84 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Tambah Laporan Kesehatan', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+    <?php
+    if(Yii::$app->user->can('admin')){
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
 
 //            'id',
 //            'siswa_id',
-            [
-                'attribute' => 'NISN',
-                'value' => 'siswa_id'
-            ],
-            [
-                'attribute' => 'siswa',
-                'value' => 'siswa.nama'
-            ],
-            'penyakit',
-            'keterangan',
+                [
+                    'attribute' => 'NISN',
+                    'value' => 'siswa_id'
+                ],
+                [
+                    'attribute' => 'siswa',
+                    'value' => 'siswa.nama'
+                ],
+                'penyakit',
+//            'keterangan',
 //            'tahun_ajaran_semester_id',
-            [
-                'attribute' => 'Semester',
-                'value' => function($model){
-                    return $model->tahunAjaranSemester->tahun_ajaran.' '.$model->tahunAjaranSemester->semester;
-                }
-            ],
+                [
+                    'attribute' => 'Semester',
+                    'value' => function($model){
+                        return $model->tahunAjaranSemester->tahun_ajaran.' '.$model->tahunAjaranSemester->semester;
+                    }
+                ],
 //            'tanggal',
-            'created_by',
+                'created_by',
 
-            [
-                'attribute' => 'tanggal',
-                'format' => ['date', 'php:d-M-Y']
+                [
+                    'attribute' => 'tanggal',
+                    'format' => ['date', 'php:d-M-Y']
+                ],
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                ],
             ],
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{view}'
+        ]);
+    }else{
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+
+//            'id',
+//            'siswa_id',
+                [
+                    'attribute' => 'NISN',
+                    'value' => 'siswa_id'
+                ],
+                [
+                    'attribute' => 'siswa',
+                    'value' => 'siswa.nama'
+                ],
+                'penyakit',
+//            'keterangan',
+//            'tahun_ajaran_semester_id',
+                [
+                    'attribute' => 'Semester',
+                    'value' => function($model){
+                        return $model->tahunAjaranSemester->tahun_ajaran.' '.$model->tahunAjaranSemester->semester;
+                    }
+                ],
+//            'tanggal',
+                'created_by',
+
+                [
+                    'attribute' => 'tanggal',
+                    'format' => ['date', 'php:d-M-Y']
+                ],
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{view}'
+                ],
             ],
-        ],
-    ]); ?>
+        ]);
+    }
+    ?>
 </div>

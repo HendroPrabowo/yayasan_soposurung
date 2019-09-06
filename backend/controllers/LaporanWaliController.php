@@ -227,6 +227,11 @@ class LaporanWaliController extends Controller
         $kelas_siswa = null;
 
         $tahun_ajaran_kelas = $laporan_wali->semesterAngkatan->tahunAjaranSemester->tahunAjaranKelas;
+
+        if($tahun_ajaran_kelas == null){
+            return $this->render('error');
+        }
+
         foreach ($tahun_ajaran_kelas as $value){
             foreach ($value->kelasSiswa as $value2){
                 if($value2->nisn == $laporan_wali->siswa_id){
@@ -242,6 +247,34 @@ class LaporanWaliController extends Controller
         ])->all();
         $kepala_asrama = KepalaAsrama::find()->one();
 
+        // Cek pembayaran apakah sudah lunas
+        $tahun_ajaran_aktif = TahunAjaranSemester::find()->where(['is_active' => 1])->one();
+        $semester_bulan = $tahun_ajaran_aktif->semesterBulan;
+        $angkatan = $laporan_wali->siswa->angkatan;
+
+        $pengecekan_pembayaran = array();
+        foreach ($semester_bulan as $value){
+            foreach ($value->bulanAngkatan as $value1){
+                if($value1->angkatan_id == $angkatan->id){
+                    foreach ($value1->bulanSiswa as $value2){
+                        if ($value2->siswa_id == $laporan_wali->siswa_id){
+                            $pengecekan_pembayaran[] = $value2;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Set Variable Awal
+        $kelunasan = 'Lunas';
+        foreach ($pengecekan_pembayaran as $value){
+            echo $value->id;
+            if($value->lunas == 0 || $value->lunas == null){
+                $kelunasan = 'Tidak Lunas';
+                break;
+            }
+        }
+
         // Preview
 //        return $this->render('view-pdf', [
 //            'laporan_wali' => $laporan_wali,
@@ -256,6 +289,7 @@ class LaporanWaliController extends Controller
             'kelas_siswa' => $kelas_siswa,
             'kesehatan' => $kesehatan,
             'kepala_asrama' => $kepala_asrama,
+            'kelunasan' => $kelunasan
         ]);
         $mpdf = new Mpdf([
             'format' => 'A4',

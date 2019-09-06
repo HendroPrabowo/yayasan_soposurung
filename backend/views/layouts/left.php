@@ -83,6 +83,7 @@
                                 ['label' => 'Laporan Wali Angkatan', 'icon' => 'print', 'url' => ['laporan-wali/index']],
                             ]
                         ],
+                        ['label' => 'Bendahara', 'icon' => 'money', 'url' => ['semester-bulan/index']],
                     ];
                 }elseif ($user->role == 'siswa'){
                     $menuItems = [
@@ -143,6 +144,10 @@
                         ],
                         ['label' => 'Laporan Piket', 'icon' => 'cutlery', 'url' => ['jurnal-laporan-piket/index']],
                         ['label' => 'Laporan Wali Angkatan', 'icon' => 'print', 'url' => ['laporan-wali/index']],
+                    ];
+                }elseif ($user->role == 'bendahara'){
+                    $menuItems = [
+                        ['label' => 'Bendahara', 'icon' => 'money', 'url' => ['semester-bulan/index']],
                     ];
                 }
             }

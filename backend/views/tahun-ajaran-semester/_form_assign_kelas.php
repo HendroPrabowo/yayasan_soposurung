@@ -1,7 +1,6 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
@@ -20,7 +19,7 @@ $this->title = "Assign Kelas";
     <div class="form-group">
         <label>Pilih Kelas</label>
         <?php
-        foreach ($array as $value){
+        foreach ($kelas as $value){
             echo "<br>".Html::input('checkbox', 'kelas'.$value->id, $value->id)." ".$value->kelas;
         }
         ?>

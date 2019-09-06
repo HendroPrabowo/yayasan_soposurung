@@ -2,7 +2,9 @@
 
 namespace backend\controllers;
 
+use app\models\BulanAngkatan;
 use app\models\KelasR;
+use app\models\SemesterBulan;
 use yii\data\ActiveDataProvider;
 use app\models\TahunAjaranKelas;
 use Yii;
@@ -59,9 +61,12 @@ class TahunAjaranSemesterController extends Controller
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $tahun_ajaran_aktif = TahunAjaranSemester::findOne(['is_active' => 1]);
 
-            $tahun_ajaran_kelas = new ActiveDataProvider([
-                'query' => TahunAjaranKelas::find()->where(['tahun_ajaran_semester_id' => $tahun_ajaran_aktif->id]),
-            ]);
+            $tahun_ajaran_kelas = null;
+            if($tahun_ajaran_aktif != null){
+                $tahun_ajaran_kelas = new ActiveDataProvider([
+                    'query' => TahunAjaranKelas::find()->where(['tahun_ajaran_semester_id' => $tahun_ajaran_aktif->id]),
+                ]);
+            }
 
             return $this->render('index', [
                 'searchModel' => $searchModel,
@@ -113,12 +118,79 @@ class TahunAjaranSemesterController extends Controller
                 $model->is_active = 1;
                 $model->save();
 
+                $semester_bulan = SemesterBulan::find()->where(['tahun_ajaran_semester_id' => $model->id])->one();
+                if($semester_bulan == null){
+                    $model_semester_bulan = new SemesterBulan();
+                    $model_semester_bulan->tahun_ajaran_semester_id = $model->id;
+                    $model_semester_bulan->bulan = 'July';
+                    $model_semester_bulan->save();
+
+                    $model_semester_bulan = new SemesterBulan();
+                    $model_semester_bulan->tahun_ajaran_semester_id = $model->id;
+                    $model_semester_bulan->bulan = 'Agustus';
+                    $model_semester_bulan->save();
+
+                    $model_semester_bulan = new SemesterBulan();
+                    $model_semester_bulan->tahun_ajaran_semester_id = $model->id;
+                    $model_semester_bulan->bulan = 'September';
+                    $model_semester_bulan->save();
+
+                    $model_semester_bulan = new SemesterBulan();
+                    $model_semester_bulan->tahun_ajaran_semester_id = $model->id;
+                    $model_semester_bulan->bulan = 'Oktober';
+                    $model_semester_bulan->save();
+
+                    $model_semester_bulan = new SemesterBulan();
+                    $model_semester_bulan->tahun_ajaran_semester_id = $model->id;
+                    $model_semester_bulan->bulan = 'November';
+                    $model_semester_bulan->save();
+
+                    $model_semester_bulan = new SemesterBulan();
+                    $model_semester_bulan->tahun_ajaran_semester_id = $model->id;
+                    $model_semester_bulan->bulan = 'Desember';
+                    $model_semester_bulan->save();
+                }
+
+
                 // Untuk Semester Genap
                 $model2 = new TahunAjaranSemester();
                 $model2->tahun_ajaran = $model->tahun_ajaran;
                 $model2->semester = 'Genap';
                 $model->is_active = 0;
                 $model2->save();
+
+                $semester_bulan = SemesterBulan::find()->where(['tahun_ajaran_semester_id' => $model2->id])->one();
+                if($semester_bulan == null){
+                    $model_semester_bulan = new SemesterBulan();
+                    $model_semester_bulan->tahun_ajaran_semester_id = $model2->id;
+                    $model_semester_bulan->bulan = 'Januari';
+                    $model_semester_bulan->save();
+
+                    $model_semester_bulan = new SemesterBulan();
+                    $model_semester_bulan->tahun_ajaran_semester_id = $model2->id;
+                    $model_semester_bulan->bulan = 'Februari';
+                    $model_semester_bulan->save();
+
+                    $model_semester_bulan = new SemesterBulan();
+                    $model_semester_bulan->tahun_ajaran_semester_id = $model2->id;
+                    $model_semester_bulan->bulan = 'Maret';
+                    $model_semester_bulan->save();
+
+                    $model_semester_bulan = new SemesterBulan();
+                    $model_semester_bulan->tahun_ajaran_semester_id = $model2->id;
+                    $model_semester_bulan->bulan = 'April';
+                    $model_semester_bulan->save();
+
+                    $model_semester_bulan = new SemesterBulan();
+                    $model_semester_bulan->tahun_ajaran_semester_id = $model2->id;
+                    $model_semester_bulan->bulan = 'Mei';
+                    $model_semester_bulan->save();
+
+                    $model_semester_bulan = new SemesterBulan();
+                    $model_semester_bulan->tahun_ajaran_semester_id = $model2->id;
+                    $model_semester_bulan->bulan = 'Juni';
+                    $model_semester_bulan->save();
+                }
 
                 return $this->actionIndex();
             }

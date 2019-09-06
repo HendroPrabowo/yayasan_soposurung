@@ -65,4 +65,8 @@ class TahunAjaranSemester extends \yii\db\ActiveRecord
     {
         return $this->hasMany(TahunAjaranKelas::className(), ['tahun_ajaran_semester_id' => 'id']);
     }
+
+    public function getSemesterBulan(){
+        return $this->hasMany(SemesterBulan::className(), ['tahun_ajaran_semester_id' => 'id']);
+    }
 }

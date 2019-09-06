@@ -97,7 +97,7 @@
     </tr>
     <tr>
         <td class="td" style="font-weight: bold;">Administrasi</td>
-        <td class="td"><?= $laporan_wali->administrasi ?></td>
+        <td class="td"><?= $laporan_wali->administrasi ?> <?= $kelunasan ?></td>
     </tr>
 </tbody>
 </table>
