@@ -15,6 +15,16 @@ $this->params['breadcrumbs'][] = $this->title;
     <h3><?= Html::encode($this->title) ?></h3>
 
     <?php
+    if(Yii::$app->user->can('admin')){
+        echo Html::a('<span class="glyphicon glyphicon-download-alt"></span> Download Template', ['laporan-wali/download-template', 'id' => $id], ['class' => 'btn btn-primary']).' ';
+        echo Html::a('<span class="glyphicon glyphicon-upload"></span> Upload', ['laporan-wali/upload-template', 'id' => $id], ['class' => 'btn btn-success']);
+    }if(Yii::$app->user->can('wali angkatan') && $semester_angkatan->excel != 1){
+        echo Html::a('<span class="glyphicon glyphicon-download-alt"></span> Download Template', ['laporan-wali/download-template', 'id' => $id], ['class' => 'btn btn-primary']).' ';
+        echo Html::a('<span class="glyphicon glyphicon-upload"></span> Upload', ['laporan-wali/upload-template', 'id' => $id], ['class' => 'btn btn-success']);
+    }
+    ?>
+
+    <?php
     if(Yii::$app->user->can('admin') || Yii::$app->user->can('wali angkatan')){
         echo GridView::widget([
             'dataProvider' => $dataProvider,

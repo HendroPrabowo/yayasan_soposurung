@@ -10,6 +10,7 @@ use app\models\Siswa;
 use app\models\TahunAjaranSemester;
 use app\models\WaliAngkatan;
 use Mpdf\Mpdf;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Yii;
 use app\models\LaporanWali;
 use app\models\search\LaporanWaliSearch;
@@ -18,6 +19,10 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use yii\web\UploadedFile;
+use backend\models\Excel;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 /**
  * LaporanWaliController implements the CRUD actions for LaporanWali model.
@@ -38,7 +43,7 @@ class LaporanWaliController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'print', 'index-laporan', 'index-wali-angkatan'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'print', 'index-laporan', 'index-wali-angkatan', 'download-template', 'upload-template'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -46,7 +51,7 @@ class LaporanWaliController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'print', 'index-laporan', 'index-wali-angkatan'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'print', 'index-laporan', 'index-wali-angkatan', 'download-template', 'upload-template'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -310,6 +315,7 @@ class LaporanWaliController extends Controller
             return $this->render('index-laporan', [
                 'dataProvider' => $dataProvider,
                 'semester_angkatan' => $semester_angkatan,
+                'id' => $id,
             ]);
         }else{
             return $this->redirect(['error/forbidden-error']);
@@ -329,14 +335,105 @@ class LaporanWaliController extends Controller
                 }
             }
 
-//            echo '<pre>';
-//            var_dump($semester_angkatan);
-//            echo '</pre>';
-//
-//            die();
-
             return $this->render('index-wali-angkatan', [
                 'semester_angkatan' => $semester_angkatan,
+            ]);
+        }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
+    }
+
+    public function actionDownloadTemplate($id)
+    {
+        $semester_angkatan = SemesterAngkatan::findOne($id);
+        $laporan_wali = LaporanWali::find()->where(['semester_angkatan_id' => $id])->all();
+
+        $spreadsheet = new Spreadsheet();
+
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->getColumnDimension('A')->setWidth(5);
+        $sheet->getColumnDimension('B')->setWidth(20);
+        $sheet->getColumnDimension('C')->setWidth(40);
+        $sheet->getColumnDimension('D')->setWidth(20);
+        $sheet->getColumnDimension('E')->setWidth(15);
+        $sheet->getColumnDimension('F')->setWidth(40);
+        $sheet->getColumnDimension('G')->setWidth(10);
+        $sheet->getColumnDimension('H')->setWidth(20);
+
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'NISN');
+        $sheet->setCellValue('C1', 'NAMA');
+        $sheet->setCellValue('D1', 'Prestasi');
+        $sheet->setCellValue('E1', 'Absensi');
+        $sheet->setCellValue('F1', 'Catatan dari Konselor & Wali Angkatan');
+        $sheet->setCellValue('G1', 'Fisik');
+        $sheet->setCellValue('H1', 'Organisasi');
+
+        $iterator = 2;
+        foreach ($laporan_wali  as $value){
+            $sheet->setCellValue('A'.$iterator, $iterator-1);
+            $sheet->setCellValue('B'.$iterator, $value->siswa->nisn);
+            $sheet->setCellValue('C'.$iterator, $value->siswa->nama);
+            $iterator++;
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('template/Template_Laporan_Wali_Angkatan_'.$semester_angkatan->angkatan->angkatan.'.xlsx');
+
+        $excel = Yii::$app->basePath.'/web/template/Template_Laporan_Wali_Angkatan_'.$semester_angkatan->angkatan->angkatan.'.xlsx';
+
+        if (file_exists($excel)) {
+            return Yii::$app->response->sendFile($excel);
+        }
+    }
+
+    public function actionUploadTemplate($id){
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wali angkatan')) {
+            $model = new Excel();
+
+            $semester_angkatan = SemesterAngkatan::findOne($id);
+            if(Yii::$app->user->can('wali angkatan') && $semester_angkatan->excel == 1){
+                Yii::$app->session->setFlash('danger', "Excel sudah pernah diupload");
+                return $this->actionIndexLaporan($id);
+            }
+
+            if(Yii::$app->request->post()){
+                $model->excel = UploadedFile::getInstance($model, 'excel');
+                $path = 'uploads/';
+                $filePath = $path.$model->excel->name;
+                $model->excel->saveAs($filePath);
+
+                // membaca file
+                $spreadsheet = IOFactory::load($filePath);
+                $sheetdata = $spreadsheet->getActiveSheet()->toArray();
+
+                $i = 0;
+                set_time_limit(7200);
+                foreach ($sheetdata as $row) {
+                    if($i > 0){
+                        $nisn = $row[1];
+                        $laporan_wali = LaporanWali::find()->where(['siswa_id' => $row[1], 'semester_angkatan_id' =>
+                        $id])->one();
+                        $laporan_wali->prestasi = $row[3];
+                        $laporan_wali->absensi = $row[4];
+                        $laporan_wali->catatan = $row[5];
+                        $laporan_wali->fisik = $row[6];
+                        $laporan_wali->organisasi = $row[7];
+                        $laporan_wali->save();
+                    }
+                    $i++;
+                }
+
+                $semester_angkatan->excel = 1;
+                $semester_angkatan->save();
+
+                Yii::$app->session->setFlash('success', "Behasil Upload Excel");
+                return $this->actionIndexLaporan($id);
+            }
+
+            return $this->render('upload-template', [
+                'model' => $model
             ]);
         }else{
             return $this->redirect(['error/forbidden-error']);

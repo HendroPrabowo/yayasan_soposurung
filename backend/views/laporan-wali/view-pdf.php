@@ -27,6 +27,8 @@
 <h3 style="text-align: center;">LAPORAN KONDISI SISWA/I KELAS XI ANGKATAN XXVIII YASOP</h3>
 <h3 style="text-align: center; margin-top: 0px">
     <?php
+    $formatter = \Yii::$app->formatter;
+
     if($laporan_wali->semesterAngkatan->tahunAjaranSemester->semester == 'Ganjil'){
         echo 'Juli '.date("Y").' - Desember '.date("Y");
     }else{
@@ -65,19 +67,19 @@
     </tr>
     <tr>
         <td class="td" style="font-weight: bold;">Prestasi</td>
-        <td class="td"><?= $laporan_wali->prestasi ?></td>
+        <td class="td"><?= $formatter->asNtext($laporan_wali->prestasi) ?></td>
     </tr>
     <tr>
         <td class="td" style="font-weight: bold;">Absensi</td>
-        <td class="td"><?= $laporan_wali->absensi ?></td>
+        <td class="td"><?= $formatter->asNtext($laporan_wali->absensi) ?></td>
     </tr>
     <tr>
         <td class="td" style="font-weight: bold;">Catatan dari Konselor & Wali Angkatan</td>
-        <td class="td"><?= $laporan_wali->administrasi ?></td>
+        <td class="td"><?= $formatter->asNtext($laporan_wali->administrasi) ?></td>
     </tr>
     <tr>
         <td class="td" style="font-weight: bold;">Fisik</td>
-        <td class="td"><?= $laporan_wali->fisik ?></td>
+        <td class="td"><?= $formatter->asNtext($laporan_wali->fisik) ?></td>
     </tr>
     <tr>
         <td class="td" style="font-weight: bold;">Catatan Medis</td>
@@ -93,7 +95,7 @@
     </tr>
     <tr>
         <td class="td" style="font-weight: bold;">Organisasi</td>
-        <td class="td"><?= $laporan_wali->organisasi ?></td>
+        <td class="td"><?= $formatter->asNtext($laporan_wali->organisasi) ?></td>
     </tr>
     <tr>
         <td class="td" style="font-weight: bold;">Administrasi</td>

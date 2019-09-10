@@ -10,7 +10,9 @@ use Yii;
  * @property int $id
  * @property int $angkatan_id
  * @property int $tahun_ajaran_semester_id
+ * @property int $excel
  *
+ * @property LaporanWali[] $laporanWali
  * @property Angkatan $angkatan
  * @property TahunAjaranSemester $tahunAjaranSemester
  */
@@ -31,7 +33,7 @@ class SemesterAngkatan extends \yii\db\ActiveRecord
     {
         return [
             [['angkatan_id', 'tahun_ajaran_semester_id'], 'required'],
-            [['angkatan_id', 'tahun_ajaran_semester_id'], 'integer'],
+            [['angkatan_id', 'tahun_ajaran_semester_id', 'excel'], 'integer'],
             [['angkatan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Angkatan::className(), 'targetAttribute' => ['angkatan_id' => 'id']],
             [['tahun_ajaran_semester_id'], 'exist', 'skipOnError' => true, 'targetClass' => TahunAjaranSemester::className(), 'targetAttribute' => ['tahun_ajaran_semester_id' => 'id']],
         ];
@@ -46,7 +48,16 @@ class SemesterAngkatan extends \yii\db\ActiveRecord
             'id' => 'ID',
             'angkatan_id' => 'Angkatan ID',
             'tahun_ajaran_semester_id' => 'Tahun Ajaran Semester ID',
+            'excel' => 'Excel',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLaporanWali()
+    {
+        return $this->hasMany(LaporanWali::className(), ['semester_angkatan_id' => 'id']);
     }
 
     /**
