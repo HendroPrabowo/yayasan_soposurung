@@ -301,7 +301,7 @@ class LaporanWaliController extends Controller
     }
 
     public function actionIndexLaporan($id){
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wali angkatan')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wali angkatan') || Yii::$app->user->can('kepala asrama')) {
             $semester_angkatan = SemesterAngkatan::findOne($id);
             $dataProvider = new ActiveDataProvider([
                 'query' => LaporanWali::find()->where(['semester_angkatan_id' => $id]),
