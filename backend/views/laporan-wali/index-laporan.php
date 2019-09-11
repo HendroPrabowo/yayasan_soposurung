@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
 
     <?php
-    if(Yii::$app->user->can('admin') || Yii::$app->user->can('wali angkatan')){
+    if(Yii::$app->user->can('admin')){
         echo GridView::widget([
             'dataProvider' => $dataProvider,
             'columns' => [
@@ -66,15 +66,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'dataProvider' => $dataProvider,
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
-//            'id',
-//            'akademik',
-//            'prestasi',
-//            'absensi',
-//            'catatan',
-//            'fisik',
-//            'organisasi',
-//            'administrasi',
-//            'semester_angkatan_id',
                 'siswa_id',
                 [
                     'attribute' => 'Nama',
@@ -82,10 +73,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 [
                     'class' => 'yii\grid\ActionColumn',
-                    'template' => '{print}',
+                    'template' => '{print} {view}',
                     'buttons'=>[
                         'print' => function ($url, $model) {
                             return Html::a('<span class="glyphicon glyphicon-print"></span> Print', ['laporan-wali/print', 'id' => $model->id], ['class' => 'btn btn-primary btn-sm', 'target' => '_blank']);
+                        },
+                        'view' => function ($url, $model) {
+                            return Html::a('<span class="glyphicon glyphicon-eye-open"></span> View', ['laporan-wali/view', 'id' => $model->id], ['class' => 'btn btn-warning btn-sm']);
                         },
                     ],
                 ],

@@ -13,7 +13,7 @@ use Yii;
  *
  * @property Angkatan $angkatan
  * @property SemesterBulan $semesterBulan
- * @property BulanSiswa[] $bulanSiswas
+ * @property BulanSiswa[] $bulanSiswa
  */
 class BulanAngkatan extends \yii\db\ActiveRecord
 {
