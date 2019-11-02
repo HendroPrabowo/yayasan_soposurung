@@ -399,7 +399,10 @@ class PenilaianController extends Controller
     public function actionLaporanNilai($id){
         $kelas_mata_pelajaran = KelasMataPelajaran::find()->where(['id' => $id])->one();
 
-//        die();
+        if($kelas_mata_pelajaran->assignGuru == null){
+            Yii::$app->session->setFlash('danger', 'Guru Belum Di Assign ke MataPelajaran ini');
+            return $this->actionViewKomponenNilai($id);
+        }
 
         if(Yii::$app->user->can('admin') || Yii::$app->user->can('guru')) {
             $kelas_mata_pelajaran = KelasMataPelajaran::findOne($id);
