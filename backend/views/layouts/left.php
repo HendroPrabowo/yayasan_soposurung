@@ -149,6 +149,80 @@
                     $menuItems = [
                         ['label' => 'Bendahara', 'icon' => 'money', 'url' => ['semester-bulan/index']],
                     ];
+                }elseif($user->role == 'supervisor'){
+                    $menuItems = [
+                        [
+                            'label' => 'User',
+                            'icon' => 'address-book',
+                            'url' => '#',
+                            'items' => [
+                                ['label' => 'Semua User', 'icon' => 'user', 'url' => ['user/index']],
+                                ['label' => 'Guru', 'icon' => 'users', 'url' => ['guru/index']],
+                                ['label' => 'Wali Angkatan', 'icon' => 'users', 'url' => ['wali-angkatan/index']],
+                                ['label' => 'Kepala Asrama', 'icon' => 'users', 'url' => ['kepala-asrama/index']],
+                            ]
+                        ],
+                        ['label' => 'Data Siswa', 'icon' => 'user', 'url' => ['siswa/index']],
+                        ['label' => 'Semua Kelas', 'icon' => 'cog', 'url' => ['kelas-r/index']],
+                        ['label' => 'Semua Mata Pelajaran', 'icon' => 'book', 'url' => ['mata-pelajaran-r/index']],
+                        [
+                            'label' => 'Tahun Ajaran',
+                            'icon' => 'list-alt',
+                            'url' => '#',
+                            'items' => [
+                                ['label' => 'Tahun Ajaran', 'icon' => 'laptop', 'url' => ['tahun-ajaran-semester/index']],
+                                ['label' => 'List Assign Guru', 'icon' => 'users', 'url' => ['assign-guru/index']],
+                                ['label' => 'Assign Siswa', 'icon' => 'send', 'url' => ['kelas-siswa/index']],
+                                ['label' => 'Nilai Siswa', 'icon' => 'check', 'url' => ['siswa-nilai/index']],
+                            ]
+                        ],
+                        ['label' => 'Aturan Asrama', 'icon' => 'exclamation', 'url' => ['aturan-asrama/index']],
+                        ['label' => 'Kesehatan', 'icon' => 'heart', 'url' => ['kesehatan/index']],
+                        ['label' => 'Kedisiplinan', 'icon' => 'warning', 'url' => ['kedisiplinan/index']],
+                        [
+                            'label' => 'Security',
+                            'icon' => 'book',
+                            'url' => '#',
+                            'items' => [
+                                ['label' => 'Log Tamu', 'icon' => 'phone', 'url' => ['log-tamu/index']],
+                                ['label' => 'Barang Masuk', 'icon' => 'shopping-cart', 'url' => ['log-masuk-barang/index']],
+                                ['label' => 'Barang Keluar', 'icon' => 'shopping-cart', 'url' => ['log-keluar-barang/index']],
+                            ]
+                        ],
+                        [
+                            'label' => 'Penilaian',
+                            'icon' => 'pencil',
+                            'url' => '#',
+                            'items' => [
+                                ['label' => 'Komponen Nilai', 'icon' => 'print', 'url' => ['penilaian/index']],
+                            ]
+                        ],
+                        [
+                            'label' => 'Jurnal Piket',
+                            'icon' => 'cutlery',
+                            'url' => '#',
+                            'items' => [
+                                ['label' => 'Laporan Piket', 'icon' => 'inbox', 'url' => ['jurnal-laporan-piket/index']],
+                                ['label' => 'Apel Senam Pagi', 'icon' => 'inbox', 'url' => ['sw-senam-apl-pgi/index']],
+                                ['label' => 'Apel Makan Pagi', 'icon' => 'inbox', 'url' => ['sw-apl-mkn-pgi/index']],
+                                ['label' => 'Apel Pagi', 'icon' => 'inbox', 'url' => ['apl-pgi-kelas/index']],
+                                ['label' => 'Apel Makan Siang', 'icon' => 'inbox', 'url' => ['apl-mkn-siang/index']],
+                                ['label' => 'Apel Sore', 'icon' => 'inbox', 'url' => ['apl-sore/index']],
+                                ['label' => 'Apel Makan Malam', 'icon' => 'inbox', 'url' => ['apl-mkn-malam/index']],
+                                ['label' => 'Apel Malam', 'icon' => 'inbox', 'url' => ['apl-malam/index']],
+                            ]
+                        ],
+                        [
+                            'label' => 'Angkatan',
+                            'icon' => 'users    ',
+                            'url' => '#',
+                            'items' => [
+                                ['label' => 'Angkatan', 'icon' => 'users', 'url' => ['angkatan/index']],
+                                ['label' => 'Laporan Wali Angkatan', 'icon' => 'print', 'url' => ['laporan-wali/index']],
+                            ]
+                        ],
+                        ['label' => 'Bendahara', 'icon' => 'money', 'url' => ['semester-bulan/index']],
+                    ];
                 }
             }
         ?>

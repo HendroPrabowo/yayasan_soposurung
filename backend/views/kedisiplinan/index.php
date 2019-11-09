@@ -14,10 +14,12 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="kedisiplinan-index">
 
     <h3><?= Html::encode($this->title) ?></h3>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
-        <?= Html::a('Tambah Pelanggaran', ['create'], ['class' => 'btn btn-success']) ?>
+        <?php
+        if(!Yii::$app->user->can('supervisor')){
+            echo Html::a('Tambah Pelanggaran', ['create'], ['class' => 'btn btn-success']);
+        }
+        ?>
     </p>
 
     <?php
@@ -114,6 +116,50 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'class' => 'yii\grid\ActionColumn',
                     'template' => '{view} {update}'
+                ],
+            ],
+        ]);
+    }elseif(Yii::$app->user->can('supervisor')){
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+//            'id',
+//            'siswa_id',
+                [
+                    'attribute' => 'siswa',
+                    'value' => 'siswa.nama'
+                ],
+                [
+                    'attribute' => 'Jenis Pelanggaran',
+                    'value' => 'aturanAsrama.jenis_pelanggaran'
+                ],
+                [
+                    'attribute' => 'Kredit Point',
+                    'value' => 'aturanAsrama.point'
+                ],
+//            'aturan_asrama_id',
+                'keterangan:ntext',
+//            'tambah_ke_point',
+                [
+                    'attribute' => 'Tambah Point',
+                    'value' => function(\yii\base\Model $model){
+                        if($model->tambah_ke_point == 0){
+                            return "Tidak";
+                        }else if($model->tambah_ke_point == 1){
+                            return "Ya";
+                        }else{
+                            return "-----";
+                        }
+                    },
+                    'contentOptions' => function ($model, $key, $index, $column) {
+                        if($model->tambah_ke_point == 3){
+                            return ['class' => 'label label-danger center-block'];
+                        }else{
+                            return ['class' => 'label label-success center-block'];
+                        }
+                    },
                 ],
             ],
         ]);

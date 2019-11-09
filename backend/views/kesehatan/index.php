@@ -13,11 +13,12 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="kesehatan-index">
 
     <h3><?= Html::encode($this->title) ?></h3>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Tambah Laporan Kesehatan', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <?php
+    if(!Yii::$app->user->can('supervisor')){
+        echo Html::a('Tambah Laporan Kesehatan', ['create'], ['class' => 'btn btn-success']);
+    }
+    ?>
 
     <?php
     if(Yii::$app->user->can('admin')){
@@ -58,15 +59,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ],
         ]);
-    }else{
+    }elseif(Yii::$app->user->can('supervisor')){
         echo GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
-
-//            'id',
-//            'siswa_id',
                 [
                     'attribute' => 'NISN',
                     'value' => 'siswa_id'
@@ -76,15 +74,42 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value' => 'siswa.nama'
                 ],
                 'penyakit',
-//            'keterangan',
-//            'tahun_ajaran_semester_id',
                 [
                     'attribute' => 'Semester',
                     'value' => function($model){
                         return $model->tahunAjaranSemester->tahun_ajaran.' '.$model->tahunAjaranSemester->semester;
                     }
                 ],
-//            'tanggal',
+                'created_by',
+
+                [
+                    'attribute' => 'tanggal',
+                    'format' => ['date', 'php:d-M-Y']
+                ],
+            ],
+        ]);
+	}
+    else{
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                [
+                    'attribute' => 'NISN',
+                    'value' => 'siswa_id'
+                ],
+                [
+                    'attribute' => 'siswa',
+                    'value' => 'siswa.nama'
+                ],
+                'penyakit',
+                [
+                    'attribute' => 'Semester',
+                    'value' => function($model){
+                        return $model->tahunAjaranSemester->tahun_ajaran.' '.$model->tahunAjaranSemester->semester;
+                    }
+                ],
                 'created_by',
 
                 [

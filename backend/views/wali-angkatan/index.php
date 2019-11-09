@@ -14,29 +14,45 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h3><?= Html::encode($this->title) ?></h3>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-//        'filterModel' => $searchModel,
-        'options' => [
-            'style' => [
-                'width' => '500px',
-            ]
-        ],
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-//            'id',
-            [
-                'attribute' => 'Username',
-                'value' => 'user.username',
+    <?php
+    if(Yii::$app->user->can('supervisor')){
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'options' => [
+                'style' => [
+                    'width' => '500px',
+                ]
             ],
-            'nama',
-//            'user_id',
-
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {update}',
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                [
+                    'attribute' => 'Username',
+                    'value' => 'user.username',
+                ],
+                'nama',
             ],
-        ],
-    ]); ?>
+        ]);
+	}else{
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'options' => [
+                'style' => [
+                    'width' => '500px',
+                ]
+            ],
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                [
+                    'attribute' => 'Username',
+                    'value' => 'user.username',
+                ],
+                'nama',
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{view} {update}',
+                ],
+            ],
+        ]);
+	}
+    ?>
 </div>

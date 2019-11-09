@@ -14,21 +14,33 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h3><?= Html::encode($this->title) ?></h3>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-//            'id',
-            'no_induk_guru',
-            'username',
-            'nama',
-
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {update}',
+    <?php
+    if(Yii::$app->user->can('supervisor')){
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                'no_induk_guru',
+                'username',
+                'nama',
             ],
-        ],
-    ]); ?>
+        ]);
+    }else{
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                'no_induk_guru',
+                'username',
+                'nama',
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{view} {update}',
+                ],
+            ],
+        ]);
+    }
+    ?>
 </div>

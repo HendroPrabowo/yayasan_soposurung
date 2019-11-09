@@ -15,30 +15,49 @@ $this->params['breadcrumbs'][] = $this->title;
     <h3><?= Html::encode($this->title) ?></h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Tambah', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <?php
+    if(!Yii::$app->user->can('supervisor')){
+        echo Html::a('Tambah', ['create'], ['class' => 'btn btn-success']);
+    }
+    ?>
 
-    <?= GridView::widget([
-        'options' => [
-            'style' => [
-                'width' => '500px',
-                'margin-left' => '10px'
-            ]
-        ],
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-//            'id',
-            'kelas',
-
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'header' => 'Actions',
-                'headerOptions' => ['style' => 'color:black'],
+    <?php
+    if(Yii::$app->user->can('supervisor')){
+        echo GridView::widget([
+            'options' => [
+                'style' => [
+                    'width' => '500px',
+                    'margin-left' => '10px'
+                ]
             ],
-        ],
-    ]); ?>
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                'kelas',
+            ],
+        ]);
+	}else{
+        echo GridView::widget([
+            'options' => [
+                'style' => [
+                    'width' => '500px',
+                    'margin-left' => '10px'
+                ]
+            ],
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                'kelas',
+
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'header' => 'Actions',
+                    'headerOptions' => ['style' => 'color:black'],
+                ],
+            ],
+        ]);
+	}
+    ?>
 </div>

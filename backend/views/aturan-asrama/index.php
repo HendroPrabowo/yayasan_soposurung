@@ -16,11 +16,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Tambah Aturan Asrama', ['create'], ['class' => 'btn btn-success']) ?>
         <?php
-        if(!Yii::$app->user->can('pengawas')){
-            echo Html::a('Import Excel', ['import-excel'], ['class' => 'btn btn-primary']).'&nbsp';
-            echo Html::a('Download Template Excel', ['download-excel'], ['class' => 'btn btn-warning']);
+        if(!Yii::$app->user->can('supervisor')){
+            echo Html::a('Tambah Aturan Asrama', ['create'], ['class' => 'btn btn-success']). '&nbsp';
+            if(!Yii::$app->user->can('pengawas')){
+                echo Html::a('Import Excel', ['import-excel'], ['class' => 'btn btn-primary']).'&nbsp';
+                echo Html::a('Download Template Excel', ['download-excel'], ['class' => 'btn btn-warning']);
+            }
         }
         ?>
     </p>
@@ -44,7 +46,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ],
         ]);
-    }else{
+    }elseif(Yii::$app->user->can('supervisor')){
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                'jenis_pelanggaran',
+                'point',
+            ],
+        ]);
+	}
+    else{
         echo GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,

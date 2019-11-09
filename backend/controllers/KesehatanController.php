@@ -55,7 +55,7 @@ class KesehatanController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('perawat')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('perawat') || Yii::$app->user->can('supervisor')) {
             $searchModel = new KesehatanSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

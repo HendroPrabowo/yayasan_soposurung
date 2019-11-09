@@ -16,7 +16,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Tambah Log Barang Masuk', ['create'], ['class' => 'btn btn-success']) ?>
+        <?php
+        if(!Yii::$app->user->can('supervisor')){
+            echo Html::a('Tambah Log Barang Masuk', ['create'], ['class' => 'btn btn-success']);
+        }
+        ?>
     </p>
 
     <?php
@@ -99,6 +103,27 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ],
         ]
+        );
+    }elseif (Yii::$app->user->can('supervisor')){
+        echo GridView::widget([
+                'dataProvider' => $dataProvider,
+                'filterModel' => $searchModel,
+                'columns' => [
+                    ['class' => 'yii\grid\SerialColumn'],
+                    'nama_barang',
+                    'vendor',
+                    'jumlah',
+                    [
+                        'attribute' => 'Created',
+                        'value' => 'createdBy.username'
+                    ],
+                    [
+                        'attribute' => 'tanggal',
+                        'format' => ['date', 'php:d-M-Y']
+                    ],
+                    'keterangan:ntext',
+                ],
+            ]
         );
     }
     ?>

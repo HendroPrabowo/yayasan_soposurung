@@ -15,20 +15,33 @@ $this->params['breadcrumbs'][] = $this->title;
     <h3><?= Html::encode($this->title) ?></h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Tambah Mata Pelajaran', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <?php
+    if(!Yii::$app->user->can('supervisor')){
+        echo Html::a('Tambah Mata Pelajaran', ['create'], ['class' => 'btn btn-success']);
+    }
+    ?>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+    <?php
+    if(Yii::$app->user->can('supervisor')){
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                'pelajaran',
+            ],
+        ]);
+	}else{
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                'pelajaran',
 
-//            'id',
-            'pelajaran',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+                ['class' => 'yii\grid\ActionColumn'],
+            ],
+        ]);
+	}
+    ?>
 </div>

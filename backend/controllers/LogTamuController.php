@@ -54,7 +54,7 @@ class LogTamuController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('security')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('security') || Yii::$app->user->can('supervisor')) {
             $searchModel = new LogTamuSearch();
 
             $dataProvider = new ActiveDataProvider([

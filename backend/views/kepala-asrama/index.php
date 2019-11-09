@@ -13,23 +13,33 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="kepala-asrama-index">
 
     <h3><?= Html::encode($this->title) ?></h3>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-//        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-//            'id',
-            [
-                'attribute' => 'Username',
-                'value' => 'user.username',
+    <?php
+    if(Yii::$app->user->can('supervisor')){
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                [
+                    'attribute' => 'Username',
+                    'value' => 'user.username',
+                ],
+                'nama',
             ],
-            'nama',
-//            'user_id',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+        ]);
+	}else{
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                [
+                    'attribute' => 'Username',
+                    'value' => 'user.username',
+                ],
+                'nama',
+                ['class' => 'yii\grid\ActionColumn'],
+            ],
+        ]);
+	}
+    ?>
 </div>

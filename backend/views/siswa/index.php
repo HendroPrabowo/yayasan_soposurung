@@ -3,24 +3,22 @@
 use yii\helpers\Html;
 use yii\bootstrap\Tabs;
 
-/* @var $this yii\web\View */
-/* @var $searchModel app\models\search\SiswaSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
 $this->title = 'Siswa';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="siswa-index">
 
     <h3><?= Html::encode($this->title) ?></h3>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Tambah Siswa', ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('Import Excel', ['import-excel'], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Download Template Excel', ['download-excel'], ['class' => 'btn btn-warning']) ?>
+        <?php
+        if(!Yii::$app->user->can('supervisor')){
+            echo Html::a('Tambah Siswa', ['create'], ['class' => 'btn btn-success']) . '&nbsp';
+            echo Html::a('Import Excel', ['import-excel'], ['class' => 'btn btn-primary']) . '&nbsp';
+            echo Html::a('Download Template Excel', ['download-excel'], ['class' => 'btn btn-warning']) . '&nbsp';
+        }
+        ?>
     </p>
-
 
     <?= Tabs::widget([
         'items' => [

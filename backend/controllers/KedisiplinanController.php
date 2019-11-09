@@ -55,7 +55,7 @@ class KedisiplinanController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan') || Yii::$app->user->can('pengawas')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan') || Yii::$app->user->can('pengawas') || Yii::$app->user->can('supervisor')) {
             $searchModel = new KedisiplinanSearch();
 //            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

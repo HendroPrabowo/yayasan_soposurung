@@ -55,7 +55,7 @@ class AturanAsramaController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wakepas kesiswaan') || Yii::$app->user->can('supervisor')) {
             $searchModel = new AturanAsramaSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

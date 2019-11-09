@@ -54,7 +54,7 @@ class LogMasukBarangController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('security')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('security') || Yii::$app->user->can('supervisor')) {
             $searchModel = new LogMasukBarangSearch();
 //            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $dataProvider = new ActiveDataProvider([

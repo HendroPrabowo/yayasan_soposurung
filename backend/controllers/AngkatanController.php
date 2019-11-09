@@ -52,7 +52,7 @@ class AngkatanController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('supervisor')) {
             $searchModel = new AngkatanSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
