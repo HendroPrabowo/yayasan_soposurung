@@ -35,7 +35,6 @@
                                 ['label' => 'Tahun Ajaran', 'icon' => 'laptop', 'url' => ['tahun-ajaran-semester/index']],
                                 ['label' => 'List Assign Guru', 'icon' => 'users', 'url' => ['assign-guru/index']],
                                 ['label' => 'Assign Siswa', 'icon' => 'send', 'url' => ['kelas-siswa/index']],
-                                ['label' => 'Nilai Siswa', 'icon' => 'check', 'url' => ['siswa-nilai/index']],
                             ]
                         ],
                         ['label' => 'Aturan Asrama', 'icon' => 'exclamation', 'url' => ['aturan-asrama/index']],
@@ -173,7 +172,6 @@
                                 ['label' => 'Tahun Ajaran', 'icon' => 'laptop', 'url' => ['tahun-ajaran-semester/index']],
                                 ['label' => 'List Assign Guru', 'icon' => 'users', 'url' => ['assign-guru/index']],
                                 ['label' => 'Assign Siswa', 'icon' => 'send', 'url' => ['kelas-siswa/index']],
-                                ['label' => 'Nilai Siswa', 'icon' => 'check', 'url' => ['siswa-nilai/index']],
                             ]
                         ],
                         ['label' => 'Aturan Asrama', 'icon' => 'exclamation', 'url' => ['aturan-asrama/index']],

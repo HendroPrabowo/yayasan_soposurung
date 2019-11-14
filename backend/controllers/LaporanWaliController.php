@@ -65,7 +65,7 @@ class LaporanWaliController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('kepala asrama')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('kepala asrama') || Yii::$app->user->can('supervisor')) {
             $dataProvider = new ActiveDataProvider([
                 'query' => SemesterAngkatan::find()->orderBy('id ASC'),
                 'pagination' => [
@@ -90,7 +90,7 @@ class LaporanWaliController extends Controller
      */
     public function actionView($id)
     {
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wali angkatan')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wali angkatan') || Yii::$app->user->can('supervisor')) {
             return $this->render('view', [
                 'model' => $this->findModel($id),
             ]);
@@ -306,7 +306,7 @@ class LaporanWaliController extends Controller
     }
 
     public function actionIndexLaporan($id){
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wali angkatan') || Yii::$app->user->can('kepala asrama')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('wali angkatan') || Yii::$app->user->can('kepala asrama') || Yii::$app->user->can('supervisor')) {
             $semester_angkatan = SemesterAngkatan::findOne($id);
             $dataProvider = new ActiveDataProvider([
                 'query' => LaporanWali::find()->where(['semester_angkatan_id' => $id]),

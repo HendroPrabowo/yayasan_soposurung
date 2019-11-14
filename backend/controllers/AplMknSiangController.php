@@ -53,7 +53,7 @@ class AplMknSiangController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('piket')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('piket') || Yii::$app->user->can('supervisor')) {
             $dataProvider = $dataProvider = new ActiveDataProvider([
                 'query' => JurnalLaporanPiket::find()->orderBy('tanggal DESC'),
                 'pagination' => [
@@ -229,7 +229,7 @@ class AplMknSiangController extends Controller
     }
 
     public function actionIndexApel($id){
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('piket')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('piket') || Yii::$app->user->can('supervisor')) {
             $jurnal_laporan_piket = JurnalLaporanPiket::findOne($id);
             $apel_makan_siang = AplMknSiang::find()->where(['jurnal_laporan_id' => $id])->all();
 

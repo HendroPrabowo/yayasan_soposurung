@@ -23,48 +23,69 @@ elseif($tahun_ajaran_aktif->tahunAjaranKelas == null){
 //        echo Html::a($value->kelas->kelas, ['kelas-mata-pelajaran/view-mata-pelajaran', 'id' => $value->id])."<br>";
 //    }
 //    echo '<br>';
-    echo Html::a('Ubah Kelas', ['ubah-assign-kelas', 'id' => $tahun_ajaran_aktif->id], ['class' => 'btn btn-danger']);
 
-    echo GridView::widget([
-        'dataProvider' => $tahun_ajaran_kelas,
-        'options' => [
-            'style' => [
-                'width' => '400px',
-                'margin-top' => '20px'
-            ]
-        ],
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+    if(Yii::$app->user->can('supervisor')){
+        echo GridView::widget([
+            'dataProvider' => $tahun_ajaran_kelas,
+            'options' => [
+                'style' => [
+                    'width' => '400px',
+                    'margin-top' => '20px'
+                ]
+            ],
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
 //            'id',
 //            'kelas_id',
-            [
-                'attribute' => 'Kelas',
-                'value' => 'kelas.kelas'
-            ],
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {delete}',
-                'buttons'=>[
-                    'view' => function ($url, $model, $key) {
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span> Mata Pelajaran', ['kelas-mata-pelajaran/view-mata-pelajaran', 'id' => $model->id]);
-                    },
-                    'delete' => function ($url, $model, $key) {
-                        return Html::a('', ['tahun-ajaran-semester/delete-kelas', 'id' => $model->id], [
-                            'class' => 'glyphicon glyphicon-trash',
-                            'data' => [
-                                'confirm' => 'Are you sure you want to delete this item?',
-                                'method' => 'post',
-                            ],
-                            'style' => [
-                                'margin-left' => '10px',
-                            ],
-                        ]);
-                    },
+                [
+                    'attribute' => 'Kelas',
+                    'value' => 'kelas.kelas'
                 ],
             ],
-        ],
-    ]);
+        ]);
+    }else{
+        echo Html::a('Ubah Kelas', ['ubah-assign-kelas', 'id' => $tahun_ajaran_aktif->id], ['class' => 'btn btn-danger']);
 
+        echo GridView::widget([
+            'dataProvider' => $tahun_ajaran_kelas,
+            'options' => [
+                'style' => [
+                    'width' => '400px',
+                    'margin-top' => '20px'
+                ]
+            ],
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+//            'id',
+//            'kelas_id',
+                [
+                    'attribute' => 'Kelas',
+                    'value' => 'kelas.kelas'
+                ],
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{view} {delete}',
+                    'buttons'=>[
+                        'view' => function ($url, $model, $key) {
+                            return Html::a('<span class="glyphicon glyphicon-eye-open"></span> Mata Pelajaran', ['kelas-mata-pelajaran/view-mata-pelajaran', 'id' => $model->id]);
+                        },
+                        'delete' => function ($url, $model, $key) {
+                            return Html::a('', ['tahun-ajaran-semester/delete-kelas', 'id' => $model->id], [
+                                'class' => 'glyphicon glyphicon-trash',
+                                'data' => [
+                                    'confirm' => 'Are you sure you want to delete this item?',
+                                    'method' => 'post',
+                                ],
+                                'style' => [
+                                    'margin-left' => '10px',
+                                ],
+                            ]);
+                        },
+                    ],
+                ],
+            ],
+        ]);
+    }
 }
 
 ?>

@@ -30,30 +30,32 @@ if($user->role == 'admin'){
         if($kelas_mata_pelajaran->tahunAjaranKelas->jumlahSiswa == 0){
             echo 'Siswa Belum Di Assign Ke Kelas Ini';
         }else{
-            echo Html::a('Tambah Komponen Nilai', ['komponen-nilai/index', 'id' => $kelas_mata_pelajaran->id], ['class' => 'btn btn-primary']).'&nbsp';
-            echo Html::a('Laporan Nilai Siswa', ['penilaian/laporan-nilai', 'id' => $kelas_mata_pelajaran->id], ['class' => 'btn btn-warning', 'target' => '_blank']);
-            echo GridView::widget([
-                'dataProvider' => $dataProvider,
-                'options' => [
-                    'style' => [
-                        'width' => '500px',
-                        'margin-top' => '20px'
-                    ]
-                ],
-                'columns' => [
-                    ['class' => 'yii\grid\SerialColumn'],
-                    'komponen_nilai',
-                    [
-                        'class' => 'yii\grid\ActionColumn',
-                        'template' => '{penilaian}',
-                        'buttons'=>[
-                            'penilaian'=>function ($url, $model) {
-                                return Html::a('<span class="glyphicon glyphicon-pencil"></span> Nilai', ['penilaian/view-penilaian', 'id' => $model->id]);
-                            },
+            if(!Yii::$app->user->can('supervisor')){
+                echo Html::a('Tambah Komponen Nilai', ['komponen-nilai/index', 'id' => $kelas_mata_pelajaran->id], ['class' => 'btn btn-primary']).'&nbsp';
+                echo Html::a('Laporan Nilai Siswa', ['penilaian/laporan-nilai', 'id' => $kelas_mata_pelajaran->id], ['class' => 'btn btn-warning', 'target' => '_blank']);
+                echo GridView::widget([
+                    'dataProvider' => $dataProvider,
+                    'options' => [
+                        'style' => [
+                            'width' => '500px',
+                            'margin-top' => '20px'
+                        ]
+                    ],
+                    'columns' => [
+                        ['class' => 'yii\grid\SerialColumn'],
+                        'komponen_nilai',
+                        [
+                            'class' => 'yii\grid\ActionColumn',
+                            'template' => '{penilaian}',
+                            'buttons'=>[
+                                'penilaian'=>function ($url, $model) {
+                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span> Nilai', ['penilaian/view-penilaian', 'id' => $model->id]);
+                                },
+                            ],
                         ],
                     ],
-                ],
-            ]);
+                ]);
+            }
         }
      ?>
 

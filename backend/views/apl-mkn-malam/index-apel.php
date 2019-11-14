@@ -18,7 +18,9 @@ $this->params['breadcrumbs'][] = $this->title;
     if(count($apel_makan_malam) != 0){
         echo 'Apel Makan Malam Sudah Dibuat. Silahkan hubungi Admin Untuk Mengubah';
     }else{
-        echo Html::a('Isi Apel Makan Malam', ['apl-mkn-malam/create', 'id' => $jurnal_laporan_piket->id], ['class' => 'btn btn-success']);
+        if(!Yii::$app->user->can('supervisor')){
+            echo Html::a('Isi Apel Makan Malam', ['apl-mkn-malam/create', 'id' => $jurnal_laporan_piket->id], ['class' => 'btn btn-success']);
+        }
     }
     ?>
 

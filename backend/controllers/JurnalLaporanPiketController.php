@@ -53,7 +53,7 @@ class JurnalLaporanPiketController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('piket') || Yii::$app->user->can('kepala asrama')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('piket') || Yii::$app->user->can('kepala asrama') || Yii::$app->user->can('supervisor')) {
             $searchModel = new JurnalLaporanPiketSearch();
             $dataProvider = new ActiveDataProvider([
                 'query' => JurnalLaporanPiket::find()->orderBy('id DESC'),

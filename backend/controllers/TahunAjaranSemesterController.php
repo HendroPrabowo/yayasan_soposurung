@@ -56,7 +56,7 @@ class TahunAjaranSemesterController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('supervisor')) {
             $searchModel = new TahunAjaranSemesterSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $tahun_ajaran_aktif = TahunAjaranSemester::findOne(['is_active' => 1]);

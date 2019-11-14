@@ -57,7 +57,7 @@ class KelasSiswaController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('supervisor')) {
             $searchModel = new KelasSiswaSearch();
 //            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $tahun_ajaran_semester_aktif = TahunAjaranSemester::find()->where(['is_active' => 1])->one();

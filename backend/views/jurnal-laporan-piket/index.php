@@ -13,11 +13,11 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="jurnal-laporan-piket-index">
 
     <h3><?= Html::encode($this->title) ?></h3>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::a('Tambah Jurnal Laporan Piket', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <?php
+    if(!Yii::$app->user->can('supervisor')){
+        echo Html::a('Tambah Jurnal Laporan Piket', ['create'], ['class' => 'btn btn-success']);
+    }
+    ?>
 
     <?php
     if(Yii::$app->user->can('admin')){
@@ -84,6 +84,22 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                     ],
                 ],
+            ],
+        ]);
+    }elseif (Yii::$app->user->can('supervisor')){
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+
+//            'id',
+                'tanggal',
+//            'user_id',
+                'piket1',
+                'piket2',
+                'wakil_piket1',
+                'wakil_piket2',
             ],
         ]);
     }

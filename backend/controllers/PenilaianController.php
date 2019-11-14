@@ -66,7 +66,7 @@ class PenilaianController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('supervisor')) {
             // Cek tahun ajaran aktif untuk mengambil kelas yang ada di tahun ajaran tersebut
             $tahun_ajaran_aktif = TahunAjaranSemester::find()->where(['is_active' => 1])->one();
 
@@ -173,7 +173,7 @@ class PenilaianController extends Controller
 
     public function actionViewMataPelajaran($id)
     {
-        if(Yii::$app->user->can('admin')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('supervisor')) {
             $tahun_ajaran_kelas = TahunAjaranKelas::findOne($id);
             $kelas_mata_pelajaran = KelasMataPelajaran::find()->where(['tahun_ajaran_kelas_id' => $id])->all();
 
@@ -196,7 +196,7 @@ class PenilaianController extends Controller
     }
 
     public function actionViewKomponenNilai($id){
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('guru')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('guru') || Yii::$app->user->can('supervisor')) {
             $kelas_mata_pelajaran = KelasMataPelajaran::findOne($id);
 
             $user = User::find()->where(['id' => Yii::$app->user->id])->one();
