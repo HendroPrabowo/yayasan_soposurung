@@ -11,8 +11,12 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="bulan-angkatan-index">
     <h3>List Pembayaran Angkatan <?= $bulan_angkatan->angkatan->angkatan ?>, Bulan : <?= $bulan_angkatan->semesterBulan->bulan ?></h3>
 
-    <?= Html::a('<span class="glyphicon glyphicon-cloud-download"></span> Download Template', ['bulan-angkatan/download-template', 'id' => $bulan_angkatan->id], ['class' => 'btn btn-primary']) ?>
-    <?= Html::a('<span class="glyphicon glyphicon-cloud-upload"></span> Upload Template', ['bulan-angkatan/upload-template', 'id' => $bulan_angkatan->id], ['class' => 'btn btn-success']) ?>
+    <?php
+    if(!Yii::$app->user->can('supervisor')){
+        echo Html::a('<span class="glyphicon glyphicon-cloud-download"></span> Download Template', ['bulan-angkatan/download-template', 'id' => $bulan_angkatan->id], ['class' => 'btn btn-primary']).'&nbsp';
+        echo Html::a('<span class="glyphicon glyphicon-cloud-upload"></span> Upload Template', ['bulan-angkatan/upload-template', 'id' => $bulan_angkatan->id], ['class' => 'btn btn-success']);
+    }
+    ?>
 
     <table id="example" class="table table-bordered table-bordered table-hover">
         <thead>
@@ -23,7 +27,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <th>Kode Briva</th>
         <th>Jumlah Disetor</th>
         <th>Lunas</th>
-        <th>Action</th>
+        <?php
+        if(!Yii::$app->user->can('supervisor')){
+            echo '<th>Action</th>';
+        }
+        ?>
         </thead>
         <tbody>
         <?php
@@ -41,7 +49,9 @@ $this->params['breadcrumbs'][] = $this->title;
             }else{
                 echo '<td>Belum Lunas</td>';
             }
-            echo '<td><a href="update/?id='.$value->id.'" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-pencil"></span></a></td>';
+            if(!Yii::$app->user->can('supervisor')){
+                echo '<td><a href="update/?id='.$value->id.'" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-pencil"></span></a></td>';
+            }
             echo '</tr>';
             $i++;
         }

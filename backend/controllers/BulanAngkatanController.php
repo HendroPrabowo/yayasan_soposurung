@@ -63,7 +63,7 @@ class BulanAngkatanController extends Controller
      */
     public function actionIndex($id)
     {
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('bendahara')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('bendahara') || Yii::$app->user->can('supervisor')) {
             $searchModel = new BulanAngkatanSearch();
             $semester_bulan = SemesterBulan::findOne($id);
             $angkatan = Angkatan::find()->all();
@@ -172,7 +172,7 @@ class BulanAngkatanController extends Controller
     }
 
     public function actionIndexAngkatan($id){
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('bendahara')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('bendahara') || Yii::$app->user->can('supervisor')) {
             $bulan_angkatan = BulanAngkatan::findOne($id);
             $bulan_siswa = $bulan_angkatan->bulanSiswa;
 

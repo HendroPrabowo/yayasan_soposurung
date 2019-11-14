@@ -53,7 +53,7 @@ class SemesterBulanController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->can('admin') || Yii::$app->user->can('bendahara')) {
+        if(Yii::$app->user->can('admin') || Yii::$app->user->can('bendahara') || Yii::$app->user->can('supervisor')) {
             $searchModel = new SemesterBulanSearch();
             $tahun_ajaran_aktif = TahunAjaranSemester::find()->where(['is_active' => 1])->one();
 

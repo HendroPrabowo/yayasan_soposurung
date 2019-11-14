@@ -18,26 +18,28 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h3>Pembayaran Bulan : <?= $semester_bulan->bulan ?> <b><?= $semester_bulan->tahunAjaranSemester->tahun_ajaran ?></b> Semester : <?= $semester_bulan->tahunAjaranSemester->semester ?></h3>
 
-    <div class="panel panel-primary">
-        <div class="panel-heading">Assign Angkatan</div>
-        <div class="panel-body">
-            <form action="create?id=<?= $semester_bulan->id ?>" method="post">
-                <input type='hidden' name='<?= Yii::$app->request->csrfParam ?>' value='<?= Yii::$app->request->getCsrfToken()?>'>
-                <div class="form-group">
-                    <label>Angkatan</label>
-                    <select name="angkatan" class="form-control" required>
-                        <option value="">Pilih Satu</option>
-                        <?php
-                        foreach ($angkatan as $value){
-                            echo '<option value="'.$value->id.'">'.$value->angkatan.'</option>';
-                        }
-                        ?>
-                    </select>
-                </div>
-                <button class="btn btn-success" type="submit">Tambah Angkatan</button>
-            </form>
-        </div>
-    </div>
+    <?php
+    if(!Yii::$app->user->can('supervisor')){
+        echo '<div class="panel panel-primary">';
+        echo '<div class="panel-heading">Assign Angkatan</div>';
+        echo '<div class="panel-body">';
+        echo '<form action="create?id='.$semester_bulan->id.'" method="post">';
+        echo '<input type="hidden" name="'.Yii::$app->request->csrfParam.'" value="'.Yii::$app->request->getCsrfToken().'">';
+        echo '<div class="form-group">';
+        echo '<label>Angkatan</label>';
+        echo '<select name="angkatan" class="form-control" required>';
+        echo '<option value="">Pilih Satu</option>';
+            foreach ($angkatan as $value){
+                echo '<option value="'.$value->id.'">'.$value->angkatan.'</option>';
+            }
+        echo '</select>';
+        echo '</div>';
+        echo '<button class="btn btn-success" type="submit">Tambah Angkatan</button>';
+        echo '</form>';
+        echo '</div>';
+        echo '</div>';
+    }
+    ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
