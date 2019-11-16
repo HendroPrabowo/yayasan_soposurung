@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use app\models\TahunAjaranSemester;
 use app\models\User;
+use Mpdf\Mpdf;
 use Yii;
 use app\models\Kesehatan;
 use app\models\search\KesehatanSearch;
@@ -196,5 +197,49 @@ class KesehatanController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionPrintLaporan(){
+        $kesehatan_all = array();
+        $date_all = array();
+        $start = Yii::$app->request->post('start');
+        $end = Yii::$app->request->post('end');
+        $kesehatan = Kesehatan::find()->all();
+        // Validate date end and date start
+        $date_start = strtotime($start);
+        $date_end = strtotime($end);
+        if($date_end <= $date_start){
+            Yii::$app->session->setFlash('danger', "Tanggal Akhir tidak boleh lebih kecil dari Tanggal Awal");
+            return $this->actionIndex();
+        }
+        // Get range day
+        $secs = $date_end - $date_start;
+        $range = $secs / 86400;
+        $date_all[] = $end;
+        $end_temp = $end;
+        for($i=0;$i<=$range;$i++){
+            $end_temp = date('Y-m-d', strtotime('-1 days', strtotime($end_temp)));
+            $date_all[] = $end_temp;
+        }
+        foreach ($kesehatan as $value){
+            $waktu = date('Y-m-d', strtotime($value->tanggal));
+            if(in_array($waktu, $date_all)){
+                $kesehatan_all[] = $value;
+            }
+        }
+
+        $pdf = $this->renderPartial('view-pdf', [
+            'start' => $start,
+            'end' => $end,
+            'kesehatan_all' => $kesehatan_all,
+        ]);
+
+        $mpdf = new Mpdf([
+            'format' => 'A4',
+            'orientation' => 'L',
+        ]);
+
+        $mpdf->WriteHTML($pdf);
+        $mpdf->Output();
     }
 }

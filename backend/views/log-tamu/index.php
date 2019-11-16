@@ -45,46 +45,8 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>';
-        GridView::widget([
-            'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
-            'formatter' => [
-                'class' => 'yii\i18n\Formatter',
-                'nullDisplay' => '-',
-            ],
-            'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
 
-//            'id',
-                'nama_tamu',
-                'tujuan_dan_keperluan:ntext',
-//            'waktu_masuk',
-                [
-                    'attribute' => 'waktu_masuk',
-                    'format' => ['date', 'php:d-M-Y H:i:s']
-                ],
-//            'waktu_keluar',
-                [
-                    'attribute' => 'waktu_keluar',
-                    'format' => ['date', 'php:d-M-Y H:i:s']
-                ],
-//            'user_id',
-                [
-                    'attribute' => 'User',
-                    'value' => 'user.username'
-                ],
-                [
-                    'class' => 'yii\grid\ActionColumn',
-                    'template' => '{view} {update} {delete} {keluar}',
-                    'buttons'=>[
-                        'keluar' => function ($url, $model) {
-                            return Html::a('<z style="color: red;"><span class="glyphicon glyphicon-log-out"></span>Keluar</z>', ['log-tamu/keluar', 'id' => $model->id]);
-                        },
-                    ],
-                ],
-            ],
-        ]);
-
+        echo '<table class="table-responsive">';
         echo GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
@@ -124,6 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ],
         ]);
+        echo '</table>';
     }elseif (Yii::$app->user->can('security')){
         echo GridView::widget([
             'dataProvider' => $dataProvider,
@@ -191,9 +154,5 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]);
 	}
-    ?>
-
-    <?php
-
     ?>
 </div>

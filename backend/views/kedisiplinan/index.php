@@ -24,6 +24,30 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php
     if(Yii::$app->user->can('pengawas')){
+        echo '<div class="row" style="margin-top: 10px">
+        <div class="col-md-5">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <b>Print Laporan</b>
+                </div>
+                <div class="panel-body">
+                    <form action="'.\yii\helpers\Url::to(['print-laporan']).'" method="post" target="_blank">
+                        <input type="hidden" name="'.Yii::$app->request->csrfParam.'" value="'.Yii::$app->request->getCsrfToken().'">
+                        <div class="form-group">
+                            <label>Tanggal Awal</label>
+                            <input type="date" name="start" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Tanggal Akhir</label>
+                            <input type="date" name="end" class="form-control" required>
+                        </div>
+                        <input type="submit" class="btn btn-success" value="Submit">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>';
+        echo '<table class="table-responsive">';
         echo GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
@@ -45,6 +69,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
 //            'aturan_asrama_id',
                 'keterangan:ntext',
+                [
+                    'attribute' => 'tanggal',
+                    'format' => ['date', 'php:d-M-Y']
+                ],
 //            'tambah_ke_point',
                 [
                     'attribute' => 'Tambah Point',
@@ -71,7 +99,32 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ],
         ]);
+        echo '</table>';
     }elseif(Yii::$app->user->can('wakepas kesiswaan')){
+        echo '<div class="row" style="margin-top: 10px">
+        <div class="col-md-5">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <b>Print Laporan</b>
+                </div>
+                <div class="panel-body">
+                    <form action="'.\yii\helpers\Url::to(['print-laporan']).'" method="post" target="_blank">
+                        <input type="hidden" name="'.Yii::$app->request->csrfParam.'" value="'.Yii::$app->request->getCsrfToken().'">
+                        <div class="form-group">
+                            <label>Tanggal Awal</label>
+                            <input type="date" name="start" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Tanggal Akhir</label>
+                            <input type="date" name="end" class="form-control" required>
+                        </div>
+                        <input type="submit" class="btn btn-success" value="Submit">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>';
+        echo '<table class="table-responsive">';
         echo GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
@@ -93,6 +146,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
 //            'aturan_asrama_id',
                 'keterangan:ntext',
+                [
+                    'attribute' => 'tanggal',
+                    'format' => ['date', 'php:d-M-Y']
+                ],
 //            'tambah_ke_point',
                 [
                     'attribute' => 'Tambah Point',
@@ -119,7 +176,32 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ],
         ]);
+        echo '</table>';
     }elseif(Yii::$app->user->can('supervisor')){
+        echo '<div class="row" style="margin-top: 10px">
+        <div class="col-md-5">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <b>Print Laporan</b>
+                </div>
+                <div class="panel-body">
+                    <form action="'.\yii\helpers\Url::to(['print-laporan']).'" method="post" target="_blank">
+                        <input type="hidden" name="'.Yii::$app->request->csrfParam.'" value="'.Yii::$app->request->getCsrfToken().'">
+                        <div class="form-group">
+                            <label>Tanggal Awal</label>
+                            <input type="date" name="start" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Tanggal Akhir</label>
+                            <input type="date" name="end" class="form-control" required>
+                        </div>
+                        <input type="submit" class="btn btn-success" value="Submit">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>';
+        echo '<table class="table-responsive">';
         echo GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
@@ -141,6 +223,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
 //            'aturan_asrama_id',
                 'keterangan:ntext',
+                [
+                    'attribute' => 'tanggal',
+                    'format' => ['date', 'php:d-M-Y']
+                ],
 //            'tambah_ke_point',
                 [
                     'attribute' => 'Tambah Point',
@@ -163,16 +249,38 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ],
         ]);
+        echo '</table>';
     }
     else{
+        echo '<div class="row" style="margin-top: 10px">
+        <div class="col-md-5">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <b>Print Laporan</b>
+                </div>
+                <div class="panel-body">
+                    <form action="'.\yii\helpers\Url::to(['print-laporan']).'" method="post" target="_blank">
+                        <input type="hidden" name="'.Yii::$app->request->csrfParam.'" value="'.Yii::$app->request->getCsrfToken().'">
+                        <div class="form-group">
+                            <label>Tanggal Awal</label>
+                            <input type="date" name="start" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Tanggal Akhir</label>
+                            <input type="date" name="end" class="form-control" required>
+                        </div>
+                        <input type="submit" class="btn btn-success" value="Submit">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>';
+        echo '<table class="table-responsive">';
         echo GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
-
-//            'id',
-//            'siswa_id',
                 [
                     'attribute' => 'siswa',
                     'value' => 'siswa.nama'
@@ -185,9 +293,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'Kredit Point',
                     'value' => 'aturanAsrama.point'
                 ],
-//            'aturan_asrama_id',
                 'keterangan:ntext',
-//            'tambah_ke_point',
+                [
+                    'attribute' => 'tanggal',
+                    'format' => ['date', 'php:d-M-Y']
+                ],
                 [
                     'attribute' => 'Tambah Point',
                     'value' => function(\yii\base\Model $model){
@@ -211,6 +321,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ['class' => 'yii\grid\ActionColumn'],
             ],
         ]);
+        echo '</table>';
     }
     ?>
 </div>

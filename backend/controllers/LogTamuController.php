@@ -56,6 +56,7 @@ class LogTamuController extends Controller
     {
         if(Yii::$app->user->can('admin') || Yii::$app->user->can('security') || Yii::$app->user->can('supervisor')) {
             $searchModel = new LogTamuSearch();
+            $semua_log_tamu = LogTamu::find()->all();
 
             $dataProvider = new ActiveDataProvider([
                 'query' => LogTamu::find()->orderBy('id DESC'),
@@ -64,6 +65,7 @@ class LogTamuController extends Controller
             return $this->render('index', [
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
+                'semua_log_tamu' => $semua_log_tamu,
             ]);
         }else{
             return $this->redirect(['error/forbidden-error']);
@@ -198,6 +200,9 @@ class LogTamuController extends Controller
             $date_all[] = $tanggal;
             $tanggal = date('Y-m-d', strtotime('-1 days', strtotime($tanggal)));
         }
+
+        var_dump($date_all);
+        die();
 
         foreach ($semua_log_tamu as $value){
             $waktu = date('Y-m-d', strtotime($value->waktu_masuk));

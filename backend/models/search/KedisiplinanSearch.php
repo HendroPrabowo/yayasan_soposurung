@@ -18,7 +18,7 @@ class KedisiplinanSearch extends Kedisiplinan
     {
         return [
             [['id', 'aturan_asrama_id', 'tambah_ke_point'], 'integer'],
-            [['siswa_id', 'keterangan'], 'safe'],
+            [['siswa_id', 'keterangan', 'tanggal'], 'safe'],
         ];
     }
 
@@ -61,6 +61,7 @@ class KedisiplinanSearch extends Kedisiplinan
             'id' => $this->id,
             'aturan_asrama_id' => $this->aturan_asrama_id,
             'tambah_ke_point' => $this->tambah_ke_point,
+            'tanggal' => $this->tanggal,
         ]);
 
         $query->andFilterWhere(['like', 'siswa_id', $this->siswa_id])

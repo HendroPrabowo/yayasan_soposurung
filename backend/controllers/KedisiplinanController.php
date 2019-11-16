@@ -5,6 +5,7 @@ namespace backend\controllers;
 use app\models\AturanAsrama;
 use app\models\Siswa;
 use app\models\User;
+use Mpdf\Mpdf;
 use Yii;
 use app\models\Kedisiplinan;
 use app\models\search\KedisiplinanSearch;
@@ -226,5 +227,49 @@ class KedisiplinanController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionPrintLaporan(){
+        $kedisiplinan_all = array();
+        $date_all = array();
+        $start = Yii::$app->request->post('start');
+        $end = Yii::$app->request->post('end');
+        $kedisiplinan = Kedisiplinan::find()->all();
+        // Validate date end and date start
+        $date_start = strtotime($start);
+        $date_end = strtotime($end);
+        if($date_end <= $date_start){
+            Yii::$app->session->setFlash('danger', "Tanggal Akhir tidak boleh lebih kecil dari Tanggal Awal");
+            return $this->actionIndex();
+        }
+        // Get range day
+        $secs = $date_end - $date_start;
+        $range = $secs / 86400;
+        $date_all[] = $end;
+        $end_temp = $end;
+        for($i=0;$i<=$range;$i++){
+            $end_temp = date('Y-m-d', strtotime('-1 days', strtotime($end_temp)));
+            $date_all[] = $end_temp;
+        }
+        foreach ($kedisiplinan as $value){
+            $waktu = date('Y-m-d', strtotime($value->tanggal));
+            if(in_array($waktu, $date_all)){
+                $kedisiplinan_all[] = $value;
+            }
+        }
+
+        $pdf = $this->renderPartial('view-pdf', [
+            'start' => $start,
+            'end' => $end,
+            'kedisiplinan_all' => $kedisiplinan_all,
+        ]);
+
+        $mpdf = new Mpdf([
+            'format' => 'A4',
+            'orientation' => 'L',
+        ]);
+
+        $mpdf->WriteHTML($pdf);
+        $mpdf->Output();
     }
 }

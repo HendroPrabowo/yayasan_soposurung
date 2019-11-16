@@ -1,5 +1,6 @@
 <?php
 
+use kartik\date\DatePicker;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
@@ -45,6 +46,15 @@ $item_aturan_asrama = ArrayHelper::map($aturan_asrama, 'id', 'jenis_pelanggaran'
     ]) ?>
 
     <?= $form->field($model, 'keterangan')->textarea(['rows' => 6]) ?>
+
+    <?= $form->field($model, 'tanggal')->widget(DatePicker::classname(), [
+        'options' => ['placeholder' => 'Masukkan Tanggal ....'],
+        'readonly' => true,
+        'pluginOptions' => [
+            'autoclose'=>true,
+            'format' => 'yyyy/mm/dd'
+        ]
+    ]); ?>
 
     <?= $form->field($model, 'tambah_ke_point')->dropDownList($item, ['prompt' => 'Pilih Satu...']) ?>
 

@@ -32,10 +32,11 @@ class Kedisiplinan extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['siswa_id', 'aturan_asrama_id', 'keterangan', 'tambah_ke_point'], 'required'],
+            [['siswa_id', 'aturan_asrama_id', 'keterangan', 'tambah_ke_point', 'tanggal'], 'required'],
             [['aturan_asrama_id'], 'integer'],
             [['tambah_ke_point'], 'integer'],
             [['keterangan'], 'string'],
+            [['tanggal'], 'safe'],
             [['siswa_id'], 'string', 'max' => 255],
             [['siswa_id'], 'exist', 'skipOnError' => true, 'targetClass' => Siswa::className(), 'targetAttribute' => ['siswa_id' => 'nisn']],
             [['aturan_asrama_id'], 'exist', 'skipOnError' => true, 'targetClass' => AturanAsrama::className(), 'targetAttribute' => ['aturan_asrama_id' => 'id']],
@@ -52,6 +53,7 @@ class Kedisiplinan extends \yii\db\ActiveRecord
             'siswa_id' => 'Siswa ID',
             'aturan_asrama_id' => 'Aturan Asrama ID',
             'keterangan' => 'Keterangan',
+            'tanggal' => 'Tanggal',
             'tambah_ke_point' => 'Tambah Point'
         ];
     }

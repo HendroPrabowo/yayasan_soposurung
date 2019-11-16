@@ -36,6 +36,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 //            'aturan_asrama_id',
             'keterangan:ntext',
+            [
+                'attribute' => 'tanggal',
+                'format' => ['date', 'php:d-M-Y']
+            ],
 //            'tambah_ke_point',
             [
                     'attribute' => 'Tambah Point',
