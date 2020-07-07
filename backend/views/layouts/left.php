@@ -24,6 +24,15 @@
                                 ['label' => 'Jenis Akun', 'icon' => 'drivers-license-o', 'url' => ['auth-item/index']],
                             ]
                         ],
+                        [
+                            'label' => 'Angkatan',
+                            'icon' => 'users    ',
+                            'url' => '#',
+                            'items' => [
+                                ['label' => 'Angkatan', 'icon' => 'users', 'url' => ['angkatan/index']],
+                                ['label' => 'Laporan Wali Angkatan', 'icon' => 'print', 'url' => ['laporan-wali/index']],
+                            ]
+                        ],
                         ['label' => 'Data Siswa', 'icon' => 'user', 'url' => ['siswa/index']],
                         ['label' => 'Semua Kelas', 'icon' => 'cog', 'url' => ['kelas-r/index']],
                         ['label' => 'Semua Mata Pelajaran', 'icon' => 'book', 'url' => ['mata-pelajaran-r/index']],
@@ -71,15 +80,6 @@
                                 ['label' => 'Apel Sore', 'icon' => 'inbox', 'url' => ['apl-sore/index']],
                                 ['label' => 'Apel Makan Malam', 'icon' => 'inbox', 'url' => ['apl-mkn-malam/index']],
                                 ['label' => 'Apel Malam', 'icon' => 'inbox', 'url' => ['apl-malam/index']],
-                            ]
-                        ],
-                        [
-                            'label' => 'Angkatan',
-                            'icon' => 'users    ',
-                            'url' => '#',
-                            'items' => [
-                                ['label' => 'Angkatan', 'icon' => 'users', 'url' => ['angkatan/index']],
-                                ['label' => 'Laporan Wali Angkatan', 'icon' => 'print', 'url' => ['laporan-wali/index']],
                             ]
                         ],
                         ['label' => 'Bendahara', 'icon' => 'money', 'url' => ['semester-bulan/index']],

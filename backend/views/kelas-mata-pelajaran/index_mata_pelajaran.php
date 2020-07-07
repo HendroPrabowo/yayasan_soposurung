@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return Html::a('</&nbsp;><span class="glyphicon glyphicon-user"></span> Assign Guru', ['assign-guru/assign-guru', 'id' => $model->id]);
                             },
                             'delete'=>function ($url, $model) {
-                                return Html::a('&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-trash" style="color:red;"></span> <z style="color: red">Delete</z>', ['#']);
+                                return Html::a('&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-trash" style="color:red;"></span> <z style="color: red">Delete</z>', ['kelas-mata-pelajaran/delete-kelas-mata-pelajaran', 'id' => $model->id]);
                             },
                             'komponen-nilai'=>function ($url, $model) {
                                 return Html::a('&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-eye-open"></span> Komponen Nilai', ['komponen-nilai/index', 'id' => $model->id]);

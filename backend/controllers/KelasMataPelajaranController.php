@@ -36,7 +36,7 @@ class KelasMataPelajaranController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['view-mata-pelajaran', 'tambah-mata-pelajaran', 'tambah-mata-pelajaran-post', 'assign-guru'],
+                'only' => ['view-mata-pelajaran', 'tambah-mata-pelajaran', 'tambah-mata-pelajaran-post', 'assign-guru', 'delete-kelas-mata-pelajaran'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -44,7 +44,7 @@ class KelasMataPelajaranController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['view-mata-pelajaran', 'tambah-mata-pelajaran', 'tambah-mata-pelajaran-post', 'assign-guru'],
+                        'actions' => ['view-mata-pelajaran', 'tambah-mata-pelajaran', 'tambah-mata-pelajaran-post', 'assign-guru',  'delete-kelas-mata-pelajaran'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -154,6 +154,24 @@ class KelasMataPelajaranController extends Controller
 
             return $this->actionViewMataPelajaran($tahun_ajaran_kelas_aktif->id);
         }else{
+            return $this->redirect(['error/forbidden-error']);
+        }
+    }
+
+    public function actionDeleteKelasMataPelajaran($id){
+        if(Yii::$app->user->can('admin')) {
+            $kelas_mata_pelajaran = KelasMataPelajaran::findOne($id);
+            $tahun_ajaran_kelas = $kelas_mata_pelajaran->tahunAjaranKelas;
+            $nama_tahun_ajaran = $kelas_mata_pelajaran->tahunAjaranKelas->tahunAjaranSemester->tahun_ajaran;
+            $seluruh_tahun_ajaran_semester = TahunAjaranSemester::find()->where(['tahun_ajaran' => $nama_tahun_ajaran])->all();
+            foreach ($seluruh_tahun_ajaran_semester as $value){
+                $kelas = TahunAjaranKelas::find()->where(['tahun_ajaran_semester_id' => $value->id, 'kelas_id' => $tahun_ajaran_kelas->kelas_id])->one();
+                $mata_pelajaran = KelasMataPelajaran::find()->where(['tahun_ajaran_kelas_id' => $kelas->id, 'mata_pelajaran_id' => $kelas_mata_pelajaran->mata_pelajaran_id])->one();
+                $mata_pelajaran->delete();
+            }
+
+            return $this->actionViewMataPelajaran($kelas_mata_pelajaran->tahun_ajaran_kelas_id);
+        }else {
             return $this->redirect(['error/forbidden-error']);
         }
     }
