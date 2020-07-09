@@ -64,18 +64,12 @@ class UserController extends Controller
         $user_common->setPassword("admin");
         $user_common->generateAuthKey();
 
-        $user = new User();
-        $user->username = "admin";
-        $user->role = "admin";
+        $user = User::find()->where(['username' => 'admin'])->one();
         $user->password_hash = $user_common->password_hash;
         $user->auth_key = $user_common->auth_key;
         $user->save();
-
-        $auth_assignment = new AuthAssignment();
-        $auth_assignment->item_name = "admin";
-        $auth_assignment->user_id = $user->id;
-        $auth_assignment->save();
-        echo "Super User Berhasil Ditambahkan";
+        
+        echo "Akun admin di reset";
     }
     /*
      * Get authenticated user

@@ -39,7 +39,7 @@ use dmstr\widgets\Alert;
     <div class="pull-right hidden-xs">
         <b>Version</b> 2.0
     </div>
-    <strong>Copyright &copy; (2019) Hendro Prabowo</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; (2019) Developer</a>.</strong> All rights reserved.
 </footer>
 <!-- Add the sidebar's background. This div must be placed
      immediately after the control sidebar -->
