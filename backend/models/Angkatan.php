@@ -45,7 +45,7 @@ class Angkatan extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'angkatan' => 'Angkatan',
-            'wali_angkatan_id' => 'Wali Angkatan ID',
+            'wali_angkatan_id' => 'Wali Angkatan',
         ];
     }
 

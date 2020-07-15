@@ -201,9 +201,6 @@ class LogTamuController extends Controller
             $tanggal = date('Y-m-d', strtotime('-1 days', strtotime($tanggal)));
         }
 
-        var_dump($date_all);
-        die();
-
         foreach ($semua_log_tamu as $value){
             $waktu = date('Y-m-d', strtotime($value->waktu_masuk));
             if(in_array($waktu, $date_all)){

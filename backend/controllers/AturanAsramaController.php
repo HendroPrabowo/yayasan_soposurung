@@ -98,7 +98,7 @@ class AturanAsramaController extends Controller
             $model = new AturanAsrama();
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->actionIndex();
             }
 
             return $this->render('create', [

@@ -94,7 +94,7 @@ class MataPelajaranRController extends Controller
             $model = new MataPelajaranR();
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->actionIndex();
             }
 
             return $this->render('create', [
