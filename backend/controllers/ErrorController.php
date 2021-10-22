@@ -25,4 +25,11 @@ class ErrorController extends Controller{
             'message' => 'Fungsi ini sedang dikembangkan',
         ]);
     }
+
+    public function actionError($name, $message) {
+        return $this->render('error_page', [
+            'name' => $name,
+            'message' => $message,
+        ]);
+    }
 }

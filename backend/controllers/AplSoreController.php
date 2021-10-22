@@ -103,6 +103,9 @@ class AplSoreController extends Controller
             }
 
             $tahun_ajaran_aktif = TahunAjaranSemester::find()->where(['is_active' => 1])->one();
+            if($tahun_ajaran_aktif == null) {
+                return $this->redirect(['error/error', 'name' => "Belum ada tahun ajaran aktif", 'message' => 'Silahkan hubungi admin untuk menambah atau mengaktifkan tahun ajaran']);
+            }
             $tahun_ajaran_kelas = TahunAjaranKelas::find()->where(['tahun_ajaran_semester_id' => $tahun_ajaran_aktif->id])->all();
 
             $i = 0;
